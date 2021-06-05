@@ -1,0 +1,22 @@
+# Run some parallel terminal windows, one window for each of these commands.
+# Be sure to activate virtual environment and cd into setup/ in order to execute.
+
+
+PUBLISHERS
+
+Window 1 (Publisher 1)
+./setup_publishers.sh -c 1 -t A -t B -i 1 -b 5556 -s 2 -d 1
+
+Window 2 (Publisher 2)
+./setup_publishers.sh -c 1 -t E -t F -i 1 -b 5558 -s 1 -d 1
+
+Window 3 (Publisher 3)
+ ./setup_publishers.sh -c 1 -t C -t D -i 1 -b 5557 -s 1 -d 1
+
+
+SUBSCRIBERS
+Window 1 (Subscriber 1)
+./setup_subscribers.sh -c 1 -t A -t E -p 127.0.0.1:5557 -p 127.0.0.1:5558 -p 127.0.0.1:5556 -i 1 -d 1
+
+Window 2 (Subscriber 2)
+./setup_subscribers.sh -c 1 -t A -p 127.0.0.1:5556 -p 127.0.0.1:5558 -p 127.0.0.1:5557 -t C -t F -i 1 -d 1
