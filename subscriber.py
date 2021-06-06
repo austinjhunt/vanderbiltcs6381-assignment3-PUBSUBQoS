@@ -1,6 +1,7 @@
 import socket as sock
 import zmq
 import logging
+import datetime
 
 class Subscriber:
     """ Class to represent a single subscriber in a Publish/Subscribe distributed system.
@@ -96,6 +97,41 @@ class Subscriber:
         for t in self.topics:
             self.socket.setsockopt_string(zmq.SUBSCRIBE, t)
 
+    def get_publish_time_from_event(self, event): 
+        """ Method to pull a datetime object from an event received from a publisher
+        where the datetime object represents the time the event was published.
+        Args:
+        event (str) - event received from publisher
+        Return:
+        datetime object (time of publish)
+        """
+        items = [el.strip() for el in event.split('-')]
+        # second item is time of publish 
+        publish_time_string = items[1]
+        # Parse using same format used by publisher to generate the string 
+        return datetime.datetime.strptime(publish_time_string, "%m/%d/%Y, %H:%M:%S")
+
+    def get_time_difference_to_now(self, compare_time): 
+        """ Method to calculate the difference between some compare_time and now 
+        Args: 
+        - compare_time (datetime object)
+        Return 
+        datetime.timedelta
+        """
+        return datetime.datetime.now() - compare_time
+
+    
+    def receive_response(self, i): 
+        """ Method to receive and parse/process a published event 
+        Args: 
+        - i (int) - number representing the current iteration of event reception
+        """
+        event = self.socket.recv_string()
+        publish_time = self.get_publish_time_from_event(event)
+        time_diff = self.get_time_difference_to_now(publish_time)
+        logging.debug(f'{self.logging_prefix} Receiving published update {i + 1}: {event} ;total_time={time_diff}')
+
+
     def listen(self):
         """ Method to listen for published events matching topic filter applied in
         apply_topic_filters(). Will receive updates in a JSON format.
@@ -104,15 +140,12 @@ class Subscriber:
             i = 0
             while True:
                 i += 1
-                response = self.socket.recv_string()
-                logging.debug(f'{self.logging_prefix} Receiving published update {i + 1}: {response}')
-                print(response)
+                # Get response
+                self.receive_response(i)
         else:
             for i in range(self.max_event_count):
                 # Get response
-                response = self.socket.recv_string()
-                logging.debug(f'{self.logging_prefix} Receiving published update {i + 1}: {response}')
-                print(response)
+                self.receive_response(i+1)
 
 
 
