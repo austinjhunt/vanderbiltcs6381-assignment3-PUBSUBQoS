@@ -5,6 +5,7 @@ import time
 import datetime
 import json
 import pickle
+import netifaces
 class Publisher:
     """ Class to represent a single publisher in a Publish/Subscribe distributed
     system. Publisher does not need to know who is consuming the information, it
@@ -13,7 +14,7 @@ class Publisher:
 
     def __init__(self,
         broker_address='127.0.0.1',
-        own_address='127.0.0.1',
+        # own_address='127.0.0.1',
         topics=[], sleep_period=1, bind_port=5556,
         indefinite=False, max_event_count=15):
         """ Constructor
@@ -26,8 +27,9 @@ class Publisher:
         - indefinite (boolean) - whether to publish events/updates indefinitely
         - max_event_count (int) - if not (indefinite), max number of events/updates to publish
         """
+        self.id = id(self)
         self.broker_address = broker_address
-        self.own_address = own_address
+        # self.own_address = own_address
         self.topics = topics
         self.sleep_period = sleep_period
         self.bind_port = bind_port
@@ -55,7 +57,7 @@ class Publisher:
         # now create socket to publish
         self.pub_socket = self.context.socket(zmq.PUB)
         self.setup_port_binding()
-        logging.debug(f"Binding at {self.own_address}:{self.bind_port} to publish", extra=self.prefix)
+        logging.debug(f"Binding at {self.get_host_address()} to publish", extra=self.prefix)
         self.register_pub()
 
     def setup_port_binding(self):
@@ -82,19 +84,33 @@ class Publisher:
     def register_pub(self):
         """ Method to register this publisher with the broker """
         logging.debug(f"Registering with broker at {self.broker_address}", extra=self.prefix)
-        message_dict = {'address': f'{self.own_address}:{self.bind_port}', 'topics': self.topics}
+        message_dict = {'address': self.get_host_address(), 'topics': self.topics,
+            'id': self.id}
         message = json.dumps(message_dict, indent=4)
+        logging.debug(f"Sending registration message: {message}", extra=self.prefix)
         self.broker_reg_socket.send_string(message)
-        received = json.loads(self.broker_reg_socket.recv_string())
+        logging.debug(f"Sent!", extra=self.prefix)
+        received = self.broker_reg_socket.recv_string()
+        received = json.loads(received)
         if 'success' in received:
             logging.debug(f"Registration successful: {received}", extra=self.prefix)
         else:
             logging.debug(f"Registration failed: {received}", extra=self.prefix)
 
-    def get_address(self):
-        """ Method to return the IP address and port (IP:PORT) of the current host as a string"""
-        return f'{self.own_address}:{self.bind_port}'
-        # return f'{sock.gethostbyname(sock.gethostname())}:{self.bind_port}'
+    def get_host_address(self):
+        """ Method to return IP address of current host.
+        If using a mininet topology, use netifaces (socket.gethost... fails on mininet hosts)
+        Otherwise, local testing without mininet, use localhost 127.0.0.1 """
+        try:
+            # Will succeed on mininet. Two interfaces, get second one.
+            # Then get AF_INET address family with key = 2
+            # Then get first element in that address family (0)
+            # Then get addr property of that element.
+            address = netifaces.ifaddresses(netifaces.interfaces()[-1])[2][0]['addr']
+            address = f'{address}:{self.bind_port}'
+        except:
+            address = f"127.0.0.1:{self.bind_port}"
+        return address
 
     def generate_publish_event(self, iteration=0):
         """ Method to generate a publish event
@@ -102,7 +118,7 @@ class Publisher:
         - iteration (int) - current publish event iteration for this publisher """
         event = {
             # Send this to subscriber even if broker is anonymizing so performance can be analyzed.
-            'publisher': self.get_address(),
+            'publisher': self.get_host_address(),
             # If only N topics, then N+1 publish event will publish first topic over again
             'topic': self.topics[iteration % len(self.topics)],
             'publish_time': time.time()
@@ -110,11 +126,7 @@ class Publisher:
         topic = self.topics[iteration % len(self.topics)].encode('utf8')
         event = [b'%b' % topic, pickle.dumps(event)]
         return event
-        # If only N topics, then N+1 publish event will publish first topic over again
-        current_topic = self.topics[iteration % len(self.topics)]
-        current_time = time.time()
-        ip_address = self.get_address()
-        return  f'{current_topic} - {current_time} - {ip_address}'
+
 
     # Assumption:
     # Publisher is only going to publish a limited number of topics.
@@ -134,14 +146,23 @@ class Publisher:
                 # Continuous loop over topics
                 event = self.generate_publish_event(iteration=i)
                 logging.debug(f'Sending event: [{event}]', extra=self.prefix)
-                self.pub_socket.send_string(event)
+                self.pub_socket.send_multipart(event)
                 time.sleep(self.sleep_period)
 
     def disconnect(self):
         """ Method to disconnect from the pub/sub network """
         # Close all sockets associated with this context
-        logging.debug(f'Destroying ZMQ context, closing all sockets', extra=self.prefix)
+        # Tell broker publisher is disconnecting. Remove from storage.
+        msg = {'disconnect': {'id': self.id, 'address': self.get_host_address(),
+            'topics': self.topics}}
+        logging.debug(f"Disconnecting, telling broker: {msg}", extra=self.prefix)
+        self.broker_reg_socket.send_string(json.dumps(msg))
+        # Wait for response
+        response = self.broker_reg_socket.recv_string()
+        logging.debug(f"Broker response: {response} ", extra=self.prefix)
         try:
+            logging.debug(f'Destroying ZMQ context, closing all sockets', extra=self.prefix)
             self.context.destroy()
         except Exception as e:
             logging.error(f'Could not destroy ZMQ context successfully - {str(e)}', extra=self.prefix)
+

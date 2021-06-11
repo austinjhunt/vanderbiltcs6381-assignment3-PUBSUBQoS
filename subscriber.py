@@ -5,6 +5,7 @@ import datetime
 import json
 import time
 import pickle
+import netifaces
 
 class Subscriber:
     """ Class to represent a single subscriber in a Publish/Subscribe distributed system.
@@ -13,7 +14,9 @@ class Subscriber:
     information/updates across all publisher connections. If many publishers with relevant updates,
     updates will be interleaved and no single publisher connection will drown out the others. """
 
-    def __init__(self, filename=None, broker_address="127.0.0.1", own_address="127.0.0.1", topics=[], indefinite=False,
+    def __init__(self, filename=None, broker_address="127.0.0.1",
+        # own_address="127.0.0.1",
+        topics=[], indefinite=False,
         max_event_count=15, centralized=False):
         """ Constructor
         args:
@@ -26,7 +29,7 @@ class Subscriber:
         self.id = id(self)
         self.filename = filename
         self.broker_address = broker_address
-        self.own_address = own_address
+        # self.own_address = own_address
         self.centralized = centralized
         self.prefix = {'prefix' : f'SUB{id(self)}<{",".join(topics)}> -'}
 
@@ -58,6 +61,10 @@ class Subscriber:
         # a list to store all the messages received
         self.received_message_list = []
 
+        # port on broker to listen for notifications about new hosts
+        # without competition/stealing from other subscriber poll()s
+        self.notify_port = None
+
 
     def configure(self):
         """ Method to perform initial configuration of Subscriber entity """
@@ -77,21 +84,20 @@ class Subscriber:
         # Register self with broker on init
         self.register_sub()
 
-    def setup_notification_polling(self, notify_port):
+    def setup_notification_polling(self):
         """ Method to set up a socket for polling for notifications about
         new publishers from the broker. The notify port is randomly allocated
         by the broker when the subscriber registers.
         Args:
         - notify_port (int) """
         self.notify_sub_socket = self.context.socket(zmq.REP)
-        self.notify_sub_socket.connect(f"tcp://{self.broker_address}:{notify_port}")
+        self.notify_sub_socket.connect(f"tcp://{self.broker_address}:{self.notify_port}")
         self.poller.register(self.notify_sub_socket, zmq.POLLIN)
-
 
     def register_sub(self):
         """ Register self with broker """
         self.debug("Registering with broker")
-        message_dict = {'address': self.own_address, 'id': self.id, 'topics': self.topics}
+        message_dict = {'address': self.get_host_address(), 'id': self.id, 'topics': self.topics}
         message = json.dumps(message_dict, indent=4)
         self.broker_reg_socket.send_string(message)
         self.debug(f"Sent registration message: {json.dumps(message)}")
@@ -103,10 +109,13 @@ class Subscriber:
         if not self.centralized:
             # Get the port that was allocated for notifications to this subscriber
             # about new publishers
-            notify_port = reg_started['register_sub']['notify_port']
+            self.notify_port = reg_started['register_sub']['notify_port']
             # Set up notification polling with that port
-            self.setup_notification_polling(notify_port=notify_port)
+            self.setup_notification_polling()
         else:
+            # Request the topic/port mapping from broker
+            topic_port_request = {'request': 'topic_port_mapping'}
+            self.broker_reg_socket.send_string(json.dumps(topic_port_request))
             # Listen for broker to publish about topics
             received_message = self.broker_reg_socket.recv_string()
             self.setup_broker_topic_port_connections(received_message)
@@ -148,6 +157,7 @@ class Subscriber:
         """ Method to set up one socket per topic to listen to the broker
         where each topic is published from a different port on the broker address """
         broker_port_dict = json.loads(received_message)
+        self.debug("Broker port dict: {broker_port_dict}")
         # Broker will provide the published events so
         # create socket to receive message from broker
         for topic in self.topics:
@@ -164,7 +174,7 @@ class Subscriber:
             self.sub_socket_dict[topic].setsockopt_string(zmq.SUBSCRIBE, topic)
             self.debug(
                 f"Getting Topic {topic} from broker at "
-                f"{self.broker_address}:{broker_port}", extra=self.prefix
+                f"{self.broker_address}:{broker_port}"
                 )
 
     def parse_notification(self):
@@ -241,15 +251,36 @@ class Subscriber:
         else:
             self.info("No filename was provided at construction of Subscriber")
 
+    def get_host_address(self):
+        """ Method to return IP address of current host.
+        If using a mininet topology, use netifaces (socket.gethost... fails on mininet hosts)
+        Otherwise, local testing without mininet, use localhost 127.0.0.1 """
+        try:
+            # Will succeed on mininet. Two interfaces, get second one.
+            # Then get AF_INET address family with key = 2
+            # Then get first element in that address family (0)
+            # Then get addr property of that element.
+            address = netifaces.ifaddresses(netifaces.interfaces()[-1])[2][0]['addr']
+        except:
+            address = "127.0.0.1"
+        return address
 
     def disconnect(self):
         """ Method to disconnect from the pub/sub network """
         # Close all sockets associated with this context
-        self.info(f'Destroying ZMQ context, closing all sockets')
+        # Tell broker publisher is disconnecting. Remove from storage.
+        msg = {'disconnect': {'id': self.id, 'address': self.get_host_address(),
+            'topics': self.topics, 'notify_port': self.notify_port}}
+        logging.debug(f"Disconnecting, telling broker: {msg}", extra=self.prefix)
+        self.broker_reg_socket.send_string(json.dumps(msg))
+        # Wait for response
+        response = self.broker_reg_socket.recv_string()
+        logging.debug(f"Broker response: {response} ", extra=self.prefix)
         try:
+            logging.debug(f'Destroying ZMQ context, closing all sockets', extra=self.prefix)
             self.context.destroy()
         except Exception as e:
-            self.error(f'Could not destroy ZMQ context successfully - {str(e)}')
+            logging.error(f'Could not destroy ZMQ context successfully - {str(e)}', extra=self.prefix)
 
 
     def subscribe_to_new_topics(self, topics=[]):
