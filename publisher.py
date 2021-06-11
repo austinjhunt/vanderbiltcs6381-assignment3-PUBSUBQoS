@@ -4,6 +4,7 @@ import logging
 import time
 import datetime
 import json
+import pickle
 class Publisher:
     """ Class to represent a single publisher in a Publish/Subscribe distributed
     system. Publisher does not need to know who is consuming the information, it
@@ -50,6 +51,7 @@ class Publisher:
         self.broker_reg_socket = self.context.socket(zmq.REQ)
         self.broker_reg_socket.connect("tcp://{0:s}:5555".format(self.broker_address))
 
+
         # now create socket to publish
         self.pub_socket = self.context.socket(zmq.PUB)
         self.setup_port_binding()
@@ -83,17 +85,31 @@ class Publisher:
         message_dict = {'address': f'{self.own_address}:{self.bind_port}', 'topics': self.topics}
         message = json.dumps(message_dict, indent=4)
         self.broker_reg_socket.send_string(message)
-        logging.debug(f'Received message: {self.broker_reg_socket.recv_string()}', extra=self.prefix)
+        received = json.loads(self.broker_reg_socket.recv_string())
+        if 'success' in received:
+            logging.debug(f"Registration successful: {received}", extra=self.prefix)
+        else:
+            logging.debug(f"Registration failed: {received}", extra=self.prefix)
 
     def get_address(self):
         """ Method to return the IP address and port (IP:PORT) of the current host as a string"""
-        return self.own_address
+        return f'{self.own_address}:{self.bind_port}'
         # return f'{sock.gethostbyname(sock.gethostname())}:{self.bind_port}'
 
     def generate_publish_event(self, iteration=0):
         """ Method to generate a publish event
         Args:
         - iteration (int) - current publish event iteration for this publisher """
+        event = {
+            # Send this to subscriber even if broker is anonymizing so performance can be analyzed.
+            'publisher': self.get_address(),
+            # If only N topics, then N+1 publish event will publish first topic over again
+            'topic': self.topics[iteration % len(self.topics)],
+            'publish_time': time.time()
+        }
+        topic = self.topics[iteration % len(self.topics)].encode('utf8')
+        event = [b'%b' % topic, pickle.dumps(event)]
+        return event
         # If only N topics, then N+1 publish event will publish first topic over again
         current_topic = self.topics[iteration % len(self.topics)]
         current_time = time.time()
@@ -109,7 +125,8 @@ class Publisher:
                 # Continuous loop over topics
                 event = self.generate_publish_event(iteration=i)
                 logging.debug(f'Sending event: [{event}]', extra=self.prefix)
-                self.pub_socket.send_string(event)
+                # self.pub_socket.send_string(event)
+                self.pub_socket.send_multipart(event)
                 time.sleep(self.sleep_period)
                 i += 1
         else:
@@ -119,3 +136,12 @@ class Publisher:
                 logging.debug(f'Sending event: [{event}]', extra=self.prefix)
                 self.pub_socket.send_string(event)
                 time.sleep(self.sleep_period)
+
+    def disconnect(self):
+        """ Method to disconnect from the pub/sub network """
+        # Close all sockets associated with this context
+        logging.debug(f'Destroying ZMQ context, closing all sockets', extra=self.prefix)
+        try:
+            self.context.destroy()
+        except Exception as e:
+            logging.error(f'Could not destroy ZMQ context successfully - {str(e)}', extra=self.prefix)
