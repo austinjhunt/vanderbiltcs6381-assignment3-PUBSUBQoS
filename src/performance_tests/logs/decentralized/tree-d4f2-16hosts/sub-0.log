@@ -1,0 +1,285 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating 0 publishers on this host
+DRIVER - Creating 1 subscribers on this host
+DRIVER - Creating 0 broker on this host
+DRIVER - Creating 1 subscribers subscribed to topics <A,B,C>
+SUB140599866363232<A,B,C> - - Initializing subscriber to direct publishers
+SUB140599866363232<A,B,C> - - Initializing
+SUB140599866363232<A,B,C> - - Setting the context object
+SUB140599866363232<A,B,C> - - Setting the poller objects
+SUB140599866363232<A,B,C> - - Connecting to register with broker
+SUB140599866363232<A,B,C> - - Registering with broker at 10.0.0.1:5556
+SUB140599866363232<A,B,C> - - Sent registration message: "{\n    \"address\": \"10.0.0.2\",\n    \"id\": 140599866363232,\n    \"topics\": [\n        \"A\",\n        \"B\",\n        \"C\"\n    ]\n}"
+SUB140599866363232<A,B,C> - - Registration start msg from broker: {'register_sub': {'notify_port': 19655}}
+SUB140599866363232<A,B,C> - - Registration successful
+SUB140599866363232<A,B,C> - - Start to receive message
+SUB140599866363232<A,B,C> - - Parsing notification...
+SUB140599866363232<A,B,C> - - Notification: [{"register_pub": {"addresses": [], "topic": "A"}}, {"register_pub": {"addresses": [], "topic": "B"}}, {"register_pub": {"addresses": [], "topic": "C"}}]
+SUB140599866363232<A,B,C> - - New register_pub notification...
+SUB140599866363232<A,B,C> - - Setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Finished setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Parsing notification...
+SUB140599866363232<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.13:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.13:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.13:5556"], "topic": "C"}}]
+SUB140599866363232<A,B,C> - - New register_pub notification...
+SUB140599866363232<A,B,C> - - Setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.13:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.13:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.13:5556 to known publishers
+SUB140599866363232<A,B,C> - - Finished setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Parsing notification...
+SUB140599866363232<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.9:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.9:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.9:5556"], "topic": "C"}}]
+SUB140599866363232<A,B,C> - - New register_pub notification...
+SUB140599866363232<A,B,C> - - Setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.9:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.9:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.9:5556 to known publishers
+SUB140599866363232<A,B,C> - - Finished setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Parsing notification...
+SUB140599866363232<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.14:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.14:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.14:5556"], "topic": "C"}}]
+SUB140599866363232<A,B,C> - - New register_pub notification...
+SUB140599866363232<A,B,C> - - Setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.14:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.14:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.14:5556 to known publishers
+SUB140599866363232<A,B,C> - - Finished setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Parsing notification...
+SUB140599866363232<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.11:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.11:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.11:5556"], "topic": "C"}}]
+SUB140599866363232<A,B,C> - - New register_pub notification...
+SUB140599866363232<A,B,C> - - Setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.11:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.11:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.11:5556 to known publishers
+SUB140599866363232<A,B,C> - - Finished setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Parsing notification...
+SUB140599866363232<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.16:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.16:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.16:5556"], "topic": "C"}}]
+SUB140599866363232<A,B,C> - - New register_pub notification...
+SUB140599866363232<A,B,C> - - Setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.16:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.16:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.16:5556 to known publishers
+SUB140599866363232<A,B,C> - - Finished setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Parsing notification...
+SUB140599866363232<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.12:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.12:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.12:5556"], "topic": "C"}}]
+SUB140599866363232<A,B,C> - - New register_pub notification...
+SUB140599866363232<A,B,C> - - Setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.12:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.12:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.12:5556 to known publishers
+SUB140599866363232<A,B,C> - - Finished setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Parsing notification...
+SUB140599866363232<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.10:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.10:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.10:5556"], "topic": "C"}}]
+SUB140599866363232<A,B,C> - - New register_pub notification...
+SUB140599866363232<A,B,C> - - Setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.10:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.10:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.10:5556 to known publishers
+SUB140599866363232<A,B,C> - - Finished setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Parsing notification...
+SUB140599866363232<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.15:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.15:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.15:5556"], "topic": "C"}}]
+SUB140599866363232<A,B,C> - - New register_pub notification...
+SUB140599866363232<A,B,C> - - Setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.15:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.15:5556 to known publishers
+SUB140599866363232<A,B,C> - - Adding publisher 10.0.0.15:5556 to known publishers
+SUB140599866363232<A,B,C> - - Finished setting up direct publisher connections
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730839.6040897}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730839.907521}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730840.0082035}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730840.2098117}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730840.3106844}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730840.5129068}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730840.6158617}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730840.8173432}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730840.9203062}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730841.0242622}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730841.1250844}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730841.2269943}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730841.3279166}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730841.4300768}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730841.531087}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730841.6317945}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730841.7329576}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730841.8341882}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730841.9349682}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730842.0357997}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730842.1366413}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730842.23773}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730842.339045}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730842.4399683}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730842.5431943}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730842.644018}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730842.7452834}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730842.846539}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730842.9477773}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730843.0486276}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730843.1494114}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730843.2505395}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730843.3529708}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730843.4539084}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730843.5546973}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730843.6599545}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730843.7615695}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730843.863206}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730843.9648504}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730844.0655096}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730844.1663058}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730844.2676325}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730844.3711443}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730844.5526803}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730844.6570845}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730844.758073}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730844.8590512}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730844.9600904}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730845.0615466}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730845.1624734}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730845.2643025}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730845.3651156}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730845.4660962}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730845.5671809}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730845.6679897}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730845.7692976}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730845.8706074}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730845.9715588}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730846.0739563}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730846.174803}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730846.2758713}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730846.37792}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730846.479142}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730846.5818782}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "A", "publish_time": 1623730846.592414}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730846.6841528}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730846.7858734}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730846.890135}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "A", "publish_time": 1623730846.8959339}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730846.9917076}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730847.0924623}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730847.193164}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "A", "publish_time": 1623730847.1997077}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730847.2944226}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "B", "publish_time": 1623730847.3007572}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730847.3952014}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730847.4959278}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "A", "publish_time": 1623730847.5024354}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730847.5970507}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "B", "publish_time": 1623730847.6031678}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730847.698269}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730847.7993472}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "A", "publish_time": 1623730847.8048887}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730847.9000874}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "B", "publish_time": 1623730847.9058108}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730848.0028179}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "C", "publish_time": 1623730848.0068648}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730848.1062322}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "A", "publish_time": 1623730848.1097455}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730848.2070858}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "B", "publish_time": 1623730848.2103455}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730848.308066}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "C", "publish_time": 1623730848.3114026}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730848.409804}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "A", "publish_time": 1623730848.4123464}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic A
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "A", "publish_time": 1623730848.510614}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "B", "publish_time": 1623730848.5132885}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic B
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "B", "publish_time": 1623730848.6114419}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.9:5556", "topic": "C", "publish_time": 1623730848.6142614}>
+SUB140599866363232<A,B,C> - - Waiting for publish event for topic C
+SUB140599866363232<A,B,C> - - Received: <{"publisher": "10.0.0.13:5556", "topic": "C", "publish_time": 1623730848.7138577}>
+SUB140599866363232<A,B,C> - - Disconnecting, telling broker: {'disconnect': {'id': 140599866363232, 'address': '10.0.0.2', 'topics': ['A', 'B', 'C'], 'notify_port': 19655}}

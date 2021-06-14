@@ -3,15 +3,25 @@ import time
 import os
 import logging
 import sys
-logging.basicConfig(
-    stream=sys.stderr,
-    level=logging.DEBUG,
-    format='%(prefix)s - %(message)s')
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-
 class DecentralizedPerformanceTest(PerformanceTest):
 
-    def run_network(self, network=None, num_hosts=None, network_name=""):
+    def __init__(self, num_events=50, event_interval=0.3, wait_factor=10):
+        super().__init__(num_events=num_events,
+            event_interval=event_interval,wait_factor=wait_factor)
+        self.set_logger()
+
+    def set_logger(self):
+        self.logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(prefix)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+        self.logger.setLevel(logging.INFO)
+        self.logger = logging.LoggerAdapter(self.logger, self.prefix)
+
+    def test_network(self, network=None, num_hosts=None, network_name=""):
         """ Interface method from PerformanceTest superclass; implementation for
         decentralized performance testing of pub/sub system in provided network
         args:
@@ -20,12 +30,17 @@ class DecentralizedPerformanceTest(PerformanceTest):
         network_name - alias of network, used to create folders for data/logs
         """
         self.prefix['prefix'] = f'DECENTRAL-NET-{network_name}-TEST - '
-
+        self.successes = 0
+        self.failures = 0
+        self.comments = []
         if network and num_hosts:
             # For subs, write data files into a folder within this folder
             # named after the network
             data_folder = os.path.join(__location__, f"data/decentralized/{network_name}")
             log_folder = os.path.join(__location__, f"logs/decentralized/{network_name}")
+            # File for pass/fail check results
+            test_results_file = os.path.join(__location__, f"test_results/decentralized/{network_name}.csv")
+
             # Make folders dynamically since the names are variable
             try:
                 os.mkdir(data_folder)
@@ -91,6 +106,7 @@ class DecentralizedPerformanceTest(PerformanceTest):
                     f'--indefinite ' # max event count only matters for subscribers who write files at end.
                     '--topics A --topics B --topics C '
                     f'--broker_address {broker_ip} '
+                    f'--max_event_count {self.num_events} '
                     f'--verbose  &> {log_folder}/pub-{index}.log &'
                     )
             self.debug("Publishers created!")
@@ -99,8 +115,29 @@ class DecentralizedPerformanceTest(PerformanceTest):
             wait_time = self.wait_factor * (self.num_events * self.event_interval)
             self.debug(f"Waiting for {wait_time} seconds for data to generate...")
             time.sleep(wait_time)
-            self.debug(f"Finished waiting! Killing processes...")
-            # Kill the processes
+            self.debug(f"Finished waiting!")
+
+            self.debug("Running unittest assertions to verify data was written...")
+
+            for index,host in enumerate(subscribers):
+                ## Run assertions here. Data files should have been produced with num_events + 1
+                # lines each. If this is is true, then the Pub/Sub system worked. That's the only
+                # way the subscriber would be able to write the expected number of results.
+                check_result = self.data_file_written_successfully(
+                        filename=f'{data_folder}/subscriber-{index}.csv'
+                    )
+                self.comments.append(check_result[1])
+                if not check_result[0]:
+                    self.failures += 1
+                else:
+                    self.successes += 1
+
+            self.debug(f"Writing pass/fail test results to {test_results_file}")
+            with open(test_results_file, 'w') as f:
+                f.write('pass,fail,comments\n')
+                f.write(f'{self.successes},{self.failures},{",".join(self.comments)}')
+
+            self.debug("Killing processes...")
             for index,host in enumerate(subscribers):
                 out = host.cmd(f'kill %1')
 
@@ -112,6 +149,16 @@ class DecentralizedPerformanceTest(PerformanceTest):
             network.stop()
             self.debug(f"Network '{network_name}' stopped!")
 
+            return {
+                'successes': self.successes,
+                'failures': self.failures,
+                'comments': self.comments
+            }
         else:
-            logging.error("Need to pass network and num_hosts to initialize_network()")
-
+            self.logger.error("Need to pass network and num_hosts to initialize_network()")
+            return {
+                'successes': self.successes,
+                'failures': self.failures,
+                'comments': self.comments,
+                'error': "Need to pass network and num_hosts to initialize_network()"
+            }

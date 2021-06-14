@@ -6,7 +6,44 @@ This project offers a framework for spinning up a publish/subscribe system eithe
 
 The project also offers integrated performance / latency analysis by allowing you to configure subscribers to write out latency data (between publishers and subscribers) to a provided filename, which provide insight about how long it takes for messages with specific topics from specific publishers to reach the subscriber (this is done by including the publish time in the message that gets sent).
 
+## Development Environment
+To work with this system, you should do the following:
+1. Install [VirtualBox](https://www.virtualbox.org/)
+2. Set up an Ubuntu Desktop 20.04 virtual machine within VirtualBox. You can download the Ubuntu .iso file [here](https://ubuntu.com/download/server). You can follow [these instructions](https://www.youtube.com/watch?v=x5MhydijWmc) to set up your Ubuntu VM.
+3. Pausing on the VM for now, clone this repository to a directory of your choice on your computer.
+``` git clone https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB.git ```
+4. Navigate inside the project folder: `cd vanderbiltcs6381-assignment1-ZMQPUBSUB`
+5. Create a Python3.8 virtual environment to isolate the Python dependencies for this project. ` python3.8 -m venv venv `
+6. Activate the virtual environment: `source venv/bin/activate`
+7. Install the Python requirements from the requirements.txt file. `pip install -r requirements.txt`
+8. Now, back to the VM. Once you have created your VM and it's listed in VirtualBox, click on it, then click the Settings option, then go to **Shared Folders** and click the little folder with the '+' button on the right to add a new shared folder. For folder name, use `vanderbiltcs6381-assignment1-ZMQPUBSUB`. For folder path, choose the project folder you just cloned. Leave Read-Only unchecked. Check Auto-Mount. Check Make Permanent. For mount point, use: `/mnt/dev/vanderbiltcs6381-assignment1-ZMQPUBSUB`. This will mount the project from your computer into the Virtual Machine at that location (with the same root folder name).
+9. Start the VM.
+10. Once it's started, click the **Devices** option in the top toolbar, then click the **Insert Guest Additions CD Image**. This will allow the shared folder to work.
+11. Open a Terminal Window. Become root with: `sudo -i` and enter your sudo password.
+12. Run the following commands to install Python3.8 and pip pon your VM.
+```
+apt update
+apt install software-properties-common
+add-apt-repository ppa:deadsnakes/ppa
+apt install python3.8
+apt install python3-pip
+```
+13. Install Mininet using [Option 2: Native Installation from Source](http://mininet.org/download/) on the Mininet homepage, with the Python3 note at the bottom of the page.
+```
+cd /opt/
+git clone git://github.com/mininet/mininet
+cd mininet
+git checkout -b mininet-2.3.0 2.3.0
+cd ..
+PYTHON=python3 mininet/util/install.sh -a
+```
+14. Navigate to the mounted directory: `/mnt/dev/vanderbiltcs6381-assignment1-ZMQPUBSUB`
+15. Now install the Python requirements in the VM, this time not using a virtual environment as it complicates things with Mininet.
+```
+pip install -r requirements.txt
+```
 
+You now have a VM mounted to the project folder with the necessary dependencies installed to run the framework and associated tests.
 ## Architecture
 
 The following sections provide an overview of the basic architecture of this project, outlining the core entities that interact to form a fully-functional Publish-Subscribe distributed system with optional broker-based anonyomization between publishers and subscribers.
@@ -295,6 +332,8 @@ A couple of key things to note with the driver:
 
 The Unit Testing module (which uses [unittest](https://docs.python.org/3/library/unittest.html)) is designed to test those methods of the Publisher, Subscriber, and Broker classes whose functionality can be tested independently of a full Publish/Subscribe system. This module does not test things like registration, message sending, and message receiving, since those methods depend on the Publish/Subscribe system as a whole. This module tests some foundational basic units responsible for things like randomized port selection, host IP address determination, publish event generation, and file writing.
 
+For instructions on executing the unit tests, see the [Unit Tests README](src/unit_tests/README.md).
+
 ## Performance Testing
 
 The Performance Testing module uses [The Python API for Mininet](https://github.com/mininet/mininet/wiki/Introduction-to-Mininet) in combination with [The Driver](src/driver.py) to automatically spin up a series of different virtualized network topologies through Mininet (all with Python) and embed a unique Publish/Subscribe system into each of those topologies for the purpose of collecting file-written performance data (via the `--filename` argument to the Subscriber) to understand how Publish/Subscribe latency is impacted by things like:
@@ -326,11 +365,13 @@ where `self` refers to an instance of one of the above Classes.
             centralized_perf_test.test_tree_topology(depth=depth, fanout=fanout)
     ```
 
-For each virtualized network, every subscriber in the respective embedded Publish/Subscribe system writes out its performance data into a file like:
+The [main.py](src/performance_tests/main.py) module within the performance_tests folder drives the testing process and generates plots from the collected data, and for each virtualized network, every subscriber in the respective embedded Publish/Subscribe system writes out its performance data into a file like:
 
 **src/performance_tests/data/[centralized,decentralized]/<network name, e.g. "**tree-d3f2-8hosts**" for a tree topology with depth=3, fanout=2>/subscriber-<index, i.e. which subscriber this is for the current system>**
 
-From there, we are able to extract the written data and generate plots to visualize the patterns that exist within it.
+From there, we are able to extract the written data and generate plots to visualize the patterns that exist within it using [matplotlib](https://matplotlib.org/).
+
+For instructions on executing the Performance Tests, see the [Performance Tests README](src/performance_tests/README.md).
 
 ## Sample Testing Results
 

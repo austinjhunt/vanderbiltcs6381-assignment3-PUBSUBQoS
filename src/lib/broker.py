@@ -126,8 +126,10 @@ class Broker:
                 self.parse_events(i)
         else:
             logging.debug(f"Begin finite (max={self.max_event_count}) event poll loop", extra=self.prefix)
-            for i in range(self.max_event_count):
-                self.parse_events(i+1)
+            event_count = 0
+            while event_count < self.max_event_count:
+                self.parse_events(event_count+1)
+                event_count += 1
 
     # once a publisher register with broker, the broker will start to receive message from it
     # for a particular topic, the broker will open a SUB socket for a topic
@@ -230,7 +232,6 @@ class Broker:
                 # and subscribers steal poll pipeline events from each other.
                 notify_port = self.get_clear_port()
                 msg = {'register_sub': {'notify_port': notify_port}}
-                self.sub_reg_socket.send_string(json.dumps(msg))
                 ## Notify new subscriber about all publishers of topic
                 ## so they can listen directly
                 # Set up a new notify socket on a clear port for this subscriber
@@ -239,6 +240,7 @@ class Broker:
                 self.notify_sub_sockets[sub_id] = self.context.socket(zmq.REQ)
                 self.used_ports.append(notify_port)
                 self.notify_sub_sockets[sub_id].bind(f"tcp://*:{notify_port}")
+                self.sub_reg_socket.send_string(json.dumps(msg))
                 self.notify_subscribers(topics=topics, sub_id=sub_id)
             else:
                 ## Make sure there is a socket for each new topic.
@@ -297,10 +299,8 @@ class Broker:
                 )
             message = json.dumps(message)
             # Send to notify socket for new subscriber address
-            logging.debug(f"Senging message to subscriber: {message}", extra=self.prefix)
+            logging.debug(f"Sending message to subscriber: {message}", extra=self.prefix)
             self.notify_sub_sockets[sub_id].send_string(message)
-            # As client, have to send a request then wait for a response
-            # self.notify_sub_socket.send_string(message)
             logging.debug(f"Waiting for response...", extra=self.prefix)
             confirmation = self.notify_sub_sockets[sub_id].recv_string()
             logging.debug(f"Subscriber notified successfully (confirmation: <{confirmation}>", extra=self.prefix)

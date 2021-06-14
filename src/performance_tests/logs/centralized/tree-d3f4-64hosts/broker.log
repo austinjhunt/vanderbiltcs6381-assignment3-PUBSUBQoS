@@ -1,0 +1,25 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating 0 publishers on this host
+DRIVER - Creating 0 subscribers on this host
+DRIVER - Creating 1 broker on this host
+BROKER -  - Initializing broker for centralized dissemination
+BROKER -  - Opening two REP sockets for publisher registration and subscriber registration
+BROKER -  - Enabling publisher registration on port 5555
+BROKER -  - Enabling subscriber registration on port 5556
+BROKER -  - Register sockets with a ZMQ poller
+BROKER -  - Begin indefinite event poll loop
+BROKER -  - Event 1: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Topic A is being sent at port 19434
+BROKER -  - Topic B is being sent at port 13483
+BROKER -  - Topic C is being sent at port 14846
+BROKER -  - Sending topic/ports: {'A': 19434, 'B': 13483, 'C': 14846}
+BROKER -  - Subscriber registered successfully
+BROKER -  - Event 2: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Sending topic/ports: {'A': 19434, 'B': 13483, 'C': 14846}
+BROKER -  - Subscriber registered successfully
+BROKER -  - Event 3: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Sending topic/ports: {'A': 19434, 'B': 13483, 'C': 14846}
+BROKER -  - Subscriber registered successfully

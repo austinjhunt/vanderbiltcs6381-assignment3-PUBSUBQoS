@@ -1,0 +1,2 @@
+pass,fail,comments
+3,0,Line count in data file /mnt/dev/vanderbiltcs6381-assignment1/src/performance_tests/data/decentralized/tree-d3f2-8hosts/subscriber-0.csv: 100,Line count in data file /mnt/dev/vanderbiltcs6381-assignment1/src/performance_tests/data/decentralized/tree-d3f2-8hosts/subscriber-1.csv: 100,Line count in data file /mnt/dev/vanderbiltcs6381-assignment1/src/performance_tests/data/decentralized/tree-d3f2-8hosts/subscriber-2.csv: 100

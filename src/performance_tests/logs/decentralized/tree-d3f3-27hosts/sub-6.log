@@ -1,0 +1,124 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating 0 publishers on this host
+DRIVER - Creating 1 subscribers on this host
+DRIVER - Creating 0 broker on this host
+DRIVER - Creating 1 subscribers subscribed to topics <A,B,C>
+SUB140280599952736<A,B,C> - - Initializing subscriber to direct publishers
+SUB140280599952736<A,B,C> - - Initializing
+SUB140280599952736<A,B,C> - - Setting the context object
+SUB140280599952736<A,B,C> - - Setting the poller objects
+SUB140280599952736<A,B,C> - - Connecting to register with broker
+SUB140280599952736<A,B,C> - - Registering with broker at 10.0.0.1:5556
+SUB140280599952736<A,B,C> - - Sent registration message: "{\n    \"address\": \"10.0.0.8\",\n    \"id\": 140280599952736,\n    \"topics\": [\n        \"A\",\n        \"B\",\n        \"C\"\n    ]\n}"
+SUB140280599952736<A,B,C> - - Registration start msg from broker: {'register_sub': {'notify_port': 15934}}
+SUB140280599952736<A,B,C> - - Registration successful
+SUB140280599952736<A,B,C> - - Start to receive message
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": [], "topic": "A"}}, {"register_pub": {"addresses": [], "topic": "B"}}, {"register_pub": {"addresses": [], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.27:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.27:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.27:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.27:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.27:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.27:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.18:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.18:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.18:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.18:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.18:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.18:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.20:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.20:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.20:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.20:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.20:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.20:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.19:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.19:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.19:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.19:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.19:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.19:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.16:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.16:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.16:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.16:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.16:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.16:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.21:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.21:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.21:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.21:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.21:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.21:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.26:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.26:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.26:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.26:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.26:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.26:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.17:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.17:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.17:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.17:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.17:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.17:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.25:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.25:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.25:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.25:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.25:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.25:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.24:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.24:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.24:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.24:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.24:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.24:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.22:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.22:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.22:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.22:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.22:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.22:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.15:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.15:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.15:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.15:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.15:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.15:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Parsing notification...
+SUB140280599952736<A,B,C> - - Notification: [{"register_pub": {"addresses": ["10.0.0.23:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.23:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.23:5556"], "topic": "C"}}]
+SUB140280599952736<A,B,C> - - New register_pub notification...
+SUB140280599952736<A,B,C> - - Setting up direct publisher connections
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.23:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.23:5556 to known publishers
+SUB140280599952736<A,B,C> - - Adding publisher 10.0.0.23:5556 to known publishers
+SUB140280599952736<A,B,C> - - Finished setting up direct publisher connections

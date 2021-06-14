@@ -225,15 +225,16 @@ class Subscriber:
                         if self.sub_socket_dict[topic] in events:
                             self.parse_publish_event(topic=topic)
         else:
-            for i in range(self.max_event_count):
+            event_count = 0
+            while event_count < self.max_event_count:
                 events = dict(self.poller.poll())
                 if self.notify_sub_socket in events:
                     # This is a notification about new publishers
                     self.parse_notification()
                 else:
                     for topic in self.sub_socket_dict.keys():
-                        if self.sub_socket_dict[topic] in events:
-                            #full_message = self.sub_socket_dict[topic].recv_string() + ' Received at ' + f'{receive_time}'
+                        if self.sub_socket_dict[topic] in events and event_count < self.max_event_count:
+                            event_count += 1
                             self.parse_publish_event(topic=topic)
 
     def write_stored_messages(self):

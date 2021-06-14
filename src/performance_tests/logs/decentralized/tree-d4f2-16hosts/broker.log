@@ -1,0 +1,271 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating 0 publishers on this host
+DRIVER - Creating 0 subscribers on this host
+DRIVER - Creating 1 broker on this host
+BROKER -  - Initializing broker for decentralized dissemination
+BROKER -  - Opening two REP sockets for publisher registration and subscriber registration
+BROKER -  - Enabling publisher registration on port 5555
+BROKER -  - Enabling subscriber registration on port 5556
+BROKER -  - Register sockets with a ZMQ poller
+BROKER -  - Begin indefinite event poll loop
+BROKER -  - Event 1: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Enabling subscriber notification (about publishers)
+BROKER -  - Notifying subscribers
+BROKER -  - Senging message to subscriber: [{"register_pub": {"addresses": [], "topic": "A"}}, {"register_pub": {"addresses": [], "topic": "B"}}, {"register_pub": {"addresses": [], "topic": "C"}}]
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Subscriber registered successfully
+BROKER -  - Event 2: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Enabling subscriber notification (about publishers)
+BROKER -  - Notifying subscribers
+BROKER -  - Senging message to subscriber: [{"register_pub": {"addresses": [], "topic": "A"}}, {"register_pub": {"addresses": [], "topic": "B"}}, {"register_pub": {"addresses": [], "topic": "C"}}]
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Subscriber registered successfully
+BROKER -  - Event 3: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Enabling subscriber notification (about publishers)
+BROKER -  - Notifying subscribers
+BROKER -  - Senging message to subscriber: [{"register_pub": {"addresses": [], "topic": "A"}}, {"register_pub": {"addresses": [], "topic": "B"}}, {"register_pub": {"addresses": [], "topic": "C"}}]
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Subscriber registered successfully
+BROKER -  - Event 4: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Enabling subscriber notification (about publishers)
+BROKER -  - Notifying subscribers
+BROKER -  - Senging message to subscriber: [{"register_pub": {"addresses": [], "topic": "A"}}, {"register_pub": {"addresses": [], "topic": "B"}}, {"register_pub": {"addresses": [], "topic": "C"}}]
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Subscriber registered successfully
+BROKER -  - Event 5: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Enabling subscriber notification (about publishers)
+BROKER -  - Notifying subscribers
+BROKER -  - Senging message to subscriber: [{"register_pub": {"addresses": [], "topic": "A"}}, {"register_pub": {"addresses": [], "topic": "B"}}, {"register_pub": {"addresses": [], "topic": "C"}}]
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Subscriber registered successfully
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.13:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139928953671008
+}
+BROKER -  - Notifying subscribers
+BROKER -  - Sending notification to sub: 140599866363232
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140182884978016
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139856719486304
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139841592683872
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140219357232480
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.9:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139988675972448
+}
+BROKER -  - Notifying subscribers
+BROKER -  - Sending notification to sub: 140599866363232
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140182884978016
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139856719486304
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139841592683872
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140219357232480
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.14:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 140087491145056
+}
+BROKER -  - Notifying subscribers
+BROKER -  - Sending notification to sub: 140599866363232
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140182884978016
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139856719486304
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139841592683872
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140219357232480
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.11:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139640547024224
+}
+BROKER -  - Notifying subscribers
+BROKER -  - Sending notification to sub: 140599866363232
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140182884978016
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139856719486304
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139841592683872
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140219357232480
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.16:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139757445156192
+}
+BROKER -  - Notifying subscribers
+BROKER -  - Sending notification to sub: 140599866363232
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140182884978016
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139856719486304
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139841592683872
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140219357232480
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.12:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 140444154985824
+}
+BROKER -  - Notifying subscribers
+BROKER -  - Sending notification to sub: 140599866363232
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140182884978016
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139856719486304
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139841592683872
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140219357232480
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.10:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139921754914144
+}
+BROKER -  - Notifying subscribers
+BROKER -  - Sending notification to sub: 140599866363232
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140182884978016
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139856719486304
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139841592683872
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140219357232480
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.15:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139988662504800
+}
+BROKER -  - Notifying subscribers
+BROKER -  - Sending notification to sub: 140599866363232
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140182884978016
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139856719486304
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 139841592683872
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending notification to sub: 140219357232480
+BROKER -  - Waiting for response...
+BROKER -  - Subscriber notified successfully (confirmation: <Notification Acknowledged. New publishers added.>
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Event 14: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Enabling subscriber notification (about publishers)
+BROKER -  - Notifying subscribers
+BROKER -  - Senging message to subscriber: [{"register_pub": {"addresses": ["10.0.0.13:5556", "10.0.0.9:5556", "10.0.0.14:5556", "10.0.0.11:5556", "10.0.0.16:5556", "10.0.0.12:5556", "10.0.0.10:5556", "10.0.0.15:5556"], "topic": "A"}}, {"register_pub": {"addresses": ["10.0.0.13:5556", "10.0.0.9:5556", "10.0.0.14:5556", "10.0.0.11:5556", "10.0.0.16:5556", "10.0.0.12:5556", "10.0.0.10:5556", "10.0.0.15:5556"], "topic": "B"}}, {"register_pub": {"addresses": ["10.0.0.13:5556", "10.0.0.9:5556", "10.0.0.14:5556", "10.0.0.11:5556", "10.0.0.16:5556", "10.0.0.12:5556", "10.0.0.10:5556", "10.0.0.15:5556"], "topic": "C"}}]

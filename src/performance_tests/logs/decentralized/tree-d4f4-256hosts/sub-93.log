@@ -1,0 +1,12 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating 0 publishers on this host
+DRIVER - Creating 1 subscribers on this host
+DRIVER - Creating 0 broker on this host
+DRIVER - Creating 1 subscribers subscribed to topics <A,B,C>
+SUB140073425091936<A,B,C> - - Initializing subscriber to direct publishers
+SUB140073425091936<A,B,C> - - Initializing
+SUB140073425091936<A,B,C> - - Setting the context object
+SUB140073425091936<A,B,C> - - Setting the poller objects
+SUB140073425091936<A,B,C> - - Connecting to register with broker
+SUB140073425091936<A,B,C> - - Registering with broker at 10.0.0.1:5556
+SUB140073425091936<A,B,C> - - Sent registration message: "{\n    \"address\": \"10.0.0.95\",\n    \"id\": 140073425091936,\n    \"topics\": [\n        \"A\",\n        \"B\",\n        \"C\"\n    ]\n}"

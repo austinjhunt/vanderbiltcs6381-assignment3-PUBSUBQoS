@@ -3,12 +3,8 @@ from mininet.net import Mininet
 from mininet.topolib import TreeTopo
 from .topologies.single_switch_topology import SingleSwitchTopo
 import os
-import logging
 import sys
-logging.basicConfig(
-    stream=sys.stderr,
-    level=logging.DEBUG,
-    format='%(prefix)s - %(message)s')
+import logging
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 class PerformanceTest:
@@ -21,6 +17,20 @@ class PerformanceTest:
         # Files not written by subscriber until it reaches num_events.
         self.wait_factor = wait_factor
         self.prefix = {'prefix': ''}
+        self.successes = 0
+        self.failures = 0
+        self.comments = []
+        self.set_logger()
+
+    def set_logger(self):
+        self.logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(prefix)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+        self.logger.setLevel(logging.INFO)
+        self.logger = logging.LoggerAdapter(self.logger, self.prefix)
 
     def cleanup(self):
         """ Method to run the shell command mn -c to clean up existing mininet networks/resources
@@ -29,7 +39,15 @@ class PerformanceTest:
 
     def debug(self, msg):
         """ Debug method with custom prefix for class """
-        logging.debug(msg, extra=self.prefix)
+        self.logger.debug(msg, extra=self.prefix)
+
+    def info(self, msg):
+        """ Info method with custom prefix for class """
+        self.logger.info(msg, extra=self.prefix)
+
+    def error(self, msg):
+        """ Error method with custom prefix for class """
+        self.logger.error(msg, extra=self.prefix)
 
     def setWaitFactor(self, factor):
         """ Method to update the wait factor (to wait <factor> times as long
@@ -48,7 +66,7 @@ class PerformanceTest:
                 network = Mininet(topo=topo)
         return network
 
-    def run_network(self, network=None, num_hosts=None, network_name=""):
+    def test_network(self, network=None, num_hosts=None, network_name=""):
         """ Interface method; add implementation in subclasses for
         centralized/decentralized performance testing
         args:
@@ -63,12 +81,13 @@ class PerformanceTest:
         with one broker and an equal number of subscribers and publishers """
         tree = TreeTopo(depth=depth, fanout=fanout)
         network = self.create_network(topo=tree)
-        self.run_network(
+        results = self.test_network(
             network=network,
             network_name=f"tree-d{depth}f{fanout}-{fanout**depth}hosts",
             num_hosts=fanout ** depth
         )
         self.cleanup()
+        return results
 
     def test_single_switch_topology(self, num_hosts=3):
         """ Create and test Pub/Sub on a Single Switch Topology mininet network
@@ -78,9 +97,44 @@ class PerformanceTest:
             raise Exception("Topology must include at least 3 hosts")
         topo = SingleSwitchTopo(n=num_hosts)
         network = self.create_network(topo=topo)
-        self.run_network(
+        results = self.test_network(
             network=network,
             num_hosts=num_hosts,
             network_name=f"singleswitch-{num_hosts}-hosts"
         )
         self.cleanup()
+        return results
+
+    def data_file_written_successfully(self, filename):
+        """
+        Data files should have been produced with num_events + 1
+        lines each, plus one \n blank line. If this is is true,
+        then the Pub/Sub system worked. That's the only
+        way the subscriber would be able to write the expected number of results.
+        Return boolean
+        """
+        try:
+            if os.path.exists(filename):
+                # File exists, verify contents
+                with open(filename, 'r') as f:
+                    # first line should always be the same header
+                    l = f.readline()
+                    if l.strip() == 'publisher,topic,total_time_seconds':
+                        # Good so far.
+                        count = 0
+                        for line in f.readlines():
+                            if line.strip() != '':
+                                count += 1
+                        # Number of lines should be equal to the number of requested events.
+                        comment = f'Line count in data file {filename}: {count}'
+                        result = (count == self.num_events)
+                    else:
+                        comment = f'Header line: {l.strip()}'
+                        result = False
+            else:
+                comment = f'File {filename} DNE'
+                result = False
+        except Exception as e:
+            comment = str(e)
+            result = False
+        return (result, comment)

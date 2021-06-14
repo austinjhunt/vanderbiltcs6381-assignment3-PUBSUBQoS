@@ -141,12 +141,14 @@ class Publisher:
                 time.sleep(self.sleep_period)
                 i += 1
         else:
-            for i in range(self.max_event_count):
+            event_count = 0
+            while event_count < self.max_event_count:
                 # Continuous loop over topics
                 event = self.generate_publish_event(iteration=i)
                 logging.debug(f'Sending event: [{event}]', extra=self.prefix)
                 self.pub_socket.send_multipart(event)
                 time.sleep(self.sleep_period)
+                event_count += 1
 
     def disconnect(self):
         """ Method to disconnect from the pub/sub network """

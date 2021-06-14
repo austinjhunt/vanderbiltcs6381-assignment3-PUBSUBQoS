@@ -1,0 +1,20 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating 0 publishers on this host
+DRIVER - Creating 1 subscribers on this host
+DRIVER - Creating 0 broker on this host
+DRIVER - Creating 1 subscribers subscribed to topics <A,B,C>
+SUB139889572666720<A,B,C> - - Initializing subscriber to direct publishers
+SUB139889572666720<A,B,C> - - Initializing
+SUB139889572666720<A,B,C> - - Setting the context object
+SUB139889572666720<A,B,C> - - Setting the poller objects
+SUB139889572666720<A,B,C> - - Connecting to register with broker
+SUB139889572666720<A,B,C> - - Registering with broker at 10.0.0.1:5556
+SUB139889572666720<A,B,C> - - Sent registration message: "{\n    \"address\": \"10.0.0.48\",\n    \"id\": 139889572666720,\n    \"topics\": [\n        \"A\",\n        \"B\",\n        \"C\"\n    ]\n}"
+SUB139889572666720<A,B,C> - - Registration start msg from broker: {'register_sub': {'notify_port': 17132}}
+SUB139889572666720<A,B,C> - - Registration successful
+SUB139889572666720<A,B,C> - - Start to receive message
+SUB139889572666720<A,B,C> - - Parsing notification...
+SUB139889572666720<A,B,C> - - Notification: [{"register_pub": {"addresses": [], "topic": "A"}}, {"register_pub": {"addresses": [], "topic": "B"}}, {"register_pub": {"addresses": [], "topic": "C"}}]
+SUB139889572666720<A,B,C> - - New register_pub notification...
+SUB139889572666720<A,B,C> - - Setting up direct publisher connections
+SUB139889572666720<A,B,C> - - Finished setting up direct publisher connections

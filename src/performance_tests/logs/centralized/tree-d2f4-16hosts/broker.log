@@ -1,0 +1,383 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating 0 publishers on this host
+DRIVER - Creating 0 subscribers on this host
+DRIVER - Creating 1 broker on this host
+BROKER -  - Initializing broker for centralized dissemination
+BROKER -  - Opening two REP sockets for publisher registration and subscriber registration
+BROKER -  - Enabling publisher registration on port 5555
+BROKER -  - Enabling subscriber registration on port 5556
+BROKER -  - Register sockets with a ZMQ poller
+BROKER -  - Begin indefinite event poll loop
+BROKER -  - Event 1: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Topic A is being sent at port 15623
+BROKER -  - Topic B is being sent at port 14519
+BROKER -  - Topic C is being sent at port 16625
+BROKER -  - Sending topic/ports: {'A': 15623, 'B': 14519, 'C': 16625}
+BROKER -  - Subscriber registered successfully
+BROKER -  - Event 2: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Sending topic/ports: {'A': 15623, 'B': 14519, 'C': 16625}
+BROKER -  - Subscriber registered successfully
+BROKER -  - Event 3: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Sending topic/ports: {'A': 15623, 'B': 14519, 'C': 16625}
+BROKER -  - Subscriber registered successfully
+BROKER -  - Event 4: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Sending topic/ports: {'A': 15623, 'B': 14519, 'C': 16625}
+BROKER -  - Subscriber registered successfully
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.16:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139699562974560
+}
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Updating receive socket to 'subscribe' to publisher
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.15:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 140076360187232
+}
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Updating receive socket to 'subscribe' to publisher
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - Event 7: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Sending topic/ports: {'A': 15623, 'B': 14519, 'C': 16625}
+BROKER -  - Subscriber registered successfully
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.13:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139796524957024
+}
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Updating receive socket to 'subscribe' to publisher
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - Event 9: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Sending topic/ports: {'A': 15623, 'B': 14519, 'C': 16625}
+BROKER -  - Subscriber registered successfully
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.14:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139743229312352
+}
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Updating receive socket to 'subscribe' to publisher
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.12:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 140255584718176
+}
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Updating receive socket to 'subscribe' to publisher
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - Event 12: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Sending topic/ports: {'A': 15623, 'B': 14519, 'C': 16625}
+BROKER -  - Subscriber registered successfully
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.9:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139917976005984
+}
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Updating receive socket to 'subscribe' to publisher
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.9:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.9:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.9:5556
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.11:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 140438329933152
+}
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Updating receive socket to 'subscribe' to publisher
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.9:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.11:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.9:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.11:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.9:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.11:5556
+BROKER -  - Publisher Registration Started: {
+    "address": "10.0.0.10:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 139661793078624
+}
+BROKER -  - Sending response: {'success': 'registration success'}
+BROKER -  - Publisher Registration Succeeded
+BROKER -  - Updating receive socket to 'subscribe' to publisher
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.9:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.11:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.10:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.9:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.11:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.10:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.16:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.15:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.13:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.14:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.12:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.9:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.11:5556
+BROKER -  - 'Subscribing' to publisher 10.0.0.10:5556
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'C', 'publish_time': 1623805413.775336}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'A', 'publish_time': 1623805413.8763108}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'A', 'publish_time': 1623805413.8947148}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'B', 'publish_time': 1623805413.9771574}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'B', 'publish_time': 1623805413.99549}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'A', 'publish_time': 1623805414.0350564}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'B', 'publish_time': 1623805414.0461166}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'A', 'publish_time': 1623805414.0519931}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'C', 'publish_time': 1623805414.080629}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'C', 'publish_time': 1623805414.0965712}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'B', 'publish_time': 1623805414.1379404}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'C', 'publish_time': 1623805414.1470656}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'B', 'publish_time': 1623805414.1530051}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'A', 'publish_time': 1623805414.1820178}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'A', 'publish_time': 1623805414.1972003}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'B', 'publish_time': 1623805414.1971996}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'B', 'publish_time': 1623805414.2243319}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'C', 'publish_time': 1623805414.2388039}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'A', 'publish_time': 1623805414.247728}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'C', 'publish_time': 1623805414.25373}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'B', 'publish_time': 1623805414.272457}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'B', 'publish_time': 1623805414.2828636}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'B', 'publish_time': 1623805414.2979915}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'C', 'publish_time': 1623805414.2980585}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'C', 'publish_time': 1623805414.3250954}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'A', 'publish_time': 1623805414.3395455}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'B', 'publish_time': 1623805414.3485625}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'A', 'publish_time': 1623805414.3544617}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'C', 'publish_time': 1623805414.3731}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'C', 'publish_time': 1623805414.3845265}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'C', 'publish_time': 1623805414.3992527}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'A', 'publish_time': 1623805414.399252}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'A', 'publish_time': 1623805414.4261775}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'B', 'publish_time': 1623805414.4403346}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'C', 'publish_time': 1623805414.4496775}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'B', 'publish_time': 1623805414.4553668}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'A', 'publish_time': 1623805414.4738674}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'A', 'publish_time': 1623805414.485286}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'A', 'publish_time': 1623805414.5000243}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'B', 'publish_time': 1623805414.4999864}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'B', 'publish_time': 1623805414.5269058}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'C', 'publish_time': 1623805414.5412006}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'A', 'publish_time': 1623805414.5505087}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'C', 'publish_time': 1623805414.5565636}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'B', 'publish_time': 1623805414.574704}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'B', 'publish_time': 1623805414.5860903}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'B', 'publish_time': 1623805414.601129}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'C', 'publish_time': 1623805414.601108}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'C', 'publish_time': 1623805414.627842}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'A', 'publish_time': 1623805414.6420343}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'B', 'publish_time': 1623805414.6516023}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'A', 'publish_time': 1623805414.6588507}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'C', 'publish_time': 1623805414.6788087}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'C', 'publish_time': 1623805414.6870782}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'A', 'publish_time': 1623805414.7025554}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'C', 'publish_time': 1623805414.7024732}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'A', 'publish_time': 1623805414.7288327}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'B', 'publish_time': 1623805414.7429047}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'C', 'publish_time': 1623805414.7549624}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'B', 'publish_time': 1623805414.762559}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'A', 'publish_time': 1623805414.779987}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'A', 'publish_time': 1623805414.788398}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'B', 'publish_time': 1623805414.8036351}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'A', 'publish_time': 1623805414.8040235}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'B', 'publish_time': 1623805414.8424594}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'C', 'publish_time': 1623805414.8437202}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'A', 'publish_time': 1623805414.8557067}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'C', 'publish_time': 1623805414.8778803}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'B', 'publish_time': 1623805414.8807318}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'B', 'publish_time': 1623805414.8909664}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'B', 'publish_time': 1623805414.9052548}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'C', 'publish_time': 1623805414.9050798}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'C', 'publish_time': 1623805414.9434793}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'A', 'publish_time': 1623805414.9444785}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'B', 'publish_time': 1623805414.9587643}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'A', 'publish_time': 1623805414.9787128}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'C', 'publish_time': 1623805414.981416}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'C', 'publish_time': 1623805414.9916022}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'A', 'publish_time': 1623805415.0059617}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'C', 'publish_time': 1623805415.0060573}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'A', 'publish_time': 1623805415.044206}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'B', 'publish_time': 1623805415.0454175}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'C', 'publish_time': 1623805415.0629373}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'B', 'publish_time': 1623805415.080249}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'A', 'publish_time': 1623805415.0831835}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'A', 'publish_time': 1623805415.0946755}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'A', 'publish_time': 1623805415.1067312}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'B', 'publish_time': 1623805415.1067307}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'B', 'publish_time': 1623805415.1471334}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'C', 'publish_time': 1623805415.1481662}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'A', 'publish_time': 1623805415.1667144}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'C', 'publish_time': 1623805415.185034}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'B', 'publish_time': 1623805415.1861765}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'B', 'publish_time': 1623805415.1954744}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'B', 'publish_time': 1623805415.2075872}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'C', 'publish_time': 1623805415.2075865}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'C', 'publish_time': 1623805415.2481482}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'A', 'publish_time': 1623805415.24887}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'B', 'publish_time': 1623805415.2675405}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'A', 'publish_time': 1623805415.2863235}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'C', 'publish_time': 1623805415.2871265}>
+BROKER -  - Event 109: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Disconnecting subscriber...
+BROKER -  - Event 110: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Disconnecting subscriber...
+BROKER -  - Event 111: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Disconnecting subscriber...
+BROKER -  - Event 112: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Disconnecting subscriber...
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'C', 'publish_time': 1623805415.2962763}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'A', 'publish_time': 1623805415.3083153}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'C', 'publish_time': 1623805415.3083158}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'A', 'publish_time': 1623805415.3488464}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'B', 'publish_time': 1623805415.3494725}>
+BROKER -  - Event 117: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Disconnecting subscriber...
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'C', 'publish_time': 1623805415.368403}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'B', 'publish_time': 1623805415.388288}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'A', 'publish_time': 1623805415.3888288}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.16:5556', 'topic': 'A', 'publish_time': 1623805415.3987315}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.9:5556', 'topic': 'B', 'publish_time': 1623805415.409837}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.15:5556', 'topic': 'A', 'publish_time': 1623805415.410382}>
+BROKER -  - Event 124: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Disconnecting subscriber...
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.11:5556', 'topic': 'B', 'publish_time': 1623805415.4507906}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.14:5556', 'topic': 'C', 'publish_time': 1623805415.451291}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.13:5556', 'topic': 'A', 'publish_time': 1623805415.469383}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.12:5556', 'topic': 'C', 'publish_time': 1623805415.4891539}>
+BROKER -  - Forwarding Msg: <{'publisher': '10.0.0.10:5556', 'topic': 'B', 'publish_time': 1623805415.4895465}>
+BROKER -  - Event 130: subscriber
+BROKER -  - Subscriber Registration Started
+BROKER -  - Disconnecting subscriber...

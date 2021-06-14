@@ -3,4 +3,3 @@ venv
 .vscode
 .env
 __pycache__
-logs

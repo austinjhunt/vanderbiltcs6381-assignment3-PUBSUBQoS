@@ -1,0 +1,23 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating 1 publishers on this host
+DRIVER - Creating 0 subscribers on this host
+DRIVER - Creating 0 broker on this host
+DRIVER - Creating 1 publishers for topics A,B,C
+PUB140062986268000<A,B,C> - - Initializing
+PUB140062986268000<A,B,C> - - Setting the context object
+PUB140062986268000<A,B,C> - - Connecting to register with broker
+PUB140062986268000<A,B,C> - - Attempting bind to port 5556
+PUB140062986268000<A,B,C> - - Successful bind to port 5556
+PUB140062986268000<A,B,C> - - Finished loop
+PUB140062986268000<A,B,C> - - Binding at 10.0.0.228:5556 to publish
+PUB140062986268000<A,B,C> - - Registering with broker at 10.0.0.1:5555
+PUB140062986268000<A,B,C> - - Sending registration message: {
+    "address": "10.0.0.228:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": 140062986268000
+}
+PUB140062986268000<A,B,C> - - Sent!

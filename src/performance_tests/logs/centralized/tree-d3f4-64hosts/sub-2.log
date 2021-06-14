@@ -1,0 +1,23 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating 0 publishers on this host
+DRIVER - Creating 1 subscribers on this host
+DRIVER - Creating 0 broker on this host
+DRIVER - Creating 1 subscribers subscribed to topics <A,B,C>
+SUB139757789216096<A,B,C> - - Initializing subscriber to centralized broker
+SUB139757789216096<A,B,C> - - Initializing
+SUB139757789216096<A,B,C> - - Setting the context object
+SUB139757789216096<A,B,C> - - Setting the poller objects
+SUB139757789216096<A,B,C> - - Connecting to register with broker
+SUB139757789216096<A,B,C> - - Registering with broker at 10.0.0.1:5556
+SUB139757789216096<A,B,C> - - Sent registration message: "{\n    \"address\": \"10.0.0.4\",\n    \"id\": 139757789216096,\n    \"topics\": [\n        \"A\",\n        \"B\",\n        \"C\"\n    ]\n}"
+SUB139757789216096<A,B,C> - - Registration start msg from broker: {'A': 19434, 'B': 13483, 'C': 14846}
+SUB139757789216096<A,B,C> - - Broker port dict: {'A': 19434, 'B': 13483, 'C': 14846}
+SUB139757789216096<A,B,C> - - Connecting to broker for topic <A> at tcp://10.0.0.1:19434
+SUB139757789216096<A,B,C> - - Getting Topic A from broker at 10.0.0.1:19434
+SUB139757789216096<A,B,C> - - Connecting to broker for topic <B> at tcp://10.0.0.1:13483
+SUB139757789216096<A,B,C> - - Getting Topic B from broker at 10.0.0.1:13483
+SUB139757789216096<A,B,C> - - Connecting to broker for topic <C> at tcp://10.0.0.1:14846
+SUB139757789216096<A,B,C> - - Getting Topic C from broker at 10.0.0.1:14846
+SUB139757789216096<A,B,C> - - Successfully set up broker topic/port connections
+SUB139757789216096<A,B,C> - - Registration successful
+SUB139757789216096<A,B,C> - - Start to receive message
