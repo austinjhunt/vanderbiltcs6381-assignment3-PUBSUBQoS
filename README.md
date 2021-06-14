@@ -332,6 +332,43 @@ For each virtualized network, every subscriber in the respective embedded Publis
 
 From there, we are able to extract the written data and generate plots to visualize the patterns that exist within it.
 
+## Sample Testing Results
+
+The sample testing is conducted with a mininet tree topology of fanout 3 and depth 3, so in total there are 27 hosts:
+* Host 13 is chosen as the broker.
+* Host 1, 11, 16, and 21 are chosen as the publisher.
+* Host 2, 4, 17, 19 are chosen as the subscriber.
+
+The same set of broker, publisher, and subscriber are tested with the centralized dissemination and direct dissemination. For each publisher, the logs from the subscribers are analyzed to study the time difference between the time when the message is disseminated from the publisher and that when the message is received by the subscriber.
+
+For direct dissemination, the following is the latency comparison across publishers:
+![direct_publishers](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_4_pub_4_sub_50_message/direct.png)
+
+For centralized dissemination, the following is the latency comparison across publishers:
+![centralized_publishers](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_4_pub_4_sub_50_message/centralized.png)
+
+For publisher at host 1 (ip: 10.0.0.1), the following is the latency comparsion between direct and centralized dissemination
+![p10.0.0.1](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_4_pub_4_sub_50_message/10.0.0.1.png)
+
+For publisher at host 11 (ip: 10.0.0.11), the following is the latency comparsion between direct and centralized dissemination
+![p10.0.0.11](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_4_pub_4_sub_50_message/10.0.0.11.png)
+
+For publisher at host 16 (ip: 10.0.0.16), the following is the latency comparsion between direct and centralized dissemination
+![p10.0.0.16](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_4_pub_4_sub_50_message/10.0.0.16.png)
+
+For publisher at host 21 (ip: 10.0.0.21), the following is the latency comparsion between direct and centralized dissemination
+![p10.0.0.21](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_4_pub_4_sub_50_message/10.0.0.21.png)
+
+To test the impact of number of publisher and subscriber on the performance, Host 8 and Host 26 are added as publishers, and Host 10 and Host 27 are added as subscriber.  Since Host 1, 11, 16, and 21 are common publishers in both setting, their performance are compared in each setting to evaluate the impact of number of publisher and subscriber.
+
+![more_pub_sub_10.0.0.1](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_6_pub_6_sub_50_message/Six%20vs%20Four%2010.0.0.1.png)
+
+![more_pub_sub_10.0.0.11](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_6_pub_6_sub_50_message/Six%20vs%20Four%2010.0.0.11.png)
+
+![more_pub_sub_10.0.0.16](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_6_pub_6_sub_50_message/Six%20vs%20Four%2010.0.0.16.png)
+
+![more_pub_sub_10.0.0.21](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/blob/54259e1f1ea3410fb0afdf15eda904ef967847a7/result_6_pub_6_sub_50_message/Six%20vs%20Four%2010.0.0.21.png)
+
 ## Patterns Found
 There are several interesting observations can be made from the tests that have been run within the Performance Testing Framework:
 1. The latency with direct dissemination is in general smaller than that with centralized dissemination.
