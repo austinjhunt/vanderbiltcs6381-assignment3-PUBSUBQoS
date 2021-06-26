@@ -47,11 +47,4 @@ class TestPublisher(unittest.TestCase):
         assert event[0] == b'%b' % compare_topic_encoded
         assert (time.time() - unpickled_event_dict['publish_time']) < 2
 
-    def test_get_host_address(self):
-        """ Test the get_host_address() method. Since the unittests will not
-        be run in mininet, this address will always be 127.0.0.1. Mininet
-        host addresses return a very specific data structure that fails outside of
-        mininet. """
-        addr = self.publisher.get_host_address()
-        assert addr == '127.0.0.1:5556'
 

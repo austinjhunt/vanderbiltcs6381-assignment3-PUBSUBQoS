@@ -17,11 +17,3 @@ class TestBroker(unittest.TestCase):
         p = self.broker.get_clear_port()
         assert p >= 10000 and p <= 20000
 
-    def test_get_host_address(self):
-        """ Test the get_host_address() method. Since the unittests will not
-        be run in mininet, this address will always be 127.0.0.1. Mininet
-        host addresses return a very specific data structure that fails outside of
-        mininet. """
-        addr = self.broker.get_host_address()
-        assert addr == '127.0.0.1'
-
