@@ -69,7 +69,6 @@ class Broker(ZookeeperClient):
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(prefix)s - %(message)s')
         handler.setFormatter(formatter)
-        handler.setLevel(logging.DEBUG)
         self.logger.setLevel(logging.DEBUG)
 
     def info(self, msg):
@@ -125,8 +124,8 @@ class Broker(ZookeeperClient):
         self.setup_sub_port_reg_binding()
         self.used_ports.append(self.pub_reg_port)
         self.used_ports.append(self.sub_reg_port)
-        logging.debug(f"Enabling publisher registration on port {self.pub_reg_port}", extra=self.prefix)
-        logging.debug(f"Enabling subscriber registration on port {self.sub_reg_port}", extra=self.prefix)
+        self.debug(f"Enabling publisher registration on port {self.pub_reg_port}")
+        self.debug(f"Enabling subscriber registration on port {self.sub_reg_port}")
 
         # register these sockets for incoming data
         self.debug("Register sockets with a ZMQ poller")
@@ -142,13 +141,13 @@ class Broker(ZookeeperClient):
         success = False
         while not success:
             try:
-                logging.info(f'Attempting bind to port {self.pub_reg_port}', extra=self.prefix)
+                self.info(f'Attempting bind to port {self.pub_reg_port}')
                 self.pub_reg_socket.bind(f'tcp://*:{self.pub_reg_port}')
                 success = True
-                logging.info(f'Successful bind to port {self.pub_reg_port}', extra=self.prefix)
+                self.info(f'Successful bind to port {self.pub_reg_port}')
             except:
                 try:
-                    logging.error(f'Port {self.pub_reg_port} already in use, attempting next port', extra=self.prefix)
+                    self.error(f'Port {self.pub_reg_port} already in use, attempting next port')
                     success = False
                     self.pub_reg_port += 1
                 except Exception as e:
@@ -162,13 +161,13 @@ class Broker(ZookeeperClient):
         success = False
         while not success:
             try:
-                logging.info(f'Attempting bind to port {self.sub_reg_port}', extra=self.prefix)
+                self.info(f'Attempting bind to port {self.sub_reg_port}')
                 self.sub_reg_socket.bind(f'tcp://*:{self.sub_reg_port}')
                 success = True
-                logging.info(f'Successful bind to port {self.sub_reg_port}', extra=self.prefix)
+                self.info(f'Successful bind to port {self.sub_reg_port}')
             except:
                 try:
-                    logging.error(f'Port {self.sub_reg_port} already in use, attempting next port', extra=self.prefix)
+                    self.error(f'Port {self.sub_reg_port} already in use, attempting next port')
                     success = False
                     self.sub_reg_port += 1
                 except Exception as e:
@@ -332,8 +331,7 @@ class Broker(ZookeeperClient):
                 ## Notify new subscriber about all publishers of topic
                 ## so they can listen directly
                 # Set up a new notify socket on a clear port for this subscriber
-                self.debug("Enabling subscriber notification (about publishers)",
-                    extra=self.prefix)
+                self.debug("Enabling subscriber notification (about publishers)")
                 self.notify_sub_sockets[sub_id] = self.context.socket(zmq.REQ)
                 self.used_ports.append(notify_port)
                 self.notify_sub_sockets[sub_id].bind(f"tcp://*:{notify_port}")

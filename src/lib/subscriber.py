@@ -32,14 +32,12 @@ class Subscriber(ZookeeperClient):
         self.broker_address = broker_address
         # self.own_address = own_address
         self.centralized = centralized
-        self.prefix = {'prefix' : f'SUB{id(self)}<{",".join(topics)}> -'}
-
+        self.topics = topics # topic subscriber is interested in
+        self.set_logger()
         if self.centralized:
             self.debug("Initializing subscriber to centralized broker")
         else:
             self.debug("Initializing subscriber to direct publishers")
-
-        self.topics = topics # topic subscriber is interested in
         self.indefinite = indefinite
         self.max_event_count = max_event_count
         self.publisher_connections = {}
@@ -69,6 +67,14 @@ class Subscriber(ZookeeperClient):
 
         super().__init__(zookeeper_hosts=zookeeper_hosts)
 
+    def set_logger(self):
+        self.prefix = {'prefix' : f'SUB{id(self)}<{",".join(self.topics)}> -'}
+        self.logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(prefix)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.setLevel(logging.DEBUG)
+
     def update_broker_info(self):
         if self.znode_value != None:
             print("Getting broker information from znode_value")
@@ -86,7 +92,7 @@ class Subscriber(ZookeeperClient):
         # To overcome the need for this, Kazoo has come up with a decorator.
         # Decorators can be of two kinds: watching for data on a znode changing,
         # and children on a znode changing
-        @self.zk.DataWatch(self.zkName)
+        @self.zk.DataWatch(self.zk_name)
         def dump_data_change (data, stat, event):
             if event == None:
                 print("No Event")
@@ -321,22 +327,22 @@ class Subscriber(ZookeeperClient):
         # Tell broker publisher is disconnecting. Remove from storage.
         msg = {'disconnect': {'id': self.id, 'address': self.get_host_address(),
             'topics': self.topics, 'notify_port': self.notify_port}}
-        logging.debug(f"Disconnecting, telling broker: {msg}", extra=self.prefix)
+        self.debug(f"Disconnecting, telling broker: {msg}", extra=self.prefix)
         self.broker_reg_socket.send_string(json.dumps(msg))
         # Wait for response
         response = self.broker_reg_socket.recv_string()
-        logging.debug(f"Broker response: {response} ", extra=self.prefix)
+        self.debug(f"Broker response: {response} ", extra=self.prefix)
         try:
-            logging.debug(f'Destroying ZMQ context, closing all sockets', extra=self.prefix)
+            self.debug(f'Destroying ZMQ context, closing all sockets', extra=self.prefix)
             self.context.destroy()
         except Exception as e:
-            logging.error(f'Could not destroy ZMQ context successfully - {str(e)}', extra=self.prefix)
+            self.error(f'Could not destroy ZMQ context successfully - {str(e)}', extra=self.prefix)
 
     def info(self, msg):
-        logging.info(msg, extra=self.prefix)
+        self.logger.info(msg, extra=self.prefix)
 
     def debug(self, msg):
-        logging.debug(msg, extra=self.prefix)
+        self.logger.debug(msg, extra=self.prefix)
 
     def error(self, msg):
-        logging.error(msg, extra=self.prefix)
+        self.logger.error(msg, extra=self.prefix)

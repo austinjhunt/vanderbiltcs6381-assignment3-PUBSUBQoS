@@ -63,8 +63,7 @@ class Publisher(ZookeeperClient):
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(prefix)s - %(message)s')
         handler.setFormatter(formatter)
-        handler.setLevel(self.debug)
-        self.logger.setLevel(self.debug)
+        self.logger.setLevel(logging.DEBUG)
 
     def get_znode_value (self):
         """ ******************* retrieve a znode value  ************************ """
