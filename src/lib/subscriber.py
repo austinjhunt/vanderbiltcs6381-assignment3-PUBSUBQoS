@@ -1,4 +1,5 @@
 import socket as sock
+from src.lib.zookeeper_client import ZookeeperClient
 import zmq
 import logging
 import datetime
@@ -8,23 +9,7 @@ import pickle
 import netifaces
 import uuid
 
-from kazoo.client import KazooClient   # client API
-from kazoo.client import KazooState    # for the state machine
-# to avoid any warning about no handlers for logging purposes, we
-# do the following
-import logging
-logging.basicConfig ()
-def listener4state (state):
-    if state == KazooState.LOST:
-        print ("Current state is now = LOST")
-    elif state == KazooState.SUSPENDED:
-        print ("Current state is now = SUSPENDED")
-    elif state == KazooState.CONNECTED:
-        print ("Current state is now = CONNECTED")
-    else:
-        print ("Current state now = UNKNOWN !! Cannot happen")
-
-class Subscriber:
+class Subscriber(ZookeeperClient):
     """ Class to represent a single subscriber in a Publish/Subscribe distributed system.
     Subscriber is indifferent to who is disseminating the information, as long as it knows their
     address(es). Subscriber can subscribed to specific topics and will listen for relevant
@@ -33,8 +18,7 @@ class Subscriber:
 
     def __init__(self, broker_address, filename=None,
         topics=[], indefinite=False,
-        max_event_count=15, centralized=False,
-        zk_address="127.0.0.1", zk_port="2181"):
+        max_event_count=15, centralized=False, zookeeper_hosts=["127.0.0.1:2181"]):
         """ Constructor
         args:
         - broker_address - IP address of broker
@@ -81,75 +65,9 @@ class Subscriber:
         # port on broker to listen for notifications about new hosts
         # without competition/stealing from other subscriber poll()s
         self.notify_port = None
+        self.sub_reg_port = 5556
 
-        # this is to connect with zookeeper Server
-        self.zk_address = zk_address
-        self.zk_port = zk_port
-        self.zk_server = f"{zk_address}:{zk_port}"
-
-        # this is an identifier for ZooKeeper
-        self.instanceId = str(uuid.uuid4())
-        print(f"My InstanceId is {self.instanceId}")
-
-        # this is the zk node name
-        self.zkName = '/broker'
-
-        # this is in the infor stored in znode
-        # this info is broker_address,pub_port,sub_port
-        self.znode_value = None
-        self.sub_reg_port = "5556"
-
-    def connect_zk(self):
-        try:
-            print("Try to connect with ZooKeeper server: hosts = {}".format(self.zk_server))
-            self.zk = KazooClient(self.zk_server)
-            self.zk.add_listener (listener4state)
-            print("ZooKeeper Current Status = {}".format (self.zk.state))
-        except:
-            print("Issues with ZooKeeper, cannot connect with Server")
-
-    def start_session(self):
-        """ Starting a Session """
-        try:
-            # now connect to the server
-            self.zk.start()
-        except:
-            print("Exception thrown in start (): ", sys.exc_info()[0])
-
-    def stop_session (self):
-        """ Stopping a Session """
-        try:
-            # now disconnect from the server
-            self.zk.stop ()
-        except:
-            print("Exception thrown in stop (): ", sys.exc_info()[0])
-            return
-
-    def close_connection(self):
-        try:
-            # now disconnect from the server
-            self.zk.close()
-        except:
-            print("Exception thrown in close (): ", sys.exc_info()[0])
-            return
-
-    def get_znode_value (self):
-        """ ******************* retrieve a znode value  ************************ """
-        try:
-            print ("Checking if {} exists (it better be)".format(self.zkName))
-            if self.zk.exists (self.zkName):
-                print ("{} znode indeed exists; get value".format(self.zkName))
-                # Now acquire the value and stats of that znode
-                #value,stat = self.zk.get (self.zkName, watch=self.watch)
-                value,stat = self.zk.get (self.zkName)
-                self.znode_value = value.decode("utf-8")
-                print(("Details of znode {}: value = {}, stat = {}".format (self.zkName, value, stat)))
-                print(f"Values stored in field znode_value is {self.znode_value}")
-            else:
-                print ("{} znode does not exist, why?".format(self.zkName))
-        except:
-            print("Exception thrown checking for exists/get: ", sys.exc_info()[0])
-            return
+        super().__init__(zookeeper_hosts=zookeeper_hosts)
 
     def update_broker_info(self):
         if self.znode_value != None:
@@ -192,7 +110,6 @@ class Subscriber:
             self.notify()
         except KeyboardInterrupt:
             self.disconnect()
-
 
     def configure(self):
         """ Method to perform initial configuration of Subscriber entity """

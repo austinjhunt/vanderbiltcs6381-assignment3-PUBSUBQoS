@@ -1,4 +1,5 @@
 import socket as sock
+from src.lib.zookeeper_client import ZookeeperClient
 import zmq
 import logging
 import time
@@ -24,7 +25,7 @@ def listener4state (state):
     else:
         print ("Current state now = UNKNOWN !! Cannot happen")
 
-class Publisher:
+class Publisher(ZookeeperClient):
     """ Class to represent a single publisher in a Publish/Subscribe distributed
     system. Publisher does not need to know who is consuming the information, it
     simply publishes information independently of the consumer. If publisher has
@@ -34,8 +35,7 @@ class Publisher:
         broker_address,
         # own_address='127.0.0.1',
         topics=[], sleep_period=1, bind_port=5556,
-        indefinite=False, max_event_count=15,
-        zk_address="127.0.0.1", zk_port="2181"):
+        indefinite=False, max_event_count=15,zookeeper_hosts=["127.0.0.1:2181"]):
         """ Constructor
         args:
         - broker_address (str) - IP address of broker (port 5556)
@@ -59,57 +59,10 @@ class Publisher:
         self.broker_reg_socket = None
         self.pub_socket = None
         self.pub_port = None
+        self.pub_reg_port = 5555
 
-        # this is to connect with zookeeper Server
-        self.zk_address = zk_address
-        self.zk_port = zk_port
-        self.zk_server = f"{zk_address}:{zk_port}"
-
-        # this is an identifier for ZooKeeper
-        self.instanceId = str(uuid.uuid4())
-        print(f"My InstanceId is {self.instanceId}")
-
-        # this is the zk node name
-        self.zkName = '/broker'
-
-        # this is in the infor stored in znode
-        # this info is broker_address,pub_port,sub_port
-        self.znode_value = None
-        self.pub_reg_port = "5555"
-
-    def connect_zk(self):
-        try:
-            print("Try to connect with ZooKeeper server: hosts = {}".format(self.zk_server))
-            self.zk = KazooClient(self.zk_server)
-            self.zk.add_listener (listener4state)
-            print("ZooKeeper Current Status = {}".format (self.zk.state))
-        except:
-            print("Issues with ZooKeeper, cannot connect with Server")
-
-    def start_session(self):
-        """ Starting a Session """
-        try:
-            # now connect to the server
-            self.zk.start()
-        except:
-            print("Exception thrown in start (): ", sys.exc_info()[0])
-
-    def stop_session (self):
-        """ Stopping a Session """
-        try:
-            # now disconnect from the server
-            self.zk.stop ()
-        except:
-            print("Exception thrown in stop (): ", sys.exc_info()[0])
-            return
-
-    def close_connection(self):
-        try:
-            # now disconnect from the server
-            self.zk.close()
-        except:
-            print("Exception thrown in close (): ", sys.exc_info()[0])
-            return
+        # Set up initial config for ZooKeeper client.
+        super().__init(zookeeper_hosts)
 
     def get_znode_value (self):
         """ ******************* retrieve a znode value  ************************ """
