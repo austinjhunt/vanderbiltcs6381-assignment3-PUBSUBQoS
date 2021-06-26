@@ -2,6 +2,7 @@
 Message Broker to serve as anonymizing middleware between
 publishers and subscribers
 """
+from kazoo.exceptions import KazooException
 import zmq
 import json
 import traceback
@@ -10,22 +11,26 @@ import logging
 import pickle
 import netifaces
 import sys
+from kazoo.client import KazooClient, KazooState
+
+
 
 class Broker:
     #################################################################
     # constructor
     #################################################################
-    def __init__(self, centralized=False, indefinite=False, max_event_count=15):
+    def __init__(self, centralized=False, indefinite=False, max_event_count=15,
+        zookeeper_hosts=['127.0.0.1:2181']):
         self.centralized = centralized
         self.prefix = {'prefix': 'BROKER - '}
         if self.centralized:
             log_format = logging.Formatter('%(message)s')
             log_format._fmt = "CENTRAL PUBLISHING BROKER - " + log_format._fmt
-            logging.debug("Initializing broker for centralized dissemination", extra=self.prefix)
+            self.debug("Initializing broker for centralized dissemination")
         else:
             log_format = logging.Formatter('%(message)s')
             log_format._fmt = "DECENTRAL PUBLISHING BROKER - " + log_format._fmt
-            logging.debug("Initializing broker for decentralized dissemination", extra=self.prefix)
+            self.debug("Initializing broker for decentralized dissemination")
         # Either poll for events indefinitely or for specified max_event_count
         self.indefinite = indefinite
         self.max_event_count = max_event_count
@@ -55,6 +60,18 @@ class Broker:
         self.send_port_dict = {}
         self.used_ports = []
 
+        self.zookeeper_hosts = ','.join(zookeeper_hosts)
+        self.zookeeper_client = None
+
+    def info(self, msg):
+        logging.info(msg, extra=self.prefix)
+
+    def error(self, msg):
+        logging.error(msg, extra=self.prefix)
+
+    def debug(self, msg):
+        logging.debug(msg, extra=self.prefix)
+
     def configure(self):
         """ Method to perform initial configuration of Broker entity """
         #  The zmq context
@@ -62,10 +79,10 @@ class Broker:
         # we will use the poller to poll for incoming data
         self.poller = zmq.Poller()
         # these are the sockets we open one for each registration
-        logging.debug("Opening two REP sockets for publisher registration "
-            "and subscriber registration", extra=self.prefix)
-        logging.debug("Enabling publisher registration on port 5555", extra=self.prefix)
-        logging.debug("Enabling subscriber registration on port 5556", extra=self.prefix)
+        self.debug("Opening two REP sockets for publisher registration "
+            "and subscriber registration")
+        self.debug("Enabling publisher registration on port 5555")
+        self.debug("Enabling subscriber registration on port 5556")
         self.pub_reg_socket = self.context.socket(zmq.REP)
         self.pub_reg_socket.bind("tcp://*:5555")
         self.sub_reg_socket = self.context.socket(zmq.REP)
@@ -74,9 +91,21 @@ class Broker:
         self.used_ports.append(5556)
 
         # register these sockets for incoming data
-        logging.debug("Register sockets with a ZMQ poller", extra=self.prefix)
+        self.debug("Register sockets with a ZMQ poller")
         self.poller.register(self.pub_reg_socket, zmq.POLLIN)
         self.poller.register(self.sub_reg_socket, zmq.POLLIN)
+
+        # Initialize ZooKeeper client
+        self.connect_to_zookeeper()
+
+    def connect_to_zookeeper(self):
+        try:
+            self.info(f'Attempting to connect to zookeeper hosts: [{self.zookeeper_hosts}]')
+            # Initialize ZooKeeper client
+            self.zookeeper = KazooClient(hosts=self.zookeeper_hosts)
+        except KazooException as e:
+            self.error("Could not connect to ZooKeeper")
+            self.error(str(e))
 
     def parse_events(self, index):
         """ BOTH CENTRAL AND DECENTRALIZED DISSEMINATION
@@ -88,12 +117,12 @@ class Broker:
         # Note that we must check for all the sockets since multiple of them
         # could have been enabled.
         # The return value of poll() is a socket to event mask mapping
-        # logging.debug("Polling for events...", extra=self.prefix)
+        # self.debug("Polling for events...")
         try:
             events = dict(self.poller.poll())
         except zmq.error.ZMQError as e:
             if 'Socket operation on non-socket' in str(e):
-                logging.error(f'Exception with self.poller.poll(): {e}', extra=self.prefix)
+                self.error(f'Exception with self.poller.poll(): {e}')
                 self.disconnect()
                 sys.exit(1)
 
@@ -103,7 +132,7 @@ class Broker:
                 # Open a SUB socket to receive from publisher
                 self.update_receive_socket()
         elif self.sub_reg_socket in events:
-            logging.debug(f"Event {index}: subscriber", extra=self.prefix)
+            self.debug(f"Event {index}: subscriber")
             self.register_sub()
         # For centralized dissemination, also handle sending
         if self.centralized:
@@ -119,13 +148,13 @@ class Broker:
         Poll for events either indefinitely or until a specific
         event count (self.max_event_count, passed in constructor) is reached """
         if self.indefinite:
-            logging.debug("Begin indefinite event poll loop", extra=self.prefix)
+            self.debug("Begin indefinite event poll loop")
             i = 0 # index used just for logging event index
             while True:
                 i += 1
                 self.parse_events(i)
         else:
-            logging.debug(f"Begin finite (max={self.max_event_count}) event poll loop", extra=self.prefix)
+            self.debug(f"Begin finite (max={self.max_event_count}) event poll loop")
             event_count = 0
             while event_count < self.max_event_count:
                 self.parse_events(event_count+1)
@@ -137,16 +166,16 @@ class Broker:
         """ CENTRALIZED DISSEMINATION
         Once publisher registers with broker, broker will begin receiving messages from it
         for a given topic; broker must open a SUB socket for the topic if not already opened"""
-        logging.debug("Updating receive socket to 'subscribe' to publisher", extra=self.prefix)
+        self.debug("Updating receive socket to 'subscribe' to publisher")
         for topic in self.publishers.keys():
             if topic not in self.receive_socket_dict.keys():
                 self.receive_socket_dict[topic] = self.context.socket(zmq.SUB)
                 self.poller.register(self.receive_socket_dict[topic], zmq.POLLIN)
             for address in self.publishers[topic]:
-                logging.debug(f"'Subscribing' to publisher {address}", extra=self.prefix)
+                self.debug(f"'Subscribing' to publisher {address}")
                 self.receive_socket_dict[topic].connect(f"tcp://{address}")
                 self.receive_socket_dict[topic].setsockopt_string(zmq.SUBSCRIBE, topic)
-        # logging.debug("Broker Receive Socket: {0:s}".format(str(list(self.receive_socket_dict.keys()))))
+        # self.debug("Broker Receive Socket: {0:s}".format(str(list(self.receive_socket_dict.keys()))))
 
     def send(self, topic):
         """ CENTRALIZED DISSEMINATION
@@ -157,7 +186,7 @@ class Broker:
             # received_message = self.receive_socket_dict[topic].recv_string()
             [topic,received_message] = self.receive_socket_dict[topic].recv_multipart()
             unpickled_message = pickle.loads(received_message)
-            logging.debug(f"Forwarding Msg: <{unpickled_message}>", extra=self.prefix)
+            self.debug(f"Forwarding Msg: <{unpickled_message}>")
             # self.send_socket_dict[topic].send_string(received_message)
             self.send_socket_dict[topic.decode('utf8')].send_multipart([topic, received_message])
 
@@ -171,7 +200,7 @@ class Broker:
 
     def disconnect_sub(self, msg):
         """ Method to remove data related to a disconnecting subscriber """
-        logging.debug(f"Disconnecting subscriber...", extra=self.prefix)
+        self.debug(f"Disconnecting subscriber...")
         dc = msg['disconnect']
         topics = dc['topics']
         address = dc['address']
@@ -205,7 +234,7 @@ class Broker:
         try:
             # the format of the registration string is a json
             # '{ "address":"1234", "topics":['A', 'B']}'
-            logging.debug("Subscriber Registration Started", extra=self.prefix)
+            self.debug("Subscriber Registration Started")
             sub_reg_string = self.sub_reg_socket.recv_string()
             # Get topics and address of subscriber
             sub_reg_dict = json.loads(sub_reg_string)
@@ -235,7 +264,7 @@ class Broker:
                 ## Notify new subscriber about all publishers of topic
                 ## so they can listen directly
                 # Set up a new notify socket on a clear port for this subscriber
-                logging.debug("Enabling subscriber notification (about publishers)",
+                self.debug("Enabling subscriber notification (about publishers)",
                     extra=self.prefix)
                 self.notify_sub_sockets[sub_id] = self.context.socket(zmq.REQ)
                 self.used_ports.append(notify_port)
@@ -250,19 +279,19 @@ class Broker:
                 reply_sub_dict = {}
                 for topic in sub_reg_dict['topics']:
                     reply_sub_dict[topic] = self.send_port_dict[topic]
-                logging.debug(f"Sending topic/ports: {reply_sub_dict}", extra=self.prefix)
+                self.debug(f"Sending topic/ports: {reply_sub_dict}")
                 self.sub_reg_socket.send_string(json.dumps(reply_sub_dict, indent=4))
 
-            logging.debug("Subscriber registered successfully", extra=self.prefix)
+            self.debug("Subscriber registered successfully")
         except Exception as e:
-            logging.error(e, extra=self.prefix)
+            self.error(e)
 
     def notify_subscribers(self, topics, pub_address=None, sub_id=None):
         """ DECENTRALIZED DISSEMINATION
         Tell the subscribers of a given topic that a new publisher
         of this topic has been added; they should start listening to
         that/those publishers directly """
-        logging.debug("Notifying subscribers", extra=self.prefix)
+        self.debug("Notifying subscribers")
         message = []
         addresses = []
         if pub_address: # when registering single new publisher
@@ -277,11 +306,11 @@ class Broker:
             message = json.dumps(message)
             # Send to notify socket for each subscriber
             for sub_id, notify_socket in self.notify_sub_sockets.items():
-                logging.debug(f"Sending notification to sub: {sub_id}", extra=self.prefix)
+                self.debug(f"Sending notification to sub: {sub_id}")
                 notify_socket.send_string(message)
-                logging.debug(f"Waiting for response...", extra=self.prefix)
+                self.debug(f"Waiting for response...")
                 confirmation = notify_socket.recv_string()
-                logging.debug(f"Subscriber notified successfully (confirmation: <{confirmation}>", extra=self.prefix)
+                self.debug(f"Subscriber notified successfully (confirmation: <{confirmation}>")
 
         else: # when registering a new subscriber
             for t in topics:
@@ -299,15 +328,15 @@ class Broker:
                 )
             message = json.dumps(message)
             # Send to notify socket for new subscriber address
-            logging.debug(f"Sending message to subscriber: {message}", extra=self.prefix)
+            self.debug(f"Sending message to subscriber: {message}")
             self.notify_sub_sockets[sub_id].send_string(message)
-            logging.debug(f"Waiting for response...", extra=self.prefix)
+            self.debug(f"Waiting for response...")
             confirmation = self.notify_sub_sockets[sub_id].recv_string()
-            logging.debug(f"Subscriber notified successfully (confirmation: <{confirmation}>", extra=self.prefix)
+            self.debug(f"Subscriber notified successfully (confirmation: <{confirmation}>")
 
     def disconnect_pub(self, msg):
         """ Method to remove data related to a disconnecting publisher """
-        logging.debug(f"Disconnecting publisher...", extra=self.prefix)
+        self.debug(f"Disconnecting publisher...")
         dc = msg['disconnect']
         topics = dc['topics']
         address = dc['address']
@@ -337,7 +366,7 @@ class Broker:
             # the format of the registration string is a json
             # '{ "address":"1234", "topics":['A', 'B']}'
             pub_reg_string = self.pub_reg_socket.recv_string()
-            logging.debug(f"Publisher Registration Started: {pub_reg_string}", extra=self.prefix)
+            self.debug(f"Publisher Registration Started: {pub_reg_string}")
             pub_reg_dict = json.loads(pub_reg_string)
             # Handle disconnect if requested
             if 'disconnect' in pub_reg_dict:
@@ -361,9 +390,9 @@ class Broker:
             response = {'success': 'registration success'}
         except Exception as e:
             response = {'error': f'registration failed due to exception: {e}'}
-        logging.debug(f"Sending response: {response}", extra=self.prefix)
+        self.debug(f"Sending response: {response}")
         self.pub_reg_socket.send_string(json.dumps(response))
-        logging.debug("Publisher Registration Succeeded", extra=self.prefix)
+        self.debug("Publisher Registration Succeeded")
 
     def get_host_address(self):
         """ Method to return IP address of current host.
@@ -394,16 +423,16 @@ class Broker:
                     if port not in self.send_port_dict.values():
                         break
                 self.send_port_dict[topic] = port
-                logging.debug(f"Topic {topic} is being sent at port {port}", extra=self.prefix)
+                self.debug(f"Topic {topic} is being sent at port {port}")
                 self.send_socket_dict[topic].bind(f"tcp://{self.get_host_address()}:{port}")
 
     def disconnect(self):
         """ Method to disconnect from the publish/subscribe system by destroying the ZMQ context """
         try:
-            logging.info("Disconnecting. Destroying ZMQ context..", extra=self.prefix)
+            self.info("Disconnecting. Destroying ZMQ context..")
             self.context.destroy()
         except Exception as e:
-            logging.error(f"Failed to destroy context: {e}", extra=self.prefix)
+            self.error(f"Failed to destroy context: {e}")
 
 
 
