@@ -30,13 +30,12 @@ def create_publishers(count=1, topics=[], broker_address='127.0.0.1',
             indefinite=indefinite,
             max_event_count=max_event_count
         )
-        try:
-            pubs[i].configure()
-            pubs[i].publish()
-        except KeyboardInterrupt:
-            # If you interrupt/cancel a publisher, be sure to disconnect properly
-            # to tell broker it's no longer active
-            pubs[i].disconnect()
+        pubs[i].connect_zk()
+        pubs[i].start_session()
+        pubs[i].get_znode_value()
+        pubs[i].update_broker_info()
+        pubs[i].watch_znode_data_change()
+        pubs[i].run_publisher()
 
     return pubs
 
@@ -57,31 +56,45 @@ def create_subscribers(count=1, filename=None, broker_address='127.0.0.1',
             indefinite=indefinite,
             max_event_count=max_event_count
         )
-        try:
-            subs[i].configure()
-            subs[i].notify()
-            # This will call if notify is not indefinite
-            subs[i].disconnect()
-        except KeyboardInterrupt:
-            # If you interrupt/cancel a subscriber, be sure to disconnect properly
-            # to tell broker it's no longer active
-            subs[i].disconnect()
+
+        subs[i].connect_zk()
+        subs[i].start_session()
+        subs[i].get_znode_value()
+        subs[i].update_broker_info()
+        subs[i].watch_znode_data_change()
+        subs[i].run_subscriber()
+
+        # try:
+        #     subs[i].configure()
+        #     subs[i].notify()
+        #     # This will call if notify is not indefinite
+        #     subs[i].disconnect()
+        # except KeyboardInterrupt:
+        #     # If you interrupt/cancel a subscriber, be sure to disconnect properly
+        #     # to tell broker it's no longer active
+        #     subs[i].disconnect()
         # If filename provided (only works with finite notify() loop), write to file
         if filename:
             subs[i].write_stored_messages()
     return subs
 
-def create_broker(indefinite=False, centralized=False):
+def create_broker(indefinite=False, centralized=False, pub_reg_port=5555, sub_reg_port=5556):
     broker = Broker(
         centralized=centralized,
-        indefinite=indefinite
+        indefinite=indefinite,
+        pub_reg_port=pub_reg_port,
+        sub_reg_port=sub_reg_port
     )
-    broker.configure()
-    try:
-        broker.event_loop()
-    except KeyboardInterrupt:
-        # If you interrupt/cancel a broker, be sure to disconnect/clean all sockets
-        broker.disconnect()
+    broker.connect_zk()
+    broker.start_session()
+    broker.zk_run_election()
+
+    # broker.configure()
+    # try:
+    #     broker.event_loop()
+    # except KeyboardInterrupt:
+    #     # If you interrupt/cancel a broker, be sure to disconnect/clean all sockets
+    #     broker.disconnect()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -115,7 +128,7 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--topics', action='append',
         help=('if creating a pub or sub, provide list of topics to either publish or subscribe to.'
         ' required if using -sub or -pub '))
-    
+
     parser.add_argument('-m', '--max_event_count', type=int,
         help=(
             'if used with --sub, max num of published events to receive. '
@@ -126,7 +139,7 @@ if __name__ == "__main__":
             'if used with -pub, publish events indefinitely from created publisher(s). '
             'if used with -sub, receive published events indefinitely with created subscriber(s)'
         ))
-    
+
     # Required with --publisher and --subscriber
     parser.add_argument('-b', '--broker_address', type=str, help=(
         'required with --publisher/--subscriber; provide the IP address of the broker'
@@ -137,6 +150,14 @@ if __name__ == "__main__":
         help='(for use with -pub port on which to publish. If not provided with --pub, port 5556 used.')
     parser.add_argument('-s', '--sleep', type=float,
         help='Number of seconds to sleep between publish events. If not provided, 1 second used.')
+
+    #################################################################
+    # Required with --broker
+    parser.add_argument('-prp', '--pub_reg_port', type=int,
+        help="which port of the broker will be used to receive pub registration")
+    parser.add_argument('-srp', '--sub_reg_port', type=int,
+        help="which port of the broker will be used to receive sub registration")
+    #################################################################
 
     args = parser.parse_args()
 
@@ -170,10 +191,12 @@ if __name__ == "__main__":
                 'If creating a publisher with --publisher you must provide a set of topics to '
                 'publish with -t <topic> [-t <topic> ...]'
                 )
-        if not args.broker_address:
-            raise argparse.ArgumentTypeError(
-                'You need to provide a broker IP address with --broker_address [-b] <IP ADDRESS>'
-                )
+        # # No need to provide broker_address anymore. It will be obtained from the znode
+        # if not args.broker_address:
+        #     raise argparse.ArgumentTypeError(
+        #         'You need to provide a broker IP address with --broker_address [-b] <IP ADDRESS>'
+        #         )
+
         if args.filename:
             raise argparse.ArgumentTypeError(
                 '--filename not a valid argument with --publisher type. only works with --subscriber'
@@ -194,10 +217,11 @@ if __name__ == "__main__":
                 'If creating a subscriber with --subscriber, you must provide a set of topics to '
                 'subscribe to with -t <topic> [-t <topic> ...]'
                 )
-        if not args.broker_address:
-            raise argparse.ArgumentTypeError(
-                'You need to provide a broker IP address with --broker_address [-b] <IP ADDRESS>'
-                )
+        # # no need to provide broker address anymore. It will be obtained from the znode
+        # if not args.broker_address:
+        #     raise argparse.ArgumentTypeError(
+        #         'You need to provide a broker IP address with --broker_address [-b] <IP ADDRESS>'
+        #         )
         if args.indefinite and args.filename:
             raise argparse.ArgumentTypeError(
                 'Cannot write to file (--filename) if using indefinite loop; file write only '
@@ -219,7 +243,7 @@ if __name__ == "__main__":
                 )
         create_broker(
             centralized=args.centralized,
-            indefinite=args.indefinite
+            indefinite=args.indefinite,
+            pub_reg_port=args.pub_reg_port,
+            sub_reg_port=args.sub_reg_port
         )
-
-
