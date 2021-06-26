@@ -34,15 +34,7 @@ class TestSubscriber(unittest.TestCase):
     def test_indefinite(self):
         # By default, subscriber should listen for a max of 15 events.
         assert not self.subscriber.indefinite
-        assert self.subscriber.max_event_count == 15
-
-    def test_get_host_address(self):
-        """ Test the get_host_address() method. Since the unittests will not
-        be run in mininet, this address will always be 127.0.0.1. Mininet
-        host addresses return a very specific data structure that fails outside of
-        mininet. """
-        addr = self.subscriber.get_host_address()
-        assert addr == '127.0.0.1'
+        assert self.subscriber.max_event_count == 15 
 
     def test_write_stored_messages(self):
         # First, add some sample messages to stored messages of subscriber
