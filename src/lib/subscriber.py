@@ -6,6 +6,23 @@ import json
 import time
 import pickle
 import netifaces
+import uuid
+
+from kazoo.client import KazooClient   # client API
+from kazoo.client import KazooState    # for the state machine
+# to avoid any warning about no handlers for logging purposes, we
+# do the following
+import logging
+logging.basicConfig ()
+def listener4state (state):
+    if state == KazooState.LOST:
+        print ("Current state is now = LOST")
+    elif state == KazooState.SUSPENDED:
+        print ("Current state is now = SUSPENDED")
+    elif state == KazooState.CONNECTED:
+        print ("Current state is now = CONNECTED")
+    else:
+        print ("Current state now = UNKNOWN !! Cannot happen")
 
 class Subscriber:
     """ Class to represent a single subscriber in a Publish/Subscribe distributed system.
@@ -14,9 +31,10 @@ class Subscriber:
     information/updates across all publisher connections. If many publishers with relevant updates,
     updates will be interleaved and no single publisher connection will drown out the others. """
 
-    def __init__(self, filename=None, broker_address="127.0.0.1",
+    def __init__(self, broker_address, filename=None,
         topics=[], indefinite=False,
-        max_event_count=15, centralized=False):
+        max_event_count=15, centralized=False,
+        zk_address="127.0.0.1", zk_port="2181"):
         """ Constructor
         args:
         - broker_address - IP address of broker
@@ -64,9 +82,121 @@ class Subscriber:
         # without competition/stealing from other subscriber poll()s
         self.notify_port = None
 
+        # this is to connect with zookeeper Server
+        self.zk_address = zk_address
+        self.zk_port = zk_port
+        self.zk_server = f"{zk_address}:{zk_port}"
+
+        # this is an identifier for ZooKeeper
+        self.instanceId = str(uuid.uuid4())
+        print(f"My InstanceId is {self.instanceId}")
+
+        # this is the zk node name
+        self.zkName = '/broker'
+
+        # this is in the infor stored in znode
+        # this info is broker_address,pub_port,sub_port
+        self.znode_value = None
+        self.sub_reg_port = "5556"
+
+    def connect_zk(self):
+        try:
+            print("Try to connect with ZooKeeper server: hosts = {}".format(self.zk_server))
+            self.zk = KazooClient(self.zk_server)
+            self.zk.add_listener (listener4state)
+            print("ZooKeeper Current Status = {}".format (self.zk.state))
+        except:
+            print("Issues with ZooKeeper, cannot connect with Server")
+
+    def start_session(self):
+        """ Starting a Session """
+        try:
+            # now connect to the server
+            self.zk.start()
+        except:
+            print("Exception thrown in start (): ", sys.exc_info()[0])
+
+    def stop_session (self):
+        """ Stopping a Session """
+        try:
+            # now disconnect from the server
+            self.zk.stop ()
+        except:
+            print("Exception thrown in stop (): ", sys.exc_info()[0])
+            return
+
+    def close_connection(self):
+        try:
+            # now disconnect from the server
+            self.zk.close()
+        except:
+            print("Exception thrown in close (): ", sys.exc_info()[0])
+            return
+
+    def get_znode_value (self):
+        """ ******************* retrieve a znode value  ************************ """
+        try:
+            print ("Checking if {} exists (it better be)".format(self.zkName))
+            if self.zk.exists (self.zkName):
+                print ("{} znode indeed exists; get value".format(self.zkName))
+                # Now acquire the value and stats of that znode
+                #value,stat = self.zk.get (self.zkName, watch=self.watch)
+                value,stat = self.zk.get (self.zkName)
+                self.znode_value = value.decode("utf-8")
+                print(("Details of znode {}: value = {}, stat = {}".format (self.zkName, value, stat)))
+                print(f"Values stored in field znode_value is {self.znode_value}")
+            else:
+                print ("{} znode does not exist, why?".format(self.zkName))
+        except:
+            print("Exception thrown checking for exists/get: ", sys.exc_info()[0])
+            return
+
+    def update_broker_info(self):
+        if self.znode_value != None:
+            print("Getting broker information from znode_value")
+            self.broker_address = self.znode_value.split(",")[0]
+            self.sub_reg_port = self.znode_value.split(",")[2]
+            print(f"Broker address: {self.broker_address}")
+            print(f"Broker Pub Reg Port: {self.sub_reg_port}")
+
+    # -----------------------------------------------------------------------
+    def watch_znode_data_change(self):
+        #*****************************************************************
+        # This is the watch callback function that is supposed to be invoked
+        # when changes get made to the znode of interest. Note that a watch is
+        # effective only once. So the client has to set the watch every time.
+        # To overcome the need for this, Kazoo has come up with a decorator.
+        # Decorators can be of two kinds: watching for data on a znode changing,
+        # and children on a znode changing
+        @self.zk.DataWatch(self.zkName)
+        def dump_data_change (data, stat, event):
+            if event == None:
+                print("No Event")
+            elif event.type == 'CHANGED':
+                print("Event is {0:s}".format(event.type))
+                print("Broker Changed, First close all sockets and terminate the context")
+                self.context.destroy()
+                print("Broker Changed, Second Update Broker Information")
+                print(("Data changed for znode: data = {}".format (data)))
+                print(("Data changed for znode: stat = {}".format (stat)))
+                self.get_znode_value()
+                self.update_broker_info()
+                print("Broker Changed, Third Reconnect and Subscribe")
+                self.run_subscriber()
+            elif event.type == 'DELETED':
+                print("Event is {0:s}".format(event.type))
+
+    def run_subscriber(self):
+        try:
+            self.configure()
+            self.notify()
+        except KeyboardInterrupt:
+            self.disconnect()
+
 
     def configure(self):
         """ Method to perform initial configuration of Subscriber entity """
+        print("Configure Start")
         self.debug("Initializing")
         # Create a shared context object for all publisher connections
         self.debug("Setting the context object")
@@ -78,10 +208,11 @@ class Subscriber:
         self.debug("Connecting to register with broker")
 
         self.broker_reg_socket = self.context.socket(zmq.REQ)
-        self.broker_reg_socket.connect(f"tcp://{self.broker_address}:5556")
+        self.broker_reg_socket.connect(f"tcp://{self.broker_address}:{self.sub_reg_port}")
 
         # Register self with broker on init
         self.register_sub()
+        print("Configure Stop")
 
     def setup_notification_polling(self):
         """ Method to set up a socket for polling for notifications about
@@ -212,6 +343,7 @@ class Subscriber:
         new publishers from broker) either indefinitely
         (if indefinite=True in constructor) or until max_event_count
         (passed to constructor) is reached. """
+        print("Subscribe Start")
         self.debug("Start to receive message")
         if self.indefinite:
             while True:
@@ -291,7 +423,3 @@ class Subscriber:
 
     def error(self, msg):
         logging.error(msg, extra=self.prefix)
-
-
-
-
