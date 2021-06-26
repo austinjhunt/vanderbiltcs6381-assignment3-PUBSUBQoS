@@ -2,7 +2,7 @@
 Message Broker to serve as anonymizing middleware between
 publishers and subscribers
 """
-from src.lib.zookeeper_client import ZookeeperClient
+from .zookeeper_client import ZookeeperClient
 from kazoo.exceptions import KazooException
 import zmq
 import json
@@ -22,17 +22,10 @@ class Broker(ZookeeperClient):
     # constructor
     #################################################################
     def __init__(self, centralized=False, indefinite=False, max_event_count=15,
-        zookeeper_hosts=['127.0.0.1:2181']):
+        zookeeper_hosts=['127.0.0.1:2181'], pub_reg_port=5555, sub_reg_port=5556):
         self.centralized = centralized
         self.prefix = {'prefix': 'BROKER - '}
-        if self.centralized:
-            log_format = logging.Formatter('%(message)s')
-            log_format._fmt = "CENTRAL PUBLISHING BROKER - " + log_format._fmt
-            self.debug("Initializing broker for centralized dissemination")
-        else:
-            log_format = logging.Formatter('%(message)s')
-            log_format._fmt = "DECENTRAL PUBLISHING BROKER - " + log_format._fmt
-            self.debug("Initializing broker for decentralized dissemination")
+        self.set_logger()
         # Either poll for events indefinitely or for specified max_event_count
         self.indefinite = indefinite
         self.max_event_count = max_event_count
@@ -67,18 +60,26 @@ class Broker(ZookeeperClient):
         self.debug(f"My Zookeeper instance ID is {self.zk_instance_id}")
 
         # this is for write into the znode about the broker information
-        self.pub_reg_port = 5555
-        self.sub_reg_port = 5556
+        self.pub_reg_port = pub_reg_port
+        self.sub_reg_port = sub_reg_port
         self.znode_value = f"{self.get_host_address()},{self.pub_reg_port},{self.sub_reg_port}"
 
+    def set_logger(self):
+        self.logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(prefix)s - %(message)s')
+        handler.setFormatter(formatter)
+        handler.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.DEBUG)
+
     def info(self, msg):
-        logging.info(msg, extra=self.prefix)
+        self.logger.info(msg, extra=self.prefix)
 
     def error(self, msg):
-        logging.error(msg, extra=self.prefix)
+        self.logger.error(msg, extra=self.prefix)
 
     def debug(self, msg):
-        logging.debug(msg, extra=self.prefix)
+        self.logger.debug(msg, extra=self.prefix)
 
 
     def leader_function(self):
@@ -102,7 +103,7 @@ class Broker(ZookeeperClient):
 
     def zk_run_election(self):
         self.election = self.zk.Election("/electionpath", self.zk_instance_id)
-        self.debug("contenders", self.election.contenders())
+        self.debug(f"contenders: {self.election.contenders()}")
         # Blocks until election is won, then calls leader function
         self.election.run(self.leader_function)
 
@@ -152,7 +153,6 @@ class Broker(ZookeeperClient):
                     self.pub_reg_port += 1
                 except Exception as e:
                     self.debug(e)
-        logging.debug("Finished loop", extra=self.prefix)
 
     def setup_sub_port_reg_binding(self):
         """
@@ -173,7 +173,6 @@ class Broker(ZookeeperClient):
                     self.sub_reg_port += 1
                 except Exception as e:
                     self.debug(e)
-        logging.debug("Finished loop", extra=self.prefix)
 
     def parse_events(self, index):
         """ BOTH CENTRAL AND DECENTRALIZED DISSEMINATION

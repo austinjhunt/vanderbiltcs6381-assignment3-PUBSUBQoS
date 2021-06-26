@@ -4,7 +4,7 @@ for basic zookeeper client functionality
 import uuid
 import sys
 from kazoo.client import KazooClient, KazooState
-import logging
+
 class ZookeeperClient:
     def __init__(self, zookeeper_hosts=[]):
         self.zk_hosts = ','.join(zookeeper_hosts)
@@ -15,16 +15,6 @@ class ZookeeperClient:
         self.znode_value = None
         # The ZNode all entities will be interested in watching
         self.zk_name = '/broker'
-        self.prefix = {'prefix': 'ZKCLI - '}
-
-    def info(self, msg):
-        logging.info(msg, extra=self.prefix)
-
-    def error(self, msg):
-        logging.error(msg, extra=self.prefix)
-
-    def debug(self, msg):
-        logging.debug(msg, extra=self.prefix)
 
     def listener4state (self, state):
         if state == KazooState.LOST:
@@ -39,7 +29,7 @@ class ZookeeperClient:
     def connect_zk(self):
         try:
             self.debug(f"Try to connect with ZooKeeper server: hosts = {self.zk_hosts}")
-            self.zk = KazooClient(self.zk_server)
+            self.zk = KazooClient(self.zk_hosts)
             self.zk.add_listener (self.listener4state)
             self.debug(f"ZooKeeper Current Status = {self.zk.state}")
         except:

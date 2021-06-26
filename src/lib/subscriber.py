@@ -1,5 +1,5 @@
 import socket as sock
-from src.lib.zookeeper_client import ZookeeperClient
+from .zookeeper_client import ZookeeperClient
 import zmq
 import logging
 import datetime
