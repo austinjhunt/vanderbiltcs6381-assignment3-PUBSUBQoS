@@ -2,12 +2,11 @@ import socket as sock
 from .zookeeper_client import ZookeeperClient
 import zmq
 import logging
-import datetime
 import json
 import time
 import pickle
 import netifaces
-import uuid
+import sys
 
 class Subscriber(ZookeeperClient):
     """ Class to represent a single subscriber in a Publish/Subscribe distributed system.
@@ -64,7 +63,6 @@ class Subscriber(ZookeeperClient):
         # without competition/stealing from other subscriber poll()s
         self.notify_port = None
         self.sub_reg_port = 5556
-
         super().__init__(zookeeper_hosts=zookeeper_hosts)
 
     def set_logger(self):
@@ -97,29 +95,22 @@ class Subscriber(ZookeeperClient):
             if event == None:
                 self.debug("No Event")
             elif event.type == 'CHANGED':
-                self.debug("Event is {0:s}".format(event.type))
-                self.debug("Broker Changed, First close all sockets and terminate the context")
-                # Add this to avoid socket op on non socket when calling poller.poll()
-                # which runs in parallel to this watch method.
-                # for registered_socket in self.poller.sockets:
-                #     # FIXME: throwing key error, registered socket does not exist
-                #     self.poller.unregister(registered_socket)
-                # Can you call poller.poll() on a poller with no registered sockets?
-                # if not, the above will cause an error.
+                self.debug("Event is CHANGED")
+                self.debug("Broker Changed! Destroying context")
                 self.context.destroy()
-                self.debug("Broker Changed, Second Update Broker Information")
                 self.debug(("Data changed for znode: data = {}".format (data)))
                 self.debug(("Data changed for znode: stat = {}".format (stat)))
                 self.get_znode_value()
                 self.update_broker_info()
-                self.debug("Broker Changed, Third Reconnect and Subscribe")
+                self.debug("Reconnecting/registering with new broker...")
                 self.run_subscriber()
             elif event.type == 'DELETED':
-                self.debug("Event is {0:s}".format(event.type))
+                self.debug("Event is DELETED")
 
     def run_subscriber(self):
         try:
             self.configure()
+            # FIXME: notify() is already running as a background loop; do we need to call it again here?
             self.notify()
         except KeyboardInterrupt:
             self.disconnect()
@@ -152,6 +143,7 @@ class Subscriber(ZookeeperClient):
         - notify_port (int) """
         self.notify_sub_socket = self.context.socket(zmq.REP)
         self.notify_sub_socket.connect(f"tcp://{self.broker_address}:{self.notify_port}")
+        self.debug(f"Registering socket {self.notify_sub_socket} with poller")
         self.poller.register(self.notify_sub_socket, zmq.POLLIN)
 
     def register_sub(self):
@@ -199,6 +191,7 @@ class Subscriber(ZookeeperClient):
                 # Set up one SUB socket for topic if not already created
                 if topic not in self.sub_socket_dict:
                     self.sub_socket_dict[topic] = self.context.socket(zmq.SUB)
+                    self.debug(f"Registering topic socket {self.sub_socket_dict[topic]} with poller")
                     self.poller.register(self.sub_socket_dict[topic], zmq.POLLIN)
                 # Connect to publisher addresses if topic is of interest
                 for p in publisher_addresses:
@@ -223,6 +216,7 @@ class Subscriber(ZookeeperClient):
             broker_port = received_message[topic]
             # One SUB socket per topic
             self.sub_socket_dict[topic] = self.context.socket(zmq.SUB)
+            self.debug(f"Registering topic socket {self.sub_socket_dict[topic]} with poller")
             self.poller.register(self.sub_socket_dict[topic], zmq.POLLIN)
             self.debug(
                 f"Connecting to broker for topic <{topic}> at "
@@ -268,6 +262,7 @@ class Subscriber(ZookeeperClient):
         self.debug(f'Received: <{json.dumps(received_message)}>')
 
 
+
     def notify(self):
         """ Method to poll for published events (or notifications about
         new publishers from broker) either indefinitely
@@ -277,25 +272,39 @@ class Subscriber(ZookeeperClient):
         self.debug("Start to receive message")
         if self.indefinite:
             while True:
-                events = dict(self.poller.poll())
+                try:
+                    events = dict(self.poller.poll())
+                except zmq.error.ZMQError as e:
+                    # Socket operation on non socket error expected here
+                    # due to race condition when broker is being switched out.
+                    # Sockets are deleted and context is destroyed while notify is still running
+                    self.error(str(e))
+                    events = {}
                 if self.notify_sub_socket in events:
                     # This is a notification about new publishers
                     self.parse_notification()
                 else:
                     # This is a normal publish event from a publisher
-                    for topic in self.sub_socket_dict.keys():
-                        if self.sub_socket_dict[topic] in events:
+                    for topic, socket in self.sub_socket_dict.items():
+                        if socket in events:
                             self.parse_publish_event(topic=topic)
         else:
             event_count = 0
             while event_count < self.max_event_count:
-                events = dict(self.poller.poll())
+                try:
+                    events = dict(self.poller.poll())
+                except zmq.error.ZMQError as e:
+                    # Socket operation on non socket error expected here
+                    # due to race condition when broker is being switched out.
+                    # Sockets are deleted and context is destroyed while notify is still running
+                    self.error(str(e))
+                    events = {}
                 if self.notify_sub_socket in events:
                     # This is a notification about new publishers
                     self.parse_notification()
                 else:
-                    for topic in self.sub_socket_dict.keys():
-                        if self.sub_socket_dict[topic] in events and event_count < self.max_event_count:
+                    for topic, socket in self.sub_socket_dict.items():
+                        if socket in events and event_count < self.max_event_count:
                             event_count += 1
                             self.parse_publish_event(topic=topic)
 
@@ -342,9 +351,10 @@ class Subscriber(ZookeeperClient):
         try:
             self.debug(f'Destroying ZMQ context, closing all sockets')
             self.context.destroy()
+            sys.exit(0)
         except Exception as e:
             self.error(f'Could not destroy ZMQ context successfully - {str(e)}')
-
+            sys.exit(1)
     def info(self, msg):
         self.logger.info(msg, extra=self.prefix)
 
