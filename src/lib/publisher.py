@@ -8,6 +8,7 @@ import json
 import pickle
 import netifaces
 import uuid
+import sys
 
 class Publisher(ZookeeperClient):
     """ Class to represent a single publisher in a Publish/Subscribe distributed
@@ -46,10 +47,10 @@ class Publisher(ZookeeperClient):
         self.set_logger()
 
         # Set up initial config for ZooKeeper client.
-        super().__init(zookeeper_hosts)
+        super().__init__(zookeeper_hosts)
 
     def debug(self, msg):
-        self.debug(msg, extra=self.prefix)
+        self.logger.debug(msg, extra=self.prefix)
 
     def info(self, msg):
         self.logger.info(msg, extra=self.prefix)
@@ -68,17 +69,17 @@ class Publisher(ZookeeperClient):
     def get_znode_value (self):
         """ ******************* retrieve a znode value  ************************ """
         try:
-            self.debug ("Checking if {} exists (it better be)".format(self.zkName))
-            if self.zk.exists (self.zkName):
-                self.debug ("{} znode indeed exists; get value".format(self.zkName))
+            self.debug ("Checking if {} exists (it better be)".format(self.zk_name))
+            if self.zk.exists (self.zk_name):
+                self.debug ("{} znode indeed exists; get value".format(self.zk_name))
                 # Now acquire the value and stats of that znode
-                #value,stat = self.zk.get (self.zkName, watch=self.watch)
-                value,stat = self.zk.get (self.zkName)
+                #value,stat = self.zk.get (self.zk_name, watch=self.watch)
+                value,stat = self.zk.get (self.zk_name)
                 self.znode_value = value.decode("utf-8")
-                self.debug(("Details of znode {}: value = {}, stat = {}".format (self.zkName, value, stat)))
+                self.debug(("Details of znode {}: value = {}, stat = {}".format (self.zk_name, value, stat)))
                 self.debug(f"Values stored in field znode_value is {self.znode_value}")
             else:
-                self.debug ("{} znode does not exist, why?".format(self.zkName))
+                self.debug ("{} znode does not exist, why?".format(self.zk_name))
         except:
             self.debug("Exception thrown checking for exists/get: ", sys.exc_info()[0])
             return
@@ -100,7 +101,7 @@ class Publisher(ZookeeperClient):
         # To overcome the need for this, Kazoo has come up with a decorator.
         # Decorators can be of two kinds: watching for data on a znode changing,
         # and children on a znode changing
-        @self.zk.DataWatch(self.zkName)
+        @self.zk.DataWatch(self.zk_name)
         def dump_data_change (data, stat, event):
             if event == None:
                 self.debug("No Event")

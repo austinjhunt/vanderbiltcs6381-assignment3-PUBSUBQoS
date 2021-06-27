@@ -67,6 +67,7 @@ class ZookeeperClient:
                 # Now acquire the value and stats of that znode
                 #value,stat = self.zk.get (self.zk_name, watch=self.watch)
                 value, stat = self.zk.get (self.zk_name)
+                # ip, pub_reg_port, sub_reg_port
                 self.znode_value = value.decode("utf-8")
                 self.debug(
                     f"Details of znode {self.zk_name}: value = {value}, "

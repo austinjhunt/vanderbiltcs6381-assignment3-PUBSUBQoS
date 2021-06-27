@@ -77,11 +77,11 @@ class Subscriber(ZookeeperClient):
 
     def update_broker_info(self):
         if self.znode_value != None:
-            print("Getting broker information from znode_value")
+            self.debug("Getting broker information from znode_value")
             self.broker_address = self.znode_value.split(",")[0]
             self.sub_reg_port = self.znode_value.split(",")[2]
-            print(f"Broker address: {self.broker_address}")
-            print(f"Broker Pub Reg Port: {self.sub_reg_port}")
+            self.debug(f"Broker Address: {self.broker_address}")
+            self.debug(f"Broker Sub Reg Port: {self.sub_reg_port}")
 
     # -----------------------------------------------------------------------
     def watch_znode_data_change(self):
@@ -95,20 +95,27 @@ class Subscriber(ZookeeperClient):
         @self.zk.DataWatch(self.zk_name)
         def dump_data_change (data, stat, event):
             if event == None:
-                print("No Event")
+                self.debug("No Event")
             elif event.type == 'CHANGED':
-                print("Event is {0:s}".format(event.type))
-                print("Broker Changed, First close all sockets and terminate the context")
+                self.debug("Event is {0:s}".format(event.type))
+                self.debug("Broker Changed, First close all sockets and terminate the context")
+                # Add this to avoid socket op on non socket when calling poller.poll()
+                # which runs in parallel to this watch method.
+                # for registered_socket in self.poller.sockets:
+                #     # FIXME: throwing key error, registered socket does not exist
+                #     self.poller.unregister(registered_socket)
+                # Can you call poller.poll() on a poller with no registered sockets?
+                # if not, the above will cause an error.
                 self.context.destroy()
-                print("Broker Changed, Second Update Broker Information")
-                print(("Data changed for znode: data = {}".format (data)))
-                print(("Data changed for znode: stat = {}".format (stat)))
+                self.debug("Broker Changed, Second Update Broker Information")
+                self.debug(("Data changed for znode: data = {}".format (data)))
+                self.debug(("Data changed for znode: stat = {}".format (stat)))
                 self.get_znode_value()
                 self.update_broker_info()
-                print("Broker Changed, Third Reconnect and Subscribe")
+                self.debug("Broker Changed, Third Reconnect and Subscribe")
                 self.run_subscriber()
             elif event.type == 'DELETED':
-                print("Event is {0:s}".format(event.type))
+                self.debug("Event is {0:s}".format(event.type))
 
     def run_subscriber(self):
         try:
@@ -119,7 +126,7 @@ class Subscriber(ZookeeperClient):
 
     def configure(self):
         """ Method to perform initial configuration of Subscriber entity """
-        print("Configure Start")
+        self.debug("Configure Start")
         self.debug("Initializing")
         # Create a shared context object for all publisher connections
         self.debug("Setting the context object")
@@ -135,7 +142,7 @@ class Subscriber(ZookeeperClient):
 
         # Register self with broker on init
         self.register_sub()
-        print("Configure Stop")
+        self.debug("Configure Stop")
 
     def setup_notification_polling(self):
         """ Method to set up a socket for polling for notifications about
@@ -149,7 +156,7 @@ class Subscriber(ZookeeperClient):
 
     def register_sub(self):
         """ Register self with broker """
-        self.debug(f"Registering with broker at {self.broker_address}:5556")
+        self.debug(f"Registering with broker at {self.broker_address}:{self.sub_reg_port}")
         message_dict = {'address': self.get_host_address(), 'id': self.id, 'topics': self.topics}
         message = json.dumps(message_dict, indent=4)
         self.broker_reg_socket.send_string(message)
@@ -266,7 +273,7 @@ class Subscriber(ZookeeperClient):
         new publishers from broker) either indefinitely
         (if indefinite=True in constructor) or until max_event_count
         (passed to constructor) is reached. """
-        print("Subscribe Start")
+        self.debug("Subscribe Start")
         self.debug("Start to receive message")
         if self.indefinite:
             while True:
@@ -327,16 +334,16 @@ class Subscriber(ZookeeperClient):
         # Tell broker publisher is disconnecting. Remove from storage.
         msg = {'disconnect': {'id': self.id, 'address': self.get_host_address(),
             'topics': self.topics, 'notify_port': self.notify_port}}
-        self.debug(f"Disconnecting, telling broker: {msg}", extra=self.prefix)
+        self.debug(f"Disconnecting, telling broker: {msg}")
         self.broker_reg_socket.send_string(json.dumps(msg))
         # Wait for response
         response = self.broker_reg_socket.recv_string()
-        self.debug(f"Broker response: {response} ", extra=self.prefix)
+        self.debug(f"Broker response: {response} ")
         try:
-            self.debug(f'Destroying ZMQ context, closing all sockets', extra=self.prefix)
+            self.debug(f'Destroying ZMQ context, closing all sockets')
             self.context.destroy()
         except Exception as e:
-            self.error(f'Could not destroy ZMQ context successfully - {str(e)}', extra=self.prefix)
+            self.error(f'Could not destroy ZMQ context successfully - {str(e)}')
 
     def info(self, msg):
         self.logger.info(msg, extra=self.prefix)
