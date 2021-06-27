@@ -1,4 +1,5 @@
 import socket as sock
+from .zookeeper_client import ZookeeperClient
 import zmq
 import logging
 import time
@@ -7,24 +8,9 @@ import json
 import pickle
 import netifaces
 import uuid
+import sys
 
-from kazoo.client import KazooClient   # client API
-from kazoo.client import KazooState    # for the state machine
-# to avoid any warning about no handlers for logging purposes, we
-# do the following
-import logging
-logging.basicConfig ()
-def listener4state (state):
-    if state == KazooState.LOST:
-        print ("Current state is now = LOST")
-    elif state == KazooState.SUSPENDED:
-        print ("Current state is now = SUSPENDED")
-    elif state == KazooState.CONNECTED:
-        print ("Current state is now = CONNECTED")
-    else:
-        print ("Current state now = UNKNOWN !! Cannot happen")
-
-class Publisher:
+class Publisher(ZookeeperClient):
     """ Class to represent a single publisher in a Publish/Subscribe distributed
     system. Publisher does not need to know who is consuming the information, it
     simply publishes information independently of the consumer. If publisher has
@@ -34,8 +20,7 @@ class Publisher:
         broker_address,
         # own_address='127.0.0.1',
         topics=[], sleep_period=1, bind_port=5556,
-        indefinite=False, max_event_count=15,
-        zk_address="127.0.0.1", zk_port="2181"):
+        indefinite=False, max_event_count=15,zookeeper_hosts=["127.0.0.1:2181"]):
         """ Constructor
         args:
         - broker_address (str) - IP address of broker (port 5556)
@@ -54,88 +39,58 @@ class Publisher:
         self.bind_port = bind_port
         self.indefinite = indefinite
         self.max_event_count = max_event_count
-        self.prefix = {'prefix': f'PUB{id(self)}<{",".join(self.topics)}> -'}
         self.context = None
         self.broker_reg_socket = None
         self.pub_socket = None
         self.pub_port = None
+        self.pub_reg_port = 5555
+        self.set_logger()
 
-        # this is to connect with zookeeper Server
-        self.zk_address = zk_address
-        self.zk_port = zk_port
-        self.zk_server = f"{zk_address}:{zk_port}"
+        # Set up initial config for ZooKeeper client.
+        super().__init__(zookeeper_hosts)
 
-        # this is an identifier for ZooKeeper
-        self.instanceId = str(uuid.uuid4())
-        print(f"My InstanceId is {self.instanceId}")
+    def debug(self, msg):
+        self.logger.debug(msg, extra=self.prefix)
 
-        # this is the zk node name
-        self.zkName = '/broker'
+    def info(self, msg):
+        self.logger.info(msg, extra=self.prefix)
 
-        # this is in the infor stored in znode
-        # this info is broker_address,pub_port,sub_port
-        self.znode_value = None
-        self.pub_reg_port = "5555"
+    def error(self, msg):
+        self.logger.error(msg, extra=self.prefix)
 
-    def connect_zk(self):
-        try:
-            print("Try to connect with ZooKeeper server: hosts = {}".format(self.zk_server))
-            self.zk = KazooClient(self.zk_server)
-            self.zk.add_listener (listener4state)
-            print("ZooKeeper Current Status = {}".format (self.zk.state))
-        except:
-            print("Issues with ZooKeeper, cannot connect with Server")
-
-    def start_session(self):
-        """ Starting a Session """
-        try:
-            # now connect to the server
-            self.zk.start()
-        except:
-            print("Exception thrown in start (): ", sys.exc_info()[0])
-
-    def stop_session (self):
-        """ Stopping a Session """
-        try:
-            # now disconnect from the server
-            self.zk.stop ()
-        except:
-            print("Exception thrown in stop (): ", sys.exc_info()[0])
-            return
-
-    def close_connection(self):
-        try:
-            # now disconnect from the server
-            self.zk.close()
-        except:
-            print("Exception thrown in close (): ", sys.exc_info()[0])
-            return
+    def set_logger(self):
+        self.prefix = {'prefix': f'PUB{id(self)}<{",".join(self.topics)}> -'}
+        self.logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(prefix)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.setLevel(logging.DEBUG)
 
     def get_znode_value (self):
         """ ******************* retrieve a znode value  ************************ """
         try:
-            print ("Checking if {} exists (it better be)".format(self.zkName))
-            if self.zk.exists (self.zkName):
-                print ("{} znode indeed exists; get value".format(self.zkName))
+            self.debug ("Checking if {} exists (it better be)".format(self.zk_name))
+            if self.zk.exists (self.zk_name):
+                self.debug ("{} znode indeed exists; get value".format(self.zk_name))
                 # Now acquire the value and stats of that znode
-                #value,stat = self.zk.get (self.zkName, watch=self.watch)
-                value,stat = self.zk.get (self.zkName)
+                #value,stat = self.zk.get (self.zk_name, watch=self.watch)
+                value,stat = self.zk.get (self.zk_name)
                 self.znode_value = value.decode("utf-8")
-                print(("Details of znode {}: value = {}, stat = {}".format (self.zkName, value, stat)))
-                print(f"Values stored in field znode_value is {self.znode_value}")
+                self.debug(("Details of znode {}: value = {}, stat = {}".format (self.zk_name, value, stat)))
+                self.debug(f"Values stored in field znode_value is {self.znode_value}")
             else:
-                print ("{} znode does not exist, why?".format(self.zkName))
+                self.debug ("{} znode does not exist, why?".format(self.zk_name))
         except:
-            print("Exception thrown checking for exists/get: ", sys.exc_info()[0])
+            self.debug("Exception thrown checking for exists/get: ", sys.exc_info()[0])
             return
 
     def update_broker_info(self):
         if self.znode_value != None:
-            print("Getting broker information from znode_value")
+            self.debug("Getting broker information from znode_value")
             self.broker_address = self.znode_value.split(",")[0]
             self.pub_reg_port = self.znode_value.split(",")[1]
-            print(f"Broker address: {self.broker_address}")
-            print(f"Broker Pub Reg Port: {self.pub_reg_port}")
+            self.debug(f"Broker address: {self.broker_address}")
+            self.debug(f"Broker Pub Reg Port: {self.pub_reg_port}")
 
     # -----------------------------------------------------------------------
     def watch_znode_data_change(self):
@@ -146,23 +101,23 @@ class Publisher:
         # To overcome the need for this, Kazoo has come up with a decorator.
         # Decorators can be of two kinds: watching for data on a znode changing,
         # and children on a znode changing
-        @self.zk.DataWatch(self.zkName)
+        @self.zk.DataWatch(self.zk_name)
         def dump_data_change (data, stat, event):
             if event == None:
-                print("No Event")
+                self.debug("No Event")
             elif event.type == 'CHANGED':
-                print("Event is {0:s}".format(event.type))
-                print("Broker Changed, First close all sockets and terminate the context")
+                self.debug("Event is {0:s}".format(event.type))
+                self.debug("Broker Changed, First close all sockets and terminate the context")
                 self.context.destroy()
-                print("Broker Changed, Second Update Broker Information")
-                print(("Data changed for znode: data = {}".format (data)))
-                print(("Data changed for znode: stat = {}".format (stat)))
+                self.debug("Broker Changed, Second Update Broker Information")
+                self.debug(("Data changed for znode: data = {}".format (data)))
+                self.debug(("Data changed for znode: stat = {}".format (stat)))
                 self.get_znode_value()
                 self.update_broker_info()
-                print("Broker Changed, Third Reconnect and Publish")
+                self.debug("Broker Changed, Third Reconnect and Publish")
                 self.run_publisher()
             elif event.type == 'DELETED':
-                print("Event is {0:s}".format(event.type))
+                self.debug("Event is {0:s}".format(event.type))
 
     def run_publisher(self):
         try:
@@ -172,24 +127,25 @@ class Publisher:
             self.disconnect()
 
 
+
     def configure(self):
         """ Method to perform initial configuration of Publisher """
-        print("Configure Start")
-        logging.debug("Initializing", extra=self.prefix)
+        self.debug("Configure Start")
+        self.debug("Initializing")
         # first get the context
-        logging.debug ("Setting the context object", extra=self.prefix )
+        self.debug ("Setting the context object" )
         self.context = zmq.Context()
 
         # now create socket to register with broker
-        logging.debug("Connecting to register with broker", extra=self.prefix)
+        self.debug("Connecting to register with broker")
         self.broker_reg_socket = self.context.socket(zmq.REQ)
         self.broker_reg_socket.connect(f"tcp://{self.broker_address}:{self.pub_reg_port}")
         # now create socket to publish
         self.pub_socket = self.context.socket(zmq.PUB)
         self.setup_port_binding()
-        logging.debug(f"Binding at {self.get_host_address()} to publish", extra=self.prefix)
+        self.debug(f"Binding at {self.get_host_address()} to publish")
         self.register_pub()
-        print("Configure Stop")
+        self.debug("Configure Stop")
 
     def setup_port_binding(self):
         """
@@ -199,34 +155,34 @@ class Publisher:
         success = False
         while not success:
             try:
-                logging.info(f'Attempting bind to port {self.bind_port}', extra=self.prefix)
+                self.info(f'Attempting bind to port {self.bind_port}')
                 self.pub_socket.bind(f'tcp://*:{self.bind_port}')
                 success = True
-                logging.info(f'Successful bind to port {self.bind_port}', extra=self.prefix)
+                self.info(f'Successful bind to port {self.bind_port}')
             except:
                 try:
-                    logging.error(f'Port {self.bind_port} already in use, attempting next port', extra=self.prefix)
+                    self.error(f'Port {self.bind_port} already in use, attempting next port')
                     success = False
                     self.bind_port += 1
                 except Exception as e:
-                    print(e)
-        logging.debug("Finished loop", extra=self.prefix)
+                    self.debug(e)
+        self.debug("Finished loop")
 
     def register_pub(self):
         """ Method to register this publisher with the broker """
-        logging.debug(f"Registering with broker at {self.broker_address}:5555", extra=self.prefix)
+        self.debug(f"Registering with broker at {self.broker_address}:5555")
         message_dict = {'address': self.get_host_address(), 'topics': self.topics,
             'id': self.id}
         message = json.dumps(message_dict, indent=4)
-        logging.debug(f"Sending registration message: {message}", extra=self.prefix)
+        self.debug(f"Sending registration message: {message}")
         self.broker_reg_socket.send_string(message)
-        logging.debug(f"Sent!", extra=self.prefix)
+        self.debug(f"Sent!")
         received = self.broker_reg_socket.recv_string()
         received = json.loads(received)
         if 'success' in received:
-            logging.debug(f"Registration successful: {received}", extra=self.prefix)
+            self.debug(f"Registration successful: {received}")
         else:
-            logging.debug(f"Registration failed: {received}", extra=self.prefix)
+            self.debug(f"Registration failed: {received}")
 
     def get_host_address(self):
         """ Method to return IP address of current host.
@@ -262,13 +218,13 @@ class Publisher:
     def publish(self):
         """ Method to publish events either indefinitely or until a max event count
         is reached """
-        print("Publish Start")
+        self.debug("Publish Start")
         if self.indefinite:
             i = 0
             while True:
                 # Continuous loop over topics
                 event = self.generate_publish_event(iteration=i)
-                logging.debug(f'Sending event: [{event}]', extra=self.prefix)
+                self.debug(f'Sending event: [{event}]')
                 # self.pub_socket.send_string(event)
                 self.pub_socket.send_multipart(event)
                 time.sleep(self.sleep_period)
@@ -278,7 +234,7 @@ class Publisher:
             while event_count < self.max_event_count:
                 # Continuous loop over topics
                 event = self.generate_publish_event(iteration=event_count)
-                logging.debug(f'Sending event: [{event}]', extra=self.prefix)
+                self.debug(f'Sending event: [{event}]')
                 self.pub_socket.send_multipart(event)
                 time.sleep(self.sleep_period)
                 event_count += 1
@@ -287,16 +243,16 @@ class Publisher:
         """ Method to disconnect from the pub/sub network """
         # Close all sockets associated with this context
         # Tell broker publisher is disconnecting. Remove from storage.
-        print("Disconnect")
+        self.debug("Disconnect")
         msg = {'disconnect': {'id': self.id, 'address': self.get_host_address(),
             'topics': self.topics}}
-        logging.debug(f"Disconnecting, telling broker: {msg}", extra=self.prefix)
+        self.debug(f"Disconnecting, telling broker: {msg}")
         self.broker_reg_socket.send_string(json.dumps(msg))
         # Wait for response
         response = self.broker_reg_socket.recv_string()
-        logging.debug(f"Broker response: {response} ", extra=self.prefix)
+        self.debug(f"Broker response: {response} ")
         try:
-            logging.debug(f'Destroying ZMQ context, closing all sockets', extra=self.prefix)
+            self.debug(f'Destroying ZMQ context, closing all sockets')
             self.context.destroy()
         except Exception as e:
-            logging.error(f'Could not destroy ZMQ context successfully - {str(e)}', extra=self.prefix)
+            self.error(f'Could not destroy ZMQ context successfully - {str(e)}')

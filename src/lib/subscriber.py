@@ -1,30 +1,14 @@
 import socket as sock
+from .zookeeper_client import ZookeeperClient
 import zmq
 import logging
-import datetime
 import json
 import time
 import pickle
 import netifaces
-import uuid
+import sys
 
-from kazoo.client import KazooClient   # client API
-from kazoo.client import KazooState    # for the state machine
-# to avoid any warning about no handlers for logging purposes, we
-# do the following
-import logging
-logging.basicConfig ()
-def listener4state (state):
-    if state == KazooState.LOST:
-        print ("Current state is now = LOST")
-    elif state == KazooState.SUSPENDED:
-        print ("Current state is now = SUSPENDED")
-    elif state == KazooState.CONNECTED:
-        print ("Current state is now = CONNECTED")
-    else:
-        print ("Current state now = UNKNOWN !! Cannot happen")
-
-class Subscriber:
+class Subscriber(ZookeeperClient):
     """ Class to represent a single subscriber in a Publish/Subscribe distributed system.
     Subscriber is indifferent to who is disseminating the information, as long as it knows their
     address(es). Subscriber can subscribed to specific topics and will listen for relevant
@@ -33,8 +17,7 @@ class Subscriber:
 
     def __init__(self, broker_address, filename=None,
         topics=[], indefinite=False,
-        max_event_count=15, centralized=False,
-        zk_address="127.0.0.1", zk_port="2181"):
+        max_event_count=15, centralized=False, zookeeper_hosts=["127.0.0.1:2181"]):
         """ Constructor
         args:
         - broker_address - IP address of broker
@@ -48,14 +31,12 @@ class Subscriber:
         self.broker_address = broker_address
         # self.own_address = own_address
         self.centralized = centralized
-        self.prefix = {'prefix' : f'SUB{id(self)}<{",".join(topics)}> -'}
-
+        self.topics = topics # topic subscriber is interested in
+        self.set_logger()
         if self.centralized:
             self.debug("Initializing subscriber to centralized broker")
         else:
             self.debug("Initializing subscriber to direct publishers")
-
-        self.topics = topics # topic subscriber is interested in
         self.indefinite = indefinite
         self.max_event_count = max_event_count
         self.publisher_connections = {}
@@ -81,83 +62,24 @@ class Subscriber:
         # port on broker to listen for notifications about new hosts
         # without competition/stealing from other subscriber poll()s
         self.notify_port = None
+        self.sub_reg_port = 5556
+        super().__init__(zookeeper_hosts=zookeeper_hosts)
 
-        # this is to connect with zookeeper Server
-        self.zk_address = zk_address
-        self.zk_port = zk_port
-        self.zk_server = f"{zk_address}:{zk_port}"
-
-        # this is an identifier for ZooKeeper
-        self.instanceId = str(uuid.uuid4())
-        print(f"My InstanceId is {self.instanceId}")
-
-        # this is the zk node name
-        self.zkName = '/broker'
-
-        # this is in the infor stored in znode
-        # this info is broker_address,pub_port,sub_port
-        self.znode_value = None
-        self.sub_reg_port = "5556"
-
-    def connect_zk(self):
-        try:
-            print("Try to connect with ZooKeeper server: hosts = {}".format(self.zk_server))
-            self.zk = KazooClient(self.zk_server)
-            self.zk.add_listener (listener4state)
-            print("ZooKeeper Current Status = {}".format (self.zk.state))
-        except:
-            print("Issues with ZooKeeper, cannot connect with Server")
-
-    def start_session(self):
-        """ Starting a Session """
-        try:
-            # now connect to the server
-            self.zk.start()
-        except:
-            print("Exception thrown in start (): ", sys.exc_info()[0])
-
-    def stop_session (self):
-        """ Stopping a Session """
-        try:
-            # now disconnect from the server
-            self.zk.stop ()
-        except:
-            print("Exception thrown in stop (): ", sys.exc_info()[0])
-            return
-
-    def close_connection(self):
-        try:
-            # now disconnect from the server
-            self.zk.close()
-        except:
-            print("Exception thrown in close (): ", sys.exc_info()[0])
-            return
-
-    def get_znode_value (self):
-        """ ******************* retrieve a znode value  ************************ """
-        try:
-            print ("Checking if {} exists (it better be)".format(self.zkName))
-            if self.zk.exists (self.zkName):
-                print ("{} znode indeed exists; get value".format(self.zkName))
-                # Now acquire the value and stats of that znode
-                #value,stat = self.zk.get (self.zkName, watch=self.watch)
-                value,stat = self.zk.get (self.zkName)
-                self.znode_value = value.decode("utf-8")
-                print(("Details of znode {}: value = {}, stat = {}".format (self.zkName, value, stat)))
-                print(f"Values stored in field znode_value is {self.znode_value}")
-            else:
-                print ("{} znode does not exist, why?".format(self.zkName))
-        except:
-            print("Exception thrown checking for exists/get: ", sys.exc_info()[0])
-            return
+    def set_logger(self):
+        self.prefix = {'prefix' : f'SUB{id(self)}<{",".join(self.topics)}> -'}
+        self.logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(prefix)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.setLevel(logging.DEBUG)
 
     def update_broker_info(self):
         if self.znode_value != None:
-            print("Getting broker information from znode_value")
+            self.debug("Getting broker information from znode_value")
             self.broker_address = self.znode_value.split(",")[0]
             self.sub_reg_port = self.znode_value.split(",")[2]
-            print(f"Broker address: {self.broker_address}")
-            print(f"Broker Pub Reg Port: {self.sub_reg_port}")
+            self.debug(f"Broker Address: {self.broker_address}")
+            self.debug(f"Broker Sub Reg Port: {self.sub_reg_port}")
 
     # -----------------------------------------------------------------------
     def watch_znode_data_change(self):
@@ -168,35 +90,34 @@ class Subscriber:
         # To overcome the need for this, Kazoo has come up with a decorator.
         # Decorators can be of two kinds: watching for data on a znode changing,
         # and children on a znode changing
-        @self.zk.DataWatch(self.zkName)
+        @self.zk.DataWatch(self.zk_name)
         def dump_data_change (data, stat, event):
             if event == None:
-                print("No Event")
+                self.debug("No Event")
             elif event.type == 'CHANGED':
-                print("Event is {0:s}".format(event.type))
-                print("Broker Changed, First close all sockets and terminate the context")
+                self.debug("Event is CHANGED")
+                self.debug("Broker Changed! Destroying context")
                 self.context.destroy()
-                print("Broker Changed, Second Update Broker Information")
-                print(("Data changed for znode: data = {}".format (data)))
-                print(("Data changed for znode: stat = {}".format (stat)))
+                self.debug(("Data changed for znode: data = {}".format (data)))
+                self.debug(("Data changed for znode: stat = {}".format (stat)))
                 self.get_znode_value()
                 self.update_broker_info()
-                print("Broker Changed, Third Reconnect and Subscribe")
+                self.debug("Reconnecting/registering with new broker...")
                 self.run_subscriber()
             elif event.type == 'DELETED':
-                print("Event is {0:s}".format(event.type))
+                self.debug("Event is DELETED")
 
     def run_subscriber(self):
         try:
             self.configure()
+            # FIXME: notify() is already running as a background loop; do we need to call it again here?
             self.notify()
         except KeyboardInterrupt:
             self.disconnect()
 
-
     def configure(self):
         """ Method to perform initial configuration of Subscriber entity """
-        print("Configure Start")
+        self.debug("Configure Start")
         self.debug("Initializing")
         # Create a shared context object for all publisher connections
         self.debug("Setting the context object")
@@ -212,7 +133,7 @@ class Subscriber:
 
         # Register self with broker on init
         self.register_sub()
-        print("Configure Stop")
+        self.debug("Configure Stop")
 
     def setup_notification_polling(self):
         """ Method to set up a socket for polling for notifications about
@@ -222,11 +143,12 @@ class Subscriber:
         - notify_port (int) """
         self.notify_sub_socket = self.context.socket(zmq.REP)
         self.notify_sub_socket.connect(f"tcp://{self.broker_address}:{self.notify_port}")
+        self.debug(f"Registering socket {self.notify_sub_socket} with poller")
         self.poller.register(self.notify_sub_socket, zmq.POLLIN)
 
     def register_sub(self):
         """ Register self with broker """
-        self.debug(f"Registering with broker at {self.broker_address}:5556")
+        self.debug(f"Registering with broker at {self.broker_address}:{self.sub_reg_port}")
         message_dict = {'address': self.get_host_address(), 'id': self.id, 'topics': self.topics}
         message = json.dumps(message_dict, indent=4)
         self.broker_reg_socket.send_string(message)
@@ -269,6 +191,7 @@ class Subscriber:
                 # Set up one SUB socket for topic if not already created
                 if topic not in self.sub_socket_dict:
                     self.sub_socket_dict[topic] = self.context.socket(zmq.SUB)
+                    self.debug(f"Registering topic socket {self.sub_socket_dict[topic]} with poller")
                     self.poller.register(self.sub_socket_dict[topic], zmq.POLLIN)
                 # Connect to publisher addresses if topic is of interest
                 for p in publisher_addresses:
@@ -293,6 +216,7 @@ class Subscriber:
             broker_port = received_message[topic]
             # One SUB socket per topic
             self.sub_socket_dict[topic] = self.context.socket(zmq.SUB)
+            self.debug(f"Registering topic socket {self.sub_socket_dict[topic]} with poller")
             self.poller.register(self.sub_socket_dict[topic], zmq.POLLIN)
             self.debug(
                 f"Connecting to broker for topic <{topic}> at "
@@ -338,34 +262,49 @@ class Subscriber:
         self.debug(f'Received: <{json.dumps(received_message)}>')
 
 
+
     def notify(self):
         """ Method to poll for published events (or notifications about
         new publishers from broker) either indefinitely
         (if indefinite=True in constructor) or until max_event_count
         (passed to constructor) is reached. """
-        print("Subscribe Start")
+        self.debug("Subscribe Start")
         self.debug("Start to receive message")
         if self.indefinite:
             while True:
-                events = dict(self.poller.poll())
+                try:
+                    events = dict(self.poller.poll())
+                except zmq.error.ZMQError as e:
+                    # Socket operation on non socket error expected here
+                    # due to race condition when broker is being switched out.
+                    # Sockets are deleted and context is destroyed while notify is still running
+                    self.error(str(e))
+                    events = {}
                 if self.notify_sub_socket in events:
                     # This is a notification about new publishers
                     self.parse_notification()
                 else:
                     # This is a normal publish event from a publisher
-                    for topic in self.sub_socket_dict.keys():
-                        if self.sub_socket_dict[topic] in events:
+                    for topic, socket in self.sub_socket_dict.items():
+                        if socket in events:
                             self.parse_publish_event(topic=topic)
         else:
             event_count = 0
             while event_count < self.max_event_count:
-                events = dict(self.poller.poll())
+                try:
+                    events = dict(self.poller.poll())
+                except zmq.error.ZMQError as e:
+                    # Socket operation on non socket error expected here
+                    # due to race condition when broker is being switched out.
+                    # Sockets are deleted and context is destroyed while notify is still running
+                    self.error(str(e))
+                    events = {}
                 if self.notify_sub_socket in events:
                     # This is a notification about new publishers
                     self.parse_notification()
                 else:
-                    for topic in self.sub_socket_dict.keys():
-                        if self.sub_socket_dict[topic] in events and event_count < self.max_event_count:
+                    for topic, socket in self.sub_socket_dict.items():
+                        if socket in events and event_count < self.max_event_count:
                             event_count += 1
                             self.parse_publish_event(topic=topic)
 
@@ -404,22 +343,23 @@ class Subscriber:
         # Tell broker publisher is disconnecting. Remove from storage.
         msg = {'disconnect': {'id': self.id, 'address': self.get_host_address(),
             'topics': self.topics, 'notify_port': self.notify_port}}
-        logging.debug(f"Disconnecting, telling broker: {msg}", extra=self.prefix)
+        self.debug(f"Disconnecting, telling broker: {msg}")
         self.broker_reg_socket.send_string(json.dumps(msg))
         # Wait for response
         response = self.broker_reg_socket.recv_string()
-        logging.debug(f"Broker response: {response} ", extra=self.prefix)
+        self.debug(f"Broker response: {response} ")
         try:
-            logging.debug(f'Destroying ZMQ context, closing all sockets', extra=self.prefix)
+            self.debug(f'Destroying ZMQ context, closing all sockets')
             self.context.destroy()
+            sys.exit(0)
         except Exception as e:
-            logging.error(f'Could not destroy ZMQ context successfully - {str(e)}', extra=self.prefix)
-
+            self.error(f'Could not destroy ZMQ context successfully - {str(e)}')
+            sys.exit(1)
     def info(self, msg):
-        logging.info(msg, extra=self.prefix)
+        self.logger.info(msg, extra=self.prefix)
 
     def debug(self, msg):
-        logging.debug(msg, extra=self.prefix)
+        self.logger.debug(msg, extra=self.prefix)
 
     def error(self, msg):
-        logging.error(msg, extra=self.prefix)
+        self.logger.error(msg, extra=self.prefix)

@@ -5,7 +5,24 @@ from lib.subscriber import Subscriber
 from lib.broker import Broker
 from multiprocessing import Process
 
-driver_logging_prefix = {'prefix': 'DRIVER'}
+
+def create_publisher_with_zookeeper(publisher):
+    """ Method to handle creation of publisher using zookeeper coordination"""
+    publisher.connect_zk()
+    publisher.start_session()
+    publisher.get_znode_value()
+    publisher.update_broker_info()
+    publisher.watch_znode_data_change()
+    publisher.run_publisher()
+    # Will call if not running indefinitely
+    publisher.disconnect()
+
+def create_publisher_without_zookeeper(publisher):
+    """ Method to handle creation of publisher without zookeeper coordination """
+    publisher.configure()
+    publisher.publish()
+    # Will call if not running indefinitely
+    publisher.disconnect()
 
 def create_publishers(count=1, topics=[], broker_address='127.0.0.1',
     sleep_period=1, bind_port=5556, indefinite=False, max_event_count=15):
@@ -30,14 +47,30 @@ def create_publishers(count=1, topics=[], broker_address='127.0.0.1',
             indefinite=indefinite,
             max_event_count=max_event_count
         )
-        pubs[i].connect_zk()
-        pubs[i].start_session()
-        pubs[i].get_znode_value()
-        pubs[i].update_broker_info()
-        pubs[i].watch_znode_data_change()
-        pubs[i].run_publisher()
-
+        try:
+            create_publisher_with_zookeeper(pubs[i])
+            # create_publisher_without_zookeeper(pubs[i])
+        except KeyboardInterrupt:
+            # If you interrupt/cancel a publisher, be sure to disconnect properly
+            # to tell broker it's no longer active
+            pubs[i].disconnect()
     return pubs
+
+def create_subscriber_with_zookeeper(subscriber):
+    """ Method to handle creation of a subscriber using ZooKeeper coordination """
+    subscriber.connect_zk()
+    subscriber.start_session()
+    subscriber.get_znode_value()
+    subscriber.update_broker_info()
+    subscriber.watch_znode_data_change()
+    subscriber.run_subscriber()
+
+def create_subscriber_without_zookeeper(subscriber):
+    """ Method to handle creating subscriber without zookeeper coordination"""
+    subscriber.configure()
+    subscriber.notify()
+    # This will call if notify is not indefinite
+    subscriber.disconnect()
 
 def create_subscribers(count=1, filename=None, broker_address='127.0.0.1',
      centralized=False, topics=[], indefinite=False, max_event_count=15):
@@ -56,45 +89,47 @@ def create_subscribers(count=1, filename=None, broker_address='127.0.0.1',
             indefinite=indefinite,
             max_event_count=max_event_count
         )
+        try:
+            create_subscriber_with_zookeeper(subs[i])
+            # create_subscriber_without_zookeeper(subs[i])
+        except KeyboardInterrupt:
+            # If you interrupt/cancel a subscriber, be sure to disconnect properly
+            # to tell broker it's no longer active
+            subs[i].disconnect()
 
-        subs[i].connect_zk()
-        subs[i].start_session()
-        subs[i].get_znode_value()
-        subs[i].update_broker_info()
-        subs[i].watch_znode_data_change()
-        subs[i].run_subscriber()
-
-        # try:
-        #     subs[i].configure()
-        #     subs[i].notify()
-        #     # This will call if notify is not indefinite
-        #     subs[i].disconnect()
-        # except KeyboardInterrupt:
-        #     # If you interrupt/cancel a subscriber, be sure to disconnect properly
-        #     # to tell broker it's no longer active
-        #     subs[i].disconnect()
         # If filename provided (only works with finite notify() loop), write to file
         if filename:
             subs[i].write_stored_messages()
     return subs
 
-def create_broker(indefinite=False, centralized=False, pub_reg_port=5555, sub_reg_port=5556):
+def create_broker_with_zookeeper(broker):
+    """ Method to handle creation of broker using zookeeper coordination"""
+    broker.connect_zk()
+    broker.start_session()
+    broker.zk_run_election()
+
+def create_broker_without_zookeeper(broker):
+    """" Method to handle creation of broker without zookeeper coordination """
+    broker.configure()
+    broker.event_loop()
+    # Will call if broker event loop not indefinite
+    broker.disconnect()
+
+def create_broker(indefinite=False, centralized=False, pub_reg_port=5555,
+    sub_reg_port=5556):
+    logging.info("Creating broker", extra=driver_logging_prefix)
     broker = Broker(
         centralized=centralized,
         indefinite=indefinite,
         pub_reg_port=pub_reg_port,
         sub_reg_port=sub_reg_port
     )
-    broker.connect_zk()
-    broker.start_session()
-    broker.zk_run_election()
-
-    # broker.configure()
-    # try:
-    #     broker.event_loop()
-    # except KeyboardInterrupt:
-    #     # If you interrupt/cancel a broker, be sure to disconnect/clean all sockets
-    #     broker.disconnect()
+    try:
+        create_broker_with_zookeeper(broker)
+        # create_broker_without_zookeeper(broker)
+    except KeyboardInterrupt:
+        # If you interrupt/cancel a broker, be sure to disconnect/clean all sockets
+        broker.disconnect()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -107,10 +142,6 @@ if __name__ == "__main__":
         help='pass this followed by an integer N to create N subscribers on this host')
     parser.add_argument('--broker', type=int,
         help='pass this followed by 1 to create 1 (max) broker on this host')
-
-    # parser.add_argument('-a', '--address', type=str, required=True, help=(
-    #     'IP address of the host on which you are creating the entity; required with -pub, -sub, and --broker'
-    # ))
 
     ## For --subscriber; file to write stored messages to only if not using --indefinite
     parser.add_argument('-f', '--filename', type=str, help=(
@@ -153,9 +184,9 @@ if __name__ == "__main__":
 
     #################################################################
     # Required with --broker
-    parser.add_argument('-prp', '--pub_reg_port', type=int,
+    parser.add_argument('-prp', '--pub_reg_port', type=int, default=5555,
         help="which port of the broker will be used to receive pub registration")
-    parser.add_argument('-srp', '--sub_reg_port', type=int,
+    parser.add_argument('-srp', '--sub_reg_port', type=int, default=5556,
         help="which port of the broker will be used to receive sub registration")
     #################################################################
 
@@ -165,13 +196,20 @@ if __name__ == "__main__":
         raise argparse.ArgumentTypeError('Maximum broker count is 1 (one)')
 
     # Default log level = warning
+    logger = logging.getLogger(__name__)
+    formatter = logging.Formatter('%(prefix)s - %(message)s')
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    driver_logging_prefix = {'prefix': 'DRIVER'}
+    logger.addHandler(handler)
+    logger = logging.LoggerAdapter(logger, driver_logging_prefix)
     if args.verbose:
-        logging.basicConfig(level=logging.DEBUG, format='%(prefix)s - %(message)s')
-        logging.debug('Debug mode enabled', extra=driver_logging_prefix)
+        logger.setLevel(logging.DEBUG)
+        logger.debug('Debug mode enabled', extra=driver_logging_prefix)
     else:
-        logging.basicConfig(format='%(prefix)s - %(message)s')
+        logger.setLevel(logging.INFO)
 
-    logging.debug(F'Creating {args.publisher if args.publisher else 0} publishers on this host', extra=driver_logging_prefix)
+    logger.debug(F'Creating {args.publisher if args.publisher else 0} publishers on this host', extra=driver_logging_prefix)
     logging.debug(F'Creating {args.subscriber if args.subscriber else 0} subscribers on this host', extra=driver_logging_prefix)
     logging.debug(F'Creating {args.broker if args.broker else 0} broker on this host', extra=driver_logging_prefix)
 

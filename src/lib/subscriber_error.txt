@@ -1,0 +1,35 @@
+This error is thrown when using --pub_reg_port and --sub_reg_port on broker(s)
+
+DEBUG:lib.subscriber:Waiting for publish event for topic A
+DEBUG:lib.subscriber:Received: <{"publisher": "10.0.2.15:5556", "topic": "A", "publish_time": 1624751667.5087821}>
+Event is CHANGED
+Broker Changed, First close all sockets and terminate the context
+ERROR:kazoo.recipe.watchers:(<zmq.sugar.socket.Socket object at 0x7fa2d1c63a00>, 1)
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 162, in _log_func_exception
+    result = self._func(data, stat, event)
+  File "/mnt/dev/assign2/src/lib/subscriber.py", line 106, in dump_data_change
+    self.poller.unregister(registered_socket)
+  File "/usr/lib/python3.8/site-packages/zmq/sugar/poll.py", line 73, in unregister
+    idx = self._map.pop(socket)
+KeyError: (<zmq.sugar.socket.Socket object at 0x7fa2d1c63a00>, 1)
+ERROR:kazoo.handlers.threading:Exception in worker queue thread
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/site-packages/kazoo/handlers/threading.py", line 128, in _thread_worker
+    func()
+  File "/usr/lib/python3.8/site-packages/kazoo/handlers/threading.py", line 291, in <lambda>
+    self.callback_queue.put(lambda: callback.func(*callback.args))
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 209, in _watcher
+    self._get_data(event=event)
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 37, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 206, in _get_data
+    self._log_func_exception(data, stat, event)
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 162, in _log_func_exception
+    result = self._func(data, stat, event)
+  File "/mnt/dev/assign2/src/lib/subscriber.py", line 106, in dump_data_change
+    self.poller.unregister(registered_socket)
+  File "/usr/lib/python3.8/site-packages/zmq/sugar/poll.py", line 73, in unregister
+    idx = self._map.pop(socket)
+KeyError: (<zmq.sugar.socket.Socket object at 0x7fa2d1c63a00>, 1)
+Event is DELETED
