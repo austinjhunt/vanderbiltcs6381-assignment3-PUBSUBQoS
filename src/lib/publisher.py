@@ -49,6 +49,8 @@ class Publisher(ZookeeperClient):
         # Set up initial config for ZooKeeper client.
         super().__init__(zookeeper_hosts)
 
+        self.WATCH_FLAG = False
+
     def debug(self, msg):
         self.logger.debug(msg, extra=self.prefix)
 
@@ -104,29 +106,24 @@ class Publisher(ZookeeperClient):
         @self.zk.DataWatch(self.zk_name)
         def dump_data_change (data, stat, event):
             if event == None:
-                self.debug("No Event")
+                self.WATCH_FLAG = True
+                self.debug("No ZNODE Event - First Watch Call! Initializing publisher...")
+                self.configure()
+                self.WATCH_FLAG = False
             elif event.type == 'CHANGED':
-                self.debug("Event is {0:s}".format(event.type))
-                self.debug("Broker Changed, First close all sockets and terminate the context")
+                self.WATCH_FLAG = True
+                self.debug("ZNODE CHANGED")
+                self.debug("Close all sockets and terminate the context")
                 self.context.destroy()
-                self.debug("Broker Changed, Second Update Broker Information")
-                self.debug(("Data changed for znode: data = {}".format (data)))
-                self.debug(("Data changed for znode: stat = {}".format (stat)))
+                self.debug("Update Broker Information")
+                self.debug(f"Data changed for znode: data={data},stat={stat}")
                 self.get_znode_value()
                 self.update_broker_info()
-                self.debug("Broker Changed, Third Reconnect and Publish")
-                self.run_publisher()
+                self.debug("Reconfiguring...")
+                self.configure()
+                self.WATCH_FLAG = False
             elif event.type == 'DELETED':
-                self.debug("Event is {0:s}".format(event.type))
-
-    def run_publisher(self):
-        try:
-            self.configure()
-            self.publish()
-        except KeyboardInterrupt:
-            self.disconnect()
-
-
+                self.debug("ZNODE DELETED")
 
     def configure(self):
         """ Method to perform initial configuration of Publisher """
@@ -222,22 +219,28 @@ class Publisher(ZookeeperClient):
         if self.indefinite:
             i = 0
             while True:
-                # Continuous loop over topics
-                event = self.generate_publish_event(iteration=i)
-                self.debug(f'Sending event: [{event}]')
-                # self.pub_socket.send_string(event)
-                self.pub_socket.send_multipart(event)
-                time.sleep(self.sleep_period)
-                i += 1
+                if not self.WATCH_FLAG:
+                    # Continuous loop over topics
+                    event = self.generate_publish_event(iteration=i)
+                    self.debug(f'Sending event: [{event}]')
+                    # self.pub_socket.send_string(event)
+                    self.pub_socket.send_multipart(event)
+                    time.sleep(self.sleep_period)
+                    i += 1
+                else:
+                    self.debug("SWITCHING BROKER")
         else:
             event_count = 0
             while event_count < self.max_event_count:
-                # Continuous loop over topics
-                event = self.generate_publish_event(iteration=event_count)
-                self.debug(f'Sending event: [{event}]')
-                self.pub_socket.send_multipart(event)
-                time.sleep(self.sleep_period)
-                event_count += 1
+                if not self.WATCH_FLAG:
+                    # Continuous loop over topics
+                    event = self.generate_publish_event(iteration=event_count)
+                    self.debug(f'Sending event: [{event}]')
+                    self.pub_socket.send_multipart(event)
+                    time.sleep(self.sleep_period)
+                    event_count += 1
+                else:
+                    self.debug("SWITCHING BROKER")
 
     def disconnect(self):
         """ Method to disconnect from the pub/sub network """

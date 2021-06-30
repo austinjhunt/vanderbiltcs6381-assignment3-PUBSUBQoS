@@ -65,13 +65,14 @@ class Subscriber(ZookeeperClient):
         self.sub_reg_port = 5556
         super().__init__(zookeeper_hosts=zookeeper_hosts)
 
+        # flag to prevent race condition between notify() and watch mechanism
+        # that clears out connections
+        self.WATCH_FLAG = False
+
     def set_logger(self):
-        self.prefix = {'prefix' : f'SUB{id(self)}<{",".join(self.topics)}> -'}
-        self.logger = logging.getLogger(__name__)
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(prefix)s - %(message)s')
-        handler.setFormatter(formatter)
+        self.logger = logging.getLogger(f'SUB{id(self)}<{",".join(self.topics)}>')
         self.logger.setLevel(logging.DEBUG)
+
 
     def update_broker_info(self):
         if self.znode_value != None:
@@ -83,37 +84,30 @@ class Subscriber(ZookeeperClient):
 
     # -----------------------------------------------------------------------
     def watch_znode_data_change(self):
-        #*****************************************************************
-        # This is the watch callback function that is supposed to be invoked
-        # when changes get made to the znode of interest. Note that a watch is
-        # effective only once. So the client has to set the watch every time.
-        # To overcome the need for this, Kazoo has come up with a decorator.
-        # Decorators can be of two kinds: watching for data on a znode changing,
-        # and children on a znode changing
+        """  Watch callback function invoked upon change to znode of interest.
+        Watch effective only once so the client has to set the watch every time.
+        Decorator zk.DataWatch used to overcome this. """
         @self.zk.DataWatch(self.zk_name)
         def dump_data_change (data, stat, event):
             if event == None:
-                self.debug("No Event")
+                self.WATCH_FLAG = True
+                self.debug("No ZNODE Event - First Watch Call! Initializing subscriber...")
+                self.configure()
+                self.WATCH_FLAG = False
             elif event.type == 'CHANGED':
-                self.debug("Event is CHANGED")
+                self.WATCH_FLAG = True
+                self.debug("ZNODE CHANGED")
                 self.debug("Broker Changed! Destroying context")
                 self.context.destroy()
-                self.debug(("Data changed for znode: data = {}".format (data)))
-                self.debug(("Data changed for znode: stat = {}".format (stat)))
+                self.debug(f"Data changed for znode: data={data},stat={stat}")
                 self.get_znode_value()
                 self.update_broker_info()
-                self.debug("Reconnecting/registering with new broker...")
-                self.run_subscriber()
+                self.debug("Reconfiguring...")
+                self.configure()
+                self.WATCH_FLAG = False
             elif event.type == 'DELETED':
-                self.debug("Event is DELETED")
+                self.debug("ZNODE DELETED")
 
-    def run_subscriber(self):
-        try:
-            self.configure()
-            # FIXME: notify() is already running as a background loop; do we need to call it again here?
-            self.notify()
-        except KeyboardInterrupt:
-            self.disconnect()
 
     def configure(self):
         """ Method to perform initial configuration of Subscriber entity """
@@ -272,41 +266,48 @@ class Subscriber(ZookeeperClient):
         self.debug("Start to receive message")
         if self.indefinite:
             while True:
-                try:
-                    events = dict(self.poller.poll())
-                except zmq.error.ZMQError as e:
-                    # Socket operation on non socket error expected here
-                    # due to race condition when broker is being switched out.
-                    # Sockets are deleted and context is destroyed while notify is still running
-                    self.error(str(e))
-                    events = {}
-                if self.notify_sub_socket in events:
-                    # This is a notification about new publishers
-                    self.parse_notification()
+                if not self.WATCH_FLAG:
+                    try:
+                        events = dict(self.poller.poll())
+                    except zmq.error.ZMQError as e:
+                        # Socket operation on non socket error expected here
+                        # due to race condition when broker is being switched out.
+                        # Sockets are deleted and context is destroyed while notify is still running
+                        self.error(f"Failed to poll: {str(e)}")
+                        events = {}
+                    if self.notify_sub_socket in events:
+                        # This is a notification about new publishers
+                        self.parse_notification()
+                    else:
+                        # This is a normal publish event from a publisher
+                        for topic, socket in self.sub_socket_dict.items():
+                            if socket in events:
+                                self.parse_publish_event(topic=topic)
                 else:
-                    # This is a normal publish event from a publisher
-                    for topic, socket in self.sub_socket_dict.items():
-                        if socket in events:
-                            self.parse_publish_event(topic=topic)
+                    self.debug("SWITCHING BROKER")
         else:
             event_count = 0
             while event_count < self.max_event_count:
-                try:
-                    events = dict(self.poller.poll())
-                except zmq.error.ZMQError as e:
-                    # Socket operation on non socket error expected here
-                    # due to race condition when broker is being switched out.
-                    # Sockets are deleted and context is destroyed while notify is still running
-                    self.error(str(e))
-                    events = {}
-                if self.notify_sub_socket in events:
-                    # This is a notification about new publishers
-                    self.parse_notification()
+                if not self.WATCH_FLAG:
+                    try:
+                        events = dict(self.poller.poll())
+                    except zmq.error.ZMQError as e:
+                        # Socket operation on non socket error expected here
+                        # due to race condition when broker is being switched out.
+                        # Sockets are deleted and context is destroyed while notify is still running
+                        self.error(f"Failed to poll: {str(e)}")
+                        events = {}
+                    if self.notify_sub_socket in events:
+                        # This is a notification about new publishers
+                        self.parse_notification()
+                    else:
+                        for topic, socket in self.sub_socket_dict.items():
+                            if socket in events and event_count < self.max_event_count:
+                                event_count += 1
+                                self.parse_publish_event(topic=topic)
                 else:
-                    for topic, socket in self.sub_socket_dict.items():
-                        if socket in events and event_count < self.max_event_count:
-                            event_count += 1
-                            self.parse_publish_event(topic=topic)
+                    self.debug("SWITCHING BROKER.")
+
 
     def write_stored_messages(self):
         """ Method to write all stored messages to filename passed to constructor """
@@ -356,10 +357,10 @@ class Subscriber(ZookeeperClient):
             self.error(f'Could not destroy ZMQ context successfully - {str(e)}')
             sys.exit(1)
     def info(self, msg):
-        self.logger.info(msg, extra=self.prefix)
+        self.logger.info(msg)
 
     def debug(self, msg):
-        self.logger.debug(msg, extra=self.prefix)
+        self.logger.debug(msg)
 
     def error(self, msg):
-        self.logger.error(msg, extra=self.prefix)
+        self.logger.error(msg)
