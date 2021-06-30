@@ -3,7 +3,7 @@ import logging
 from lib.publisher import Publisher
 from lib.subscriber import Subscriber
 from lib.broker import Broker
-from multiprocessing import Process
+import time
 
 
 def create_publisher_with_zookeeper(publisher):
@@ -13,7 +13,7 @@ def create_publisher_with_zookeeper(publisher):
     publisher.get_znode_value()
     publisher.update_broker_info()
     publisher.watch_znode_data_change()
-    publisher.run_publisher()
+    publisher.publish()
     # Will call if not running indefinitely
     publisher.disconnect()
 
@@ -63,7 +63,9 @@ def create_subscriber_with_zookeeper(subscriber):
     subscriber.get_znode_value()
     subscriber.update_broker_info()
     subscriber.watch_znode_data_change()
-    subscriber.run_subscriber()
+    subscriber.notify()
+    # Will call if not running indefinitely
+    subscriber.disconnect()
 
 def create_subscriber_without_zookeeper(subscriber):
     """ Method to handle creating subscriber without zookeeper coordination"""
