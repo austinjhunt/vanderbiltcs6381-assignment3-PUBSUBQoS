@@ -359,10 +359,11 @@ class Subscriber(ZookeeperClient):
         try:
             self.debug(f'Destroying ZMQ context, closing all sockets')
             self.context.destroy()
-            sys.exit(0)
+            exit_code = 0
         except Exception as e:
             self.error(f'Could not destroy ZMQ context successfully - {str(e)}')
-            sys.exit(1)
+            exit_code = 1
+        sys.exit(exit_code)
 
     def info(self, msg):
         self.logger.info(msg, extra=self.prefix)
