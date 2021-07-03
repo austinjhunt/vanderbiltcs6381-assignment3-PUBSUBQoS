@@ -183,7 +183,6 @@ class Broker(ZookeeperClient):
         Args:
         - index (int) - event index, just used for logging current event loop index
          """
-
         try:
             # Don't block indefinitely; wait max of .5 second
             events = dict(self.poller.poll(500))
