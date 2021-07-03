@@ -4,7 +4,7 @@ for basic zookeeper client functionality
 import uuid
 import sys
 from kazoo.client import KazooClient, KazooState
-
+import logging
 class ZookeeperClient:
     def __init__(self, zookeeper_hosts=[]):
         self.zk_hosts = ','.join(zookeeper_hosts)
@@ -15,6 +15,8 @@ class ZookeeperClient:
         self.znode_value = None
         # The ZNode all entities will be interested in watching
         self.zk_name = '/broker'
+        self.set_logger()
+
 
     def listener4state (self, state):
         if state == KazooState.LOST:
@@ -27,28 +29,37 @@ class ZookeeperClient:
             self.debug ("Current state now = UNKNOWN !! Cannot happen")
 
     def connect_zk(self):
+        success = False
         try:
             self.debug(f"Try to connect with ZooKeeper server: hosts = {self.zk_hosts}")
             self.zk = KazooClient(self.zk_hosts)
             self.zk.add_listener (self.listener4state)
             self.debug(f"ZooKeeper Current Status = {self.zk.state}")
+            success = True
         except:
             self.debug("Issues with ZooKeeper, cannot connect with Server")
+        return success
+
 
     def start_session(self):
         """ Start a Zookeeper Session """
+        success = False
         try:
             self.zk.start()
+            success = True
         except:
             self.debug(f"Exception thrown in start (): {sys.exc_info()[0]}")
+        return success
 
     def stop_session (self):
         """ Stop a ZooKeeper Session """
+        success = False
         try:
             self.zk.stop()
+            success = True
         except:
             self.error(f"Exception thrown in stop (): {sys.exc_info()[0]}")
-            return
+        return success
 
     def close_connection(self):
         try:
@@ -76,24 +87,41 @@ class ZookeeperClient:
                 self.debug(f"Values stored in field znode_value is {self.znode_value}")
             else:
                 self.debug (f"{self.zk_name} znode does not exist, why?")
-        except:
+            response = self.znode_value
+        except Exception as e:
             self.error(f"Exception thrown checking for exists/get: {sys.exc_info()[0]}")
-            return
+            response = f"Error: {str(e)}"
+        return response
 
-    def create_znode (self):
+    def create_znode (self, znode_value=None):
         """ Create an ephemeral znode with name = self.zk_name and value =
         self.znode_value. Used by the broker specifically.  """
+        success = False
         try:
             self.debug(
-                f"Creating an ephemeral znode {self.zk_name} with "
+                f"Creating a znode {self.zk_name} with "
                 f"value {self.znode_value }")
-            self.zk.create(self.zk_name, value=self.znode_value.encode('utf-8'),
-                ephemeral=False)
-            self.debug(f"Ephemeral znode <{self.zk_name},{self.znode_value}> created!")
+            if self.znode_value:
+                self.zk.create(self.zk_name, value=self.znode_value.encode('utf-8'),
+                    ephemeral=False)
+                success = True
+            elif znode_value:
+                self.zk.create(self.zk_name, value=znode_value.encode('utf-8'),
+                    ephemeral=False)
+                success = True
+        except Exception as e:
+            self.error(str(e))
+            self.error("Exception thrown in create (): ", sys.exc_info()[0])
+        return success
 
-        except:
-            self.debug("Exception thrown in create (): ", sys.exc_info()[0])
-            return
+    def delete_znode(self):
+        success = False
+        try:
+            self.zk.delete(self.zk_name)
+            success = True
+        except Exception as e:
+            self.error(str(e))
+        return success
 
     def modify_znode_value(self, new_val):
         """ Modify a znode value
@@ -115,6 +143,25 @@ class ZookeeperClient:
                     )
             else:
                 self.debug(f"{self.zk_name} znode does not exist")
-        except:
+        except Exception as e:
             self.debug("Exception thrown checking for exists/set: ", sys.exc_info()[0])
-            return
+            value = str(e)
+        return value
+
+
+    def debug(self, msg):
+        self.logger.debug(msg, extra=self.prefix)
+
+    def info(self, msg):
+        self.logger.info(msg, extra=self.prefix)
+
+    def error(self, msg):
+        self.logger.error(msg, extra=self.prefix)
+
+    def set_logger(self):
+        self.prefix = {'prefix': f'ZOOKEEPERCLI -'}
+        self.logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(prefix)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.setLevel(logging.DEBUG)

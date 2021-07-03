@@ -17,8 +17,7 @@ class Publisher(ZookeeperClient):
     no connected subscribers, it will drop all messsages it produces. """
 
     def __init__(self,
-        broker_address,
-        # own_address='127.0.0.1',
+        broker_address='127.0.0.1',
         topics=[], sleep_period=1, bind_port=5556,
         indefinite=False, max_event_count=15,zookeeper_hosts=["127.0.0.1:2181"]):
         """ Constructor

@@ -15,7 +15,7 @@ class Subscriber(ZookeeperClient):
     information/updates across all publisher connections. If many publishers with relevant updates,
     updates will be interleaved and no single publisher connection will drown out the others. """
 
-    def __init__(self, broker_address, filename=None,
+    def __init__(self, broker_address='127.0.0.1', filename=None,
         topics=[], indefinite=False,
         max_event_count=15, centralized=False, zookeeper_hosts=["127.0.0.1:2181"]):
         """ Constructor
@@ -26,6 +26,7 @@ class Subscriber(ZookeeperClient):
         - indefinite (boolean) - whether to listen for published updates indefinitely
         - max_event_count (int) - if not (indefinite), max number of relevant published updates to receive
          """
+
         self.id = id(self)
         self.filename = filename
         self.broker_address = broker_address
@@ -33,6 +34,8 @@ class Subscriber(ZookeeperClient):
         self.centralized = centralized
         self.topics = topics # topic subscriber is interested in
         self.set_logger()
+        super().__init__(zookeeper_hosts=zookeeper_hosts)
+
         if self.centralized:
             self.debug("Initializing subscriber to centralized broker")
         else:
@@ -63,16 +66,18 @@ class Subscriber(ZookeeperClient):
         # without competition/stealing from other subscriber poll()s
         self.notify_port = None
         self.sub_reg_port = 5556
-        super().__init__(zookeeper_hosts=zookeeper_hosts)
 
         # flag to prevent race condition between notify() and watch mechanism
         # that clears out connections
         self.WATCH_FLAG = False
 
     def set_logger(self):
-        self.logger = logging.getLogger(f'SUB{id(self)}<{",".join(self.topics)}>')
+        self.prefix = {'prefix': f'SUB{id(self)}<{",".join(self.topics)}> -'}
+        self.logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(prefix)s - %(message)s')
+        handler.setFormatter(formatter)
         self.logger.setLevel(logging.DEBUG)
-
 
     def update_broker_info(self):
         if self.znode_value != None:
@@ -358,11 +363,12 @@ class Subscriber(ZookeeperClient):
         except Exception as e:
             self.error(f'Could not destroy ZMQ context successfully - {str(e)}')
             sys.exit(1)
+
     def info(self, msg):
-        self.logger.info(msg)
+        self.logger.info(msg, extra=self.prefix)
 
     def debug(self, msg):
-        self.logger.debug(msg)
+        self.logger.debug(msg, extra=self.prefix)
 
     def error(self, msg):
-        self.logger.error(msg)
+        self.logger.error(msg, extra=self.prefix)
