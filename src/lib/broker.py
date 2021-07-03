@@ -57,7 +57,6 @@ class Broker(ZookeeperClient):
 
         # Initialize configuration for ZooKeeper client
         super().__init__(zookeeper_hosts=zookeeper_hosts)
-        self.debug(f"My Zookeeper instance ID is {self.zk_instance_id}")
 
         # this is for write into the znode about the broker information
         self.pub_reg_port = pub_reg_port
@@ -118,8 +117,8 @@ class Broker(ZookeeperClient):
         # these are the sockets we open one for each registration
         self.debug("Opening two REP sockets for publisher registration "
             "and subscriber registration")
-        self.debug("Enabling publisher registration on port 5555")
-        self.debug("Enabling subscriber registration on port 5556")
+        self.debug(f"Enabling publisher registration on port {self.pub_reg_port}")
+        self.debug(f"Enabling subscriber registration on port {self.sub_reg_port}")
         self.pub_reg_socket = self.context.socket(zmq.REP)
         self.setup_pub_port_reg_binding()
         self.sub_reg_socket = self.context.socket(zmq.REP)
