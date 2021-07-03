@@ -277,6 +277,7 @@ class Broker(ZookeeperClient):
             self.used_ports.remove(notify_port)
             # Close the notification socket for this subscriber with id as key
             self.notify_sub_sockets[sub_id].close()
+            self.notify_sub_sockets.pop(sub_id)
         for t in topics:
             if t in self.subscribers:
                 # if only subscriber to topic, remove topic altogether

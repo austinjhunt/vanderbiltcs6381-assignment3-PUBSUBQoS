@@ -97,7 +97,8 @@ class Subscriber(ZookeeperClient):
             elif event.type == 'CHANGED':
                 self.WATCH_FLAG = True
                 self.debug("ZNODE CHANGED")
-                self.debug("Broker Changed! Destroying context")
+                self.debug("Broker Changed! Destroying context and clearing topic connection dict")
+                self.sub_socket_dict.clear()
                 self.context.destroy()
                 self.debug(f"Data changed for znode: data={data},stat={stat}")
                 self.get_znode_value()
@@ -192,8 +193,9 @@ class Subscriber(ZookeeperClient):
                     self.debug(f'Adding publisher {p} to known publishers')
                     # p includes port!
                     self.sub_socket_dict[topic].connect(f"tcp://{p}")
-                    # Set filter <topic> on the socket
                     self.sub_socket_dict[topic].setsockopt_string(zmq.SUBSCRIBE, topic)
+
+
         self.debug("Finished setting up direct publisher connections")
 
     def setup_broker_topic_port_connections(self, received_message):
