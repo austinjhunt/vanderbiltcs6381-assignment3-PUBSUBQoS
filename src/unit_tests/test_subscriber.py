@@ -6,7 +6,6 @@ from src.unit_tests import *
 from src.lib.subscriber import Subscriber
 
 class TestSubscriber(unittest.TestCase):
-    broker = None
     def setUp(self):
         # Create a Subscriber object.
         # centralized and decentralized have no affect on
@@ -34,7 +33,7 @@ class TestSubscriber(unittest.TestCase):
     def test_indefinite(self):
         # By default, subscriber should listen for a max of 15 events.
         assert not self.subscriber.indefinite
-        assert self.subscriber.max_event_count == 15 
+        assert self.subscriber.max_event_count == 15
 
     def test_write_stored_messages(self):
         # First, add some sample messages to stored messages of subscriber
