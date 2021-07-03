@@ -88,7 +88,7 @@ class ZookeeperClient:
                 f"Creating an ephemeral znode {self.zk_name} with "
                 f"value {self.znode_value }")
             self.zk.create(self.zk_name, value=self.znode_value.encode('utf-8'),
-                ephemeral=True)
+                ephemeral=False)
             self.debug(f"Ephemeral znode <{self.zk_name},{self.znode_value}> created!")
 
         except:
