@@ -116,9 +116,9 @@ class Broker(ZookeeperClient):
         self.poller = zmq.Poller()
         # these are the sockets we open one for each registration
         self.debug("Opening two REP sockets for publisher registration "
-            "and subscriber registration")
+            "and subscriber registration") 
         self.debug(f"Enabling publisher registration on port {self.pub_reg_port}")
-        self.debug(f"Enabling subscriber registration on port {self.sub_reg_port}")
+        self.debug(f"Enabling subscriber registration on port {self.sub_reg_port}") 
         self.pub_reg_socket = self.context.socket(zmq.REP)
         self.setup_pub_port_reg_binding()
         self.sub_reg_socket = self.context.socket(zmq.REP)

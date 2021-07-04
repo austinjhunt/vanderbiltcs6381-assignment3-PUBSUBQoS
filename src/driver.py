@@ -23,7 +23,8 @@ def create_publisher_without_zookeeper(publisher):
     publisher.disconnect()
 
 def create_publishers(count=1, topics=[], broker_address='127.0.0.1',
-    sleep_period=1, bind_port=5556, indefinite=False, max_event_count=15):
+    sleep_period=1, bind_port=5556, indefinite=False, max_event_count=15,
+    zookeeper_hosts=['127.0.0.1:2181']):
     """ Method to create a set of publishers.
     In order to run multiple subscribers simultaneously,
     need to use multiprocessing library, because Publisher.publish() will block for i in range(count)
@@ -43,7 +44,8 @@ def create_publishers(count=1, topics=[], broker_address='127.0.0.1',
             sleep_period=sleep_period,
             bind_port=bind_port + i,
             indefinite=indefinite,
-            max_event_count=max_event_count
+            max_event_count=max_event_count,
+            zookeeper_hosts=zookeeper_hosts
         )
         try:
             create_publisher_with_zookeeper(pubs[i])
@@ -62,6 +64,7 @@ def create_subscriber_with_zookeeper(subscriber):
     subscriber.update_broker_info()
     subscriber.watch_znode_data_change()
     subscriber.notify()
+    subscriber.write_stored_messages()
     # Will call if not running indefinitely
     subscriber.disconnect()
 
@@ -73,7 +76,8 @@ def create_subscriber_without_zookeeper(subscriber):
     subscriber.disconnect()
 
 def create_subscribers(count=1, filename=None, broker_address='127.0.0.1',
-     centralized=False, topics=[], indefinite=False, max_event_count=15):
+     centralized=False, topics=[], indefinite=False, max_event_count=15,
+     zookeeper_hosts=['127.0.0.1:2181']):
     """ Method to create a set of subscribers. In order to run multiple subscribers simultaneously,
     need to use multiprocessing library, because Subscriber.listen() will block for i in range(count)
     if run sequentially. E.g. subscriber 2 on the same host will not ever get to listen for updates
@@ -87,7 +91,8 @@ def create_subscribers(count=1, filename=None, broker_address='127.0.0.1',
             broker_address=broker_address,
             centralized=centralized,
             indefinite=indefinite,
-            max_event_count=max_event_count
+            max_event_count=max_event_count,
+            zookeeper_hosts=zookeeper_hosts
         )
         try:
             create_subscriber_with_zookeeper(subs[i])
@@ -119,16 +124,17 @@ def create_broker_without_zookeeper(broker):
     # Will call if broker event loop not indefinite
     broker.disconnect()
 
-def create_broker(indefinite=False, centralized=False, pub_reg_port=5555,
-    sub_reg_port=5556, autokill=None,max_event_count=15):
+def create_broker(indefinite=False, centralized=False, pub_reg_port=5555, 
+    sub_reg_port=5556, autokill=None, max_event_count=15, zookeeper_hosts=['127.0.0.1:2181']): 
     logging.info("Creating broker", extra=driver_logging_prefix)
     broker = Broker(
         centralized=centralized,
         indefinite=indefinite,
         pub_reg_port=pub_reg_port,
-        sub_reg_port=sub_reg_port,
+        sub_reg_port=sub_reg_port, 
         max_event_count=max_event_count,
-        autokill=autokill
+        autokill=autokill,
+        zookeeper_hosts=zookeeper_hosts 
     )
     try:
         create_broker_with_zookeeper(broker)
@@ -148,6 +154,10 @@ if __name__ == "__main__":
         help='pass this followed by an integer N to create N subscribers on this host')
     parser.add_argument('--broker', type=int,
         help='pass this followed by 1 to create 1 (max) broker on this host')
+
+    ## new argument for ZooKeeper
+    parser.add_argument('-z', '--zookeeper_hosts', action='append',
+        help=('zookeeper hosts and the port. Typical are 127.0.0.1:2181 for localhosts'))
 
     ## For --subscriber; file to write stored messages to only if not using --indefinite
     parser.add_argument('-f', '--filename', type=str, help=(
@@ -259,7 +269,8 @@ if __name__ == "__main__":
             sleep_period=args.sleep if args.sleep else 1,
             bind_port=args.bind_port if args.bind_port else 5556,
             indefinite=args.indefinite if args.indefinite else False,
-            max_event_count=args.max_event_count if args.max_event_count else 15
+            max_event_count=args.max_event_count if args.max_event_count else 15,
+            zookeeper_hosts=args.zookeeper_hosts
             )
 
     elif args.subscriber:
@@ -285,7 +296,8 @@ if __name__ == "__main__":
             centralized=args.centralized,
             topics=args.topics,
             indefinite=args.indefinite if args.indefinite else False,
-            max_event_count=args.max_event_count if args.max_event_count else 15
+            max_event_count=args.max_event_count if args.max_event_count else 15,
+            zookeeper_hosts=args.zookeeper_hosts
             )
     if args.broker:
         if args.filename:
@@ -299,8 +311,9 @@ if __name__ == "__main__":
         create_broker(
             centralized=args.centralized,
             pub_reg_port=args.pub_reg_port,
-            sub_reg_port=args.sub_reg_port,
+            sub_reg_port=args.sub_reg_port, 
             indefinite=args.indefinite if args.indefinite else False,
             max_event_count=args.max_event_count if args.max_event_count else 15,
-            autokill=autokill
+            autokill=autokill,
+            zookeeper_hosts=args.zookeeper_hosts
         )
