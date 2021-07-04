@@ -6,7 +6,8 @@ from src.unit_tests import *
 
 class TestBroker(unittest.TestCase):
     broker = None
-    def setUp(self):
+    def __init__(self, *args, **kwargs):
+        super(TestBroker, self).__init__(*args, **kwargs)
         # Create a broker object.
         # centralized and decentralized have no affect on
         # topology-independent units to be tested.

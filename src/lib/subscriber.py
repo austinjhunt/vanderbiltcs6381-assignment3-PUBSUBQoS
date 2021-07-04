@@ -17,7 +17,8 @@ class Subscriber(ZookeeperClient):
 
     def __init__(self, broker_address='127.0.0.1', filename=None,
         topics=[], indefinite=False,
-        max_event_count=15, centralized=False, zookeeper_hosts=["127.0.0.1:2181"]):
+        max_event_count=15, centralized=False, zookeeper_hosts=["127.0.0.1:2181"],
+        verbose=False):
         """ Constructor
         args:
         - broker_address - IP address of broker
@@ -26,7 +27,7 @@ class Subscriber(ZookeeperClient):
         - indefinite (boolean) - whether to listen for published updates indefinitely
         - max_event_count (int) - if not (indefinite), max number of relevant published updates to receive
          """
-
+        self.verbose = verbose
         self.id = id(self)
         self.filename = filename
         self.broker_address = broker_address
@@ -71,13 +72,16 @@ class Subscriber(ZookeeperClient):
         # that clears out connections
         self.WATCH_FLAG = False
 
+        self.info(f"Successfully initialized subscriber object (SUB{id(self)})")
+
     def set_logger(self):
-        self.prefix = {'prefix': f'SUB{id(self)}<{",".join(self.topics)}> -'}
-        self.logger = logging.getLogger(__name__)
+        self.prefix = {'prefix': f'SUB{id(self)}<{",".join(self.topics)}>'}
+        self.logger = logging.getLogger(f'SUB{id(self)}')
+        self.logger.setLevel(logging.DEBUG if self.verbose else logging.INFO)
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(prefix)s - %(message)s')
         handler.setFormatter(formatter)
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(handler)
 
     def update_broker_info(self):
         if self.znode_value != None:

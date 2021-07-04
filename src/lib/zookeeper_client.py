@@ -15,8 +15,6 @@ class ZookeeperClient:
         self.znode_value = None
         # The ZNode all entities will be interested in watching
         self.zk_name = '/broker'
-        self.set_logger()
-
 
     def listener4state (self, state):
         if state == KazooState.LOST:
@@ -157,11 +155,3 @@ class ZookeeperClient:
 
     def error(self, msg):
         self.logger.error(msg, extra=self.prefix)
-
-    def set_logger(self):
-        self.prefix = {'prefix': f'ZOOKEEPERCLI -'}
-        self.logger = logging.getLogger(__name__)
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(prefix)s - %(message)s')
-        handler.setFormatter(formatter)
-        self.logger.setLevel(logging.DEBUG)

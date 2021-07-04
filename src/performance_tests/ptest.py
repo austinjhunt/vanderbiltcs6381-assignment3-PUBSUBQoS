@@ -1,10 +1,8 @@
-import time
 from mininet.net import Mininet
 from mininet.topolib import TreeTopo
 from .topologies.single_switch_topology import SingleSwitchTopo
 import os
-import sys
-import logging
+import time
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 class PerformanceTest:
@@ -20,17 +18,6 @@ class PerformanceTest:
         self.successes = 0
         self.failures = 0
         self.comments = []
-        self.set_logger()
-
-    def set_logger(self):
-        self.logger = logging.getLogger(__name__)
-        handler = logging.StreamHandler()
-        handler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(prefix)s - %(message)s')
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        self.logger.setLevel(logging.INFO)
-        self.logger = logging.LoggerAdapter(self.logger, self.prefix)
 
     def cleanup(self):
         """ Method to run the shell command mn -c to clean up existing mininet networks/resources
@@ -53,6 +40,26 @@ class PerformanceTest:
         """ Method to update the wait factor (to wait <factor> times as long
         as num events * event interval for pub sub to generate data """
         self.wait_factor = factor
+
+    def setup_zookeeper_server(self, network, log_folder, zkStartWait):
+        """ Make the first host in the network the zookeeper server. MUST be created first."""
+        self.debug("Starting zookeeper service, just a moment...")
+        zookeeper_start_command = (
+            '/opt/zookeeper/bin/zkServer.sh start '
+            f'&> {log_folder}/zkServer.log &'
+        )
+        network.hosts[self.ZOOKEEPER_INDEX].cmd(zookeeper_start_command)
+        time.sleep(zkStartWait)
+        return network.hosts[self.ZOOKEEPER_INDEX].IP()
+
+    def kill_zookeeper_server(self, network, log_folder):
+        self.debug("Stopping zookeeper service, just a moment...")
+        zookeeper_stop_command = (
+            '/opt/zookeeper/bin/zkServer.sh stop '
+            f'&> {log_folder}/zkServer.log &'
+        )
+        network.hosts[self.ZOOKEEPER_INDEX].cmd(zookeeper_stop_command)
+        return network.hosts[self.ZOOKEEPER_INDEX].IP()
 
     def create_network(self, topo=None):
         """ Method to create a Mininet network with a provided topology;

@@ -6,7 +6,8 @@ from src.unit_tests import *
 from src.lib.subscriber import Subscriber
 
 class TestSubscriber(unittest.TestCase):
-    def setUp(self):
+    def __init__(self, *args, **kwargs):
+        super(TestSubscriber, self).__init__(*args, **kwargs)
         # Create a Subscriber object.
         # centralized and decentralized have no affect on
         # topology-independent units to be tested.
@@ -14,7 +15,6 @@ class TestSubscriber(unittest.TestCase):
         # Test file write in same folder
         __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         self.filename = os.path.join(__location__, "subscriber_write_test.csv")
-
         # Subscriber requires a broker to configure. Don't configure for unit testing.
         self.subscriber = Subscriber(
             topics=self.topics,

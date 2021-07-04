@@ -19,7 +19,8 @@ class Publisher(ZookeeperClient):
     def __init__(self,
         broker_address='127.0.0.1',
         topics=[], sleep_period=1, bind_port=5556,
-        indefinite=False, max_event_count=15,zookeeper_hosts=["127.0.0.1:2181"]):
+        indefinite=False, max_event_count=15,zookeeper_hosts=["127.0.0.1:2181"],
+        verbose=False):
         """ Constructor
         args:
         - broker_address (str) - IP address of broker (port 5556)
@@ -30,6 +31,7 @@ class Publisher(ZookeeperClient):
         - indefinite (boolean) - whether to publish events/updates indefinitely
         - max_event_count (int) - if not (indefinite), max number of events/updates to publish
         """
+        self.verbose = verbose
         self.id = id(self)
         self.broker_address = broker_address
         # self.own_address = own_address
@@ -47,8 +49,8 @@ class Publisher(ZookeeperClient):
 
         # Set up initial config for ZooKeeper client.
         super().__init__(zookeeper_hosts)
-
         self.WATCH_FLAG = False
+        self.info(f"Successfully initialized publisher object (PUB{id(self)})")
 
     def debug(self, msg):
         self.logger.debug(msg, extra=self.prefix)
@@ -60,12 +62,13 @@ class Publisher(ZookeeperClient):
         self.logger.error(msg, extra=self.prefix)
 
     def set_logger(self):
-        self.prefix = {'prefix': f'PUB{id(self)}<{",".join(self.topics)}> -'}
-        self.logger = logging.getLogger(__name__)
+        self.prefix = {'prefix': f'PUB{id(self)}<{",".join(self.topics)}>'}
+        self.logger = logging.getLogger(f'PUB{id(self)}')
+        self.logger.setLevel(logging.DEBUG if self.verbose else logging.INFO)
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(prefix)s - %(message)s')
         handler.setFormatter(formatter)
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(handler)
 
     def get_znode_value (self):
         """ ******************* retrieve a znode value  ************************ """
