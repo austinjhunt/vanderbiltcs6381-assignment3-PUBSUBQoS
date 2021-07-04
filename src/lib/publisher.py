@@ -256,5 +256,8 @@ class Publisher(ZookeeperClient):
         try:
             self.debug(f'Destroying ZMQ context, closing all sockets')
             self.context.destroy()
+            exit_code = 0
         except Exception as e:
             self.error(f'Could not destroy ZMQ context successfully - {str(e)}')
+            exit_code = 1
+        sys.exit(exit_code)

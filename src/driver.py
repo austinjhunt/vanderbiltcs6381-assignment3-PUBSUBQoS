@@ -3,8 +3,6 @@ import logging
 from lib.publisher import Publisher
 from lib.subscriber import Subscriber
 from lib.broker import Broker
-import time
-
 
 def create_publisher_with_zookeeper(publisher):
     """ Method to handle creation of publisher using zookeeper coordination"""
@@ -110,10 +108,14 @@ def create_subscribers(count=1, filename=None, broker_address='127.0.0.1',
     return subs
 
 def create_broker_with_zookeeper(broker):
-    """ Method to handle creation of broker using zookeeper coordination"""
+    """ Method to handle creation of broker using zookeeper coordination
+    Args:
+    - broker object to create
+    """
     broker.connect_zk()
     broker.start_session()
     broker.zk_run_election()
+
 
 def create_broker_without_zookeeper(broker):
     """" Method to handle creation of broker without zookeeper coordination """
@@ -122,15 +124,17 @@ def create_broker_without_zookeeper(broker):
     # Will call if broker event loop not indefinite
     broker.disconnect()
 
-def create_broker(indefinite=False, centralized=False, pub_reg_port=5555,
-    sub_reg_port=5556, zookeeper_hosts=['127.0.0.1:2181']):
+def create_broker(indefinite=False, centralized=False, pub_reg_port=5555, 
+    sub_reg_port=5556, autokill=None, max_event_count=15, zookeeper_hosts=['127.0.0.1:2181']): 
     logging.info("Creating broker", extra=driver_logging_prefix)
     broker = Broker(
         centralized=centralized,
         indefinite=indefinite,
         pub_reg_port=pub_reg_port,
-        sub_reg_port=sub_reg_port,
-        zookeeper_hosts=zookeeper_hosts
+        sub_reg_port=sub_reg_port, 
+        max_event_count=max_event_count,
+        autokill=autokill,
+        zookeeper_hosts=zookeeper_hosts 
     )
     try:
         create_broker_with_zookeeper(broker)
@@ -200,6 +204,13 @@ if __name__ == "__main__":
         help="which port of the broker will be used to receive pub registration")
     parser.add_argument('-srp', '--sub_reg_port', type=int, default=5556,
         help="which port of the broker will be used to receive sub registration")
+
+    # Optional with --broker (for ZooKeeper testing; auto kill a broker after
+    # N seconds to trigger new leader election)
+    parser.add_argument('-ak', '--autokill', type=int, required=False,
+        help=(
+            'Optional with --broker. Auto kill a broker after N (--autokill N) seconds '
+            '(to test leader election with multiple brokers)'))
     #################################################################
 
     args = parser.parse_args()
@@ -293,10 +304,16 @@ if __name__ == "__main__":
             raise argparse.ArgumentTypeError(
                 '--filename not a valid argument with --publisher type. only works with --subscriber'
                 )
+        autokill = None
+        if args.autokill:
+            autokill = args.autokill
+            logger.debug(f"Will autokill broker after {autokill} seconds")
         create_broker(
             centralized=args.centralized,
-            indefinite=args.indefinite,
             pub_reg_port=args.pub_reg_port,
-            sub_reg_port=args.sub_reg_port,
+            sub_reg_port=args.sub_reg_port, 
+            indefinite=args.indefinite if args.indefinite else False,
+            max_event_count=args.max_event_count if args.max_event_count else 15,
+            autokill=autokill,
             zookeeper_hosts=args.zookeeper_hosts
         )

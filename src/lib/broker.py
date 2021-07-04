@@ -3,17 +3,14 @@ Message Broker to serve as anonymizing middleware between
 publishers and subscribers
 """
 from .zookeeper_client import ZookeeperClient
-from kazoo.exceptions import KazooException
 import zmq
 import json
-import traceback
 import random
 import logging
 import pickle
 import netifaces
 import sys
-import uuid
-from kazoo.client import KazooClient, KazooState
+import time
 
 
 
@@ -22,10 +19,13 @@ class Broker(ZookeeperClient):
     # constructor
     #################################################################
     def __init__(self, centralized=False, indefinite=False, max_event_count=15,
-        zookeeper_hosts=['127.0.0.1:2181'], pub_reg_port=5555, sub_reg_port=5556):
+        zookeeper_hosts=['127.0.0.1:2181'], pub_reg_port=5555, sub_reg_port=5556, autokill=None):
         self.centralized = centralized
         self.prefix = {'prefix': 'BROKER - '}
         self.set_logger()
+        self.autokill_time = None
+        if autokill:
+            self.autokill_time = time.time() + autokill
         # Either poll for events indefinitely or for specified max_event_count
         self.indefinite = indefinite
         self.max_event_count = max_event_count
@@ -57,7 +57,6 @@ class Broker(ZookeeperClient):
 
         # Initialize configuration for ZooKeeper client
         super().__init__(zookeeper_hosts=zookeeper_hosts)
-        self.debug(f"My Zookeeper instance ID is {self.zk_instance_id}")
 
         # this is for write into the znode about the broker information
         self.pub_reg_port = pub_reg_port
@@ -96,6 +95,8 @@ class Broker(ZookeeperClient):
         self.configure()
         try:
             self.event_loop()
+            # Reached if not indefinite
+            self.disconnect()
         except KeyboardInterrupt:
             # If you interrupt/cancel a broker, be sure to disconnect/clean all sockets
             self.disconnect()
@@ -115,9 +116,9 @@ class Broker(ZookeeperClient):
         self.poller = zmq.Poller()
         # these are the sockets we open one for each registration
         self.debug("Opening two REP sockets for publisher registration "
-            "and subscriber registration")
-        # self.debug("Enabling publisher registration on port 5555")
-        # self.debug("Enabling subscriber registration on port 5556")
+            "and subscriber registration") 
+        self.debug(f"Enabling publisher registration on port {self.pub_reg_port}")
+        self.debug(f"Enabling subscriber registration on port {self.sub_reg_port}") 
         self.pub_reg_socket = self.context.socket(zmq.REP)
         self.setup_pub_port_reg_binding()
         self.sub_reg_socket = self.context.socket(zmq.REP)
@@ -176,26 +177,22 @@ class Broker(ZookeeperClient):
     def parse_events(self, index):
         """ BOTH CENTRAL AND DECENTRALIZED DISSEMINATION
         Parse events returned by ZMQ poller and handle accordingly
+        Find which socket was enabled and accordingly make a callback
+        Note that we must check for all the sockets since multiple of them
+        could have been enabled.
         Args:
         - index (int) - event index, just used for logging current event loop index
          """
-        # find which socket was enabled and accordingly make a callback
-        # Note that we must check for all the sockets since multiple of them
-        # could have been enabled.
-        # The return value of poll() is a socket to event mask mapping
-        # self.debug("Polling for events...")
         try:
-            events = dict(self.poller.poll())
+            # Don't block indefinitely; wait max of .5 second
+            events = dict(self.poller.poll(500))
         except zmq.error.ZMQError as e:
             if 'Socket operation on non-socket' in str(e):
                 self.error(f'Exception with self.poller.poll(): {e}')
                 self.disconnect()
-                sys.exit(1)
-
         if self.pub_reg_socket in events:
             self.register_pub()
             if self.centralized:
-                # Open a SUB socket to receive from publisher
                 self.update_receive_socket()
         elif self.sub_reg_socket in events:
             self.debug(f"Event {index}: subscriber")
@@ -206,9 +203,6 @@ class Broker(ZookeeperClient):
                 if self.receive_socket_dict[topic] in events:
                     self.send(topic)
 
-    #################################################################
-    # Run the event loop
-    #################################################################
     def event_loop(self):
         """ BOTH CENTRAL AND DECENTRALIZED DISSEMINATION
         Poll for events either indefinitely or until a specific
@@ -216,19 +210,30 @@ class Broker(ZookeeperClient):
         self.debug("Start Event Loop")
         if self.indefinite:
             self.debug("Begin indefinite event poll loop")
-            i = 0 # index used just for logging event index
-            while True:
-                i += 1
-                self.parse_events(i)
+            i = 0
+            if self.autokill_time:
+                while time.time() < self.autokill_time:
+                    i += 1
+                    self.parse_events(i)
+                self.info("Autokilling broker")
+            else:
+                while True:
+                    i += 1
+                    self.parse_events(i)
         else:
             self.debug(f"Begin finite (max={self.max_event_count}) event poll loop")
             event_count = 0
-            while event_count < self.max_event_count:
-                self.parse_events(event_count+1)
-                event_count += 1
+            if self.autokill_time:
+                while event_count < self.max_event_count and time.time() < self.autokill_time:
+                    self.parse_events(event_count+1)
+                    event_count += 1
+                if time.time() >= self.autokill_time:
+                    self.info("Autokilling broker")
+            else:
+                while event_count < self.max_event_count:
+                    self.parse_events(event_count+1)
+                    event_count += 1
 
-    # once a publisher register with broker, the broker will start to receive message from it
-    # for a particular topic, the broker will open a SUB socket for a topic
     def update_receive_socket(self):
         """ CENTRALIZED DISSEMINATION
         Once publisher registers with broker, broker will begin receiving messages from it
@@ -499,5 +504,8 @@ class Broker(ZookeeperClient):
         try:
             self.info("Disconnecting. Destroying ZMQ context..")
             self.context.destroy()
+            exit_code = 0
         except Exception as e:
             self.error(f"Failed to destroy context: {e}")
+            exit_code = 1
+        sys.exit(exit_code)
