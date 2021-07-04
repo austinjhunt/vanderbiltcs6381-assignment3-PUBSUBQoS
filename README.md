@@ -8,7 +8,7 @@ The project offers integrated performance / latency analysis by allowing you to 
 This project extends the first by adding in [Apache ZooKeeper](https://zookeeper.apache.org) for distributed coordination. Specifically, it uses [kazoo, a Python library for ZooKeeper](https://kazoo.readthedocs.io/en/latest/), to handle **multi-broker** pub/sub with **warm passive replication** between brokers. The ZooKeeper usage is completely transparent, meaning if you use one broker, the project functions exactly the same as the first (which did not use ZooKeeper). If you use multiple brokers, ZooKeeper enables all publishers and subscribers to continue functioning as though nothing happened by simply electing the next available broker as the leader.
 
 ### How is ZooKeeper used?
-#### Lead Election
+#### Leader Election
 ZooKeeper's leader election recipe is used for the leader election of the brokers.
 When a new broker is created, the `zk_run_election` [source code](https://github.com/austinjhunt/vanderbiltcs6381-assignment2-ZOOKEEPER/blob/7fde3240e1942070cbf193816dfbb90307e03cef/src/lib/broker.py#L103) is invoked. The broker will wait until the election is won. Once won, it will invoke the `leader_function` [source code](https://github.com/austinjhunt/vanderbiltcs6381-assignment2-ZOOKEEPER/blob/7fde3240e1942070cbf193816dfbb90307e03cef/src/lib/broker.py#L84) function to configure itself and write its information about its IP address and port used for publisher registration and subscriber registration into a
 ZooKeeper **znode** called **/broker**.

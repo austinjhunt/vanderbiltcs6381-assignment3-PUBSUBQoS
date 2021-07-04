@@ -10,29 +10,35 @@ class DecentralizedPerformanceTest(PerformanceTest):
         super().__init__(num_events=num_events,
             event_interval=event_interval,wait_factor=wait_factor)
         self.set_logger()
+        # 2 brokers, 1 zookeeper server. THEN pubs/subs.
+        self.OFFSET = 3
+        self.ZOOKEEPER_INDEX = 0
+        self.BROKER_1_INDEX = 1
+        self.BROKER_2_INDEX = 2
+        self.WAIT_FOR_ZK_START = 5
+
 
     def set_logger(self):
+        self.prefix = {'prefix': f'CENTRALTEST-'}
         self.logger = logging.getLogger(__name__)
         handler = logging.StreamHandler()
-        handler.setLevel(logging.DEBUG)
         formatter = logging.Formatter('%(prefix)s - %(message)s')
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
-        self.logger.setLevel(logging.INFO)
-        self.logger = logging.LoggerAdapter(self.logger, self.prefix)
+        self.logger.setLevel(logging.DEBUG)
 
-
-    def setup_brokers(self, log_folder, network):
+    def setup_brokers(self, log_folder, network, zookeeper_host):
         # Start 2 brokers with above command for multi-broker ZooKeeper test
         broker_command_1 = (
             f'python3 driver.py '
             '--broker 1 --verbose '
+            f'--zookeeper_host {zookeeper_host} '
             f'--indefinite ' # max event count only matters for subscribers who write files at end.
-            # Zookeeper test - autokill first broker after 5 seconds to allow second leader election
-            f'--autokill 5'
-            f'&> {log_folder}/broker.log &'
+            # Zookeeper test - autokill first broker after 15 seconds to allow second leader election
+            f'--autokill 15'
+            f'&> {log_folder}/broker1.log &'
         )
-        broker_host_1 = network.hosts[0]
+        broker_host_1 = network.hosts[self.BROKER_1_INDEX]
         broker_host_1.cmd(broker_command_1)
         broker_ip_1 = broker_host_1.IP()
         self.debug(f'Broker 1 set up! (IP: {broker_ip_1})')
@@ -40,26 +46,28 @@ class DecentralizedPerformanceTest(PerformanceTest):
         broker_command_2 = (
             f'python3 driver.py '
             '--broker 1 --verbose '
+            f'--zookeeper_host {zookeeper_host} '
             f'--indefinite ' # max event count only matters for subscribers who write files at end.
-            f'&> {log_folder}/broker.log &'
+            f'&> {log_folder}/broker2.log &'
         )
-        broker_host_2 = network.hosts[0]
+        broker_host_2 = network.hosts[self.BROKER_2_INDEX]
         broker_host_2.cmd(broker_command_2)
         broker_ip_2 = broker_host_2.IP()
         self.debug(f'Broker 2 set up! (IP: {broker_ip_2})')
         return broker_ip_1, broker_ip_2
 
     def setup_publishers(self, num_publishers, network, num_subscribers,
-        num_hosts, broker_ip, log_folder):
+        num_hosts, broker_ip, log_folder, zookeeper_host):
         self.debug(f"Creating {num_publishers} publishers...")
         publishers = [
-            network.hosts[i] for i in range(num_subscribers + 2, num_hosts)
+            network.hosts[i] for i in range(num_subscribers + self.OFFSET, num_hosts)
         ]
         for index,host in enumerate(publishers):
             host.cmd(
                 f'python3 driver.py '
                 '--publisher 1 '
                 f'--sleep {self.event_interval} '
+                f'--zookeeper_host {zookeeper_host} '
                 f'--indefinite ' # max event count only matters for subscribers who write files at end.
                 '--topics A --topics B --topics C '
                 f'--broker_address {broker_ip} '
@@ -69,16 +77,18 @@ class DecentralizedPerformanceTest(PerformanceTest):
         self.debug("Publishers created!")
         return publishers
 
-    def setup_subscribers(self, num_subscribers, network, broker_ip, data_folder, log_folder):
+    def setup_subscribers(self, num_subscribers, network, broker_ip, data_folder, log_folder,
+        zookeeper_host):
         self.debug(f"Starting {num_subscribers} subscribers...")
         subscribers = [
-            network.hosts[i] for i in range(2, num_subscribers + 2)
+            network.hosts[i] for i in range(self.OFFSET, num_subscribers + self.OFFSET)
         ]
         for index,host in enumerate(subscribers):
             host.cmd(
                 'python3 driver.py '
                 '--subscriber 1 '
                 '--topics A --topics B --topics C '
+                f'--zookeeper_host {zookeeper_host} '
                 f'--max_event_count {self.num_events} '
                 f'--broker_address {broker_ip} '
                 f'--filename {data_folder}/subscriber-{index}.csv '
@@ -158,29 +168,31 @@ class DecentralizedPerformanceTest(PerformanceTest):
         self.failures = 0
         self.comments = []
         if network and num_hosts:
-            data_folder, log_folder, test_results_file = self.prepare_folders(network_name)
+            data_folder, log_folder, test_results_file = self.prepare_folder_structure(network_name)
 
             self.debug("Starting network...")
             # Start the network
             network.start()
 
-            # Subtract 2 from total; 2 brokers for multi-broker test
-            num_subscribers = (num_hosts - 2) // 2
-            num_publishers = num_hosts - 2 - num_subscribers
+            num_subscribers = (num_hosts - self.OFFSET) // 2
+            num_publishers = num_hosts - self.OFFSET - num_subscribers
 
             self.debug(
                 f'With {num_hosts} hosts, there will be 2 Brokers, '
                 f'{num_publishers} Publishers, and {num_subscribers} Subscribers...'
             )
 
-            broker_ip_1, broker_ip_2 = self.setup_brokers(log_folder, network)
+            # First host is zookeeper server.
+            zookeeper_host = f'{self.setup_zookeeper_server(network, log_folder, self.WAIT_FOR_ZK_START)}:2181'
+            broker_ip_1, broker_ip_2 = self.setup_brokers(log_folder, network, zookeeper_host)
             subscribers = self.setup_subscribers(num_subscribers, network,
-                broker_ip_1, data_folder, log_folder)
+                broker_ip_1, data_folder, log_folder, zookeeper_host)
             publishers = self.setup_publishers(num_publishers, network, num_subscribers,
-                                num_hosts, broker_ip_1, log_folder)
+                                num_hosts, broker_ip_1, log_folder,zookeeper_host)
 
             self.wait_for_execution()
             self.verify_data_written(subscribers, data_folder, test_results_file)
+            self.kill_zookeeper_server(network, log_folder)
             self.terminate_test(subscribers, publishers, network_name, network)
 
             return {

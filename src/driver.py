@@ -35,7 +35,6 @@ def create_publishers(count=1, topics=[], broker_address='127.0.0.1',
     next will bind to port+1, next to port+2, etc. No need to specify port for every publisher if
     creating multiple on one host."""
 
-    logging.info(f'Creating {count} publishers for topics {",".join(topics)}', extra=driver_logging_prefix )
     pubs = {}
     for i in range(count):
         pubs[i] = Publisher(
@@ -82,7 +81,6 @@ def create_subscribers(count=1, filename=None, broker_address='127.0.0.1',
     need to use multiprocessing library, because Subscriber.listen() will block for i in range(count)
     if run sequentially. E.g. subscriber 2 on the same host will not ever get to listen for updates
     if subscriber 1 listens indefinitely. Multiprocessing not yet implemented, so limit count to 1 for now."""
-    logging.info(f'Creating {count} subscribers subscribed to topics <{",".join(topics)}>', extra=driver_logging_prefix )
     subs = {}
     for i in range(count):
         subs[i] = Subscriber(
@@ -124,17 +122,16 @@ def create_broker_without_zookeeper(broker):
     # Will call if broker event loop not indefinite
     broker.disconnect()
 
-def create_broker(indefinite=False, centralized=False, pub_reg_port=5555, 
-    sub_reg_port=5556, autokill=None, max_event_count=15, zookeeper_hosts=['127.0.0.1:2181']): 
-    logging.info("Creating broker", extra=driver_logging_prefix)
+def create_broker(indefinite=False, centralized=False, pub_reg_port=5555,
+    sub_reg_port=5556, autokill=None, max_event_count=15, zookeeper_hosts=['127.0.0.1:2181']):
     broker = Broker(
         centralized=centralized,
         indefinite=indefinite,
         pub_reg_port=pub_reg_port,
-        sub_reg_port=sub_reg_port, 
+        sub_reg_port=sub_reg_port,
         max_event_count=max_event_count,
         autokill=autokill,
-        zookeeper_hosts=zookeeper_hosts 
+        zookeeper_hosts=zookeeper_hosts
     )
     try:
         create_broker_with_zookeeper(broker)
@@ -218,8 +215,7 @@ if __name__ == "__main__":
     if args.broker and args.broker > 1:
         raise argparse.ArgumentTypeError('Maximum broker count is 1 (one)')
 
-    # Default log level = warning
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger('driver')
     formatter = logging.Formatter('%(prefix)s - %(message)s')
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
@@ -231,10 +227,6 @@ if __name__ == "__main__":
         logger.debug('Debug mode enabled', extra=driver_logging_prefix)
     else:
         logger.setLevel(logging.INFO)
-
-    logger.debug(F'Creating {args.publisher if args.publisher else 0} publishers on this host', extra=driver_logging_prefix)
-    logging.debug(F'Creating {args.subscriber if args.subscriber else 0} subscribers on this host', extra=driver_logging_prefix)
-    logging.debug(F'Creating {args.broker if args.broker else 0} broker on this host', extra=driver_logging_prefix)
 
     if (args.publisher and args.subscriber) or (args.publisher and args.broker) or \
         (args.broker and args.subscriber):
@@ -252,12 +244,6 @@ if __name__ == "__main__":
                 'If creating a publisher with --publisher you must provide a set of topics to '
                 'publish with -t <topic> [-t <topic> ...]'
                 )
-        # # No need to provide broker_address anymore. It will be obtained from the znode
-        # if not args.broker_address:
-        #     raise argparse.ArgumentTypeError(
-        #         'You need to provide a broker IP address with --broker_address [-b] <IP ADDRESS>'
-        #         )
-
         if args.filename:
             raise argparse.ArgumentTypeError(
                 '--filename not a valid argument with --publisher type. only works with --subscriber'
@@ -307,11 +293,11 @@ if __name__ == "__main__":
         autokill = None
         if args.autokill:
             autokill = args.autokill
-            logger.debug(f"Will autokill broker after {autokill} seconds")
+            logger.debug(f"Will autokill broker after {autokill} seconds", extra=driver_logging_prefix)
         create_broker(
             centralized=args.centralized,
             pub_reg_port=args.pub_reg_port,
-            sub_reg_port=args.sub_reg_port, 
+            sub_reg_port=args.sub_reg_port,
             indefinite=args.indefinite if args.indefinite else False,
             max_event_count=args.max_event_count if args.max_event_count else 15,
             autokill=autokill,

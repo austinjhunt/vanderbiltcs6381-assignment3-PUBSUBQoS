@@ -1,7 +1,7 @@
 """ Module to perform unit tests against Subscriber class for methods that
 execute and can be tested independently of the publish/subscribe network """
 import unittest
-import os
+import sys
 from src.unit_tests import *
 from src.lib.zookeeper_client import ZookeeperClient
 connected = False

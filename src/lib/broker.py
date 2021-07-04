@@ -19,9 +19,11 @@ class Broker(ZookeeperClient):
     # constructor
     #################################################################
     def __init__(self, centralized=False, indefinite=False, max_event_count=15,
-        zookeeper_hosts=['127.0.0.1:2181'], pub_reg_port=5555, sub_reg_port=5556, autokill=None):
+        zookeeper_hosts=['127.0.0.1:2181'], pub_reg_port=5555, sub_reg_port=5556, autokill=None,
+        verbose=False):
+        self.verbose = verbose
         self.centralized = centralized
-        self.prefix = {'prefix': 'BROKER - '}
+        self.prefix = {'prefix': f'BROKER({id(self)}'}
         self.set_logger()
         self.autokill_time = None
         if autokill:
@@ -62,13 +64,17 @@ class Broker(ZookeeperClient):
         self.pub_reg_port = pub_reg_port
         self.sub_reg_port = sub_reg_port
         self.znode_value = f"{self.get_host_address()},{self.pub_reg_port},{self.sub_reg_port}"
+        self.info(f"Successfully initialized broker object (BROKER{id(self)})")
 
     def set_logger(self):
-        self.logger = logging.getLogger(__name__)
+        self.prefix = {'prefix': f'BROKER{id(self)} -'}
+        self.logger = logging.getLogger(f'BROKER{id(self)}')
+        self.logger.setLevel(logging.DEBUG if self.verbose else logging.INFO)
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(prefix)s - %(message)s')
         handler.setFormatter(formatter)
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(handler)
+
 
     def info(self, msg):
         self.logger.info(msg, extra=self.prefix)
@@ -78,7 +84,6 @@ class Broker(ZookeeperClient):
 
     def debug(self, msg):
         self.logger.debug(msg, extra=self.prefix)
-
 
     def leader_function(self):
         self.debug(f"I am the leader {str(self.zk_instance_id)}")
@@ -116,9 +121,9 @@ class Broker(ZookeeperClient):
         self.poller = zmq.Poller()
         # these are the sockets we open one for each registration
         self.debug("Opening two REP sockets for publisher registration "
-            "and subscriber registration") 
+            "and subscriber registration")
         self.debug(f"Enabling publisher registration on port {self.pub_reg_port}")
-        self.debug(f"Enabling subscriber registration on port {self.sub_reg_port}") 
+        self.debug(f"Enabling subscriber registration on port {self.sub_reg_port}")
         self.pub_reg_socket = self.context.socket(zmq.REP)
         self.setup_pub_port_reg_binding()
         self.sub_reg_socket = self.context.socket(zmq.REP)
@@ -142,10 +147,10 @@ class Broker(ZookeeperClient):
         success = False
         while not success:
             try:
-                self.info(f'Attempting bind to port {self.pub_reg_port}')
+                self.debug(f'Attempting bind to port {self.pub_reg_port}')
                 self.pub_reg_socket.bind(f'tcp://*:{self.pub_reg_port}')
                 success = True
-                self.info(f'Successful bind to port {self.pub_reg_port}')
+                self.debug(f'Successful bind to port {self.pub_reg_port}')
             except:
                 try:
                     self.error(f'Port {self.pub_reg_port} already in use, attempting next port')
@@ -162,10 +167,10 @@ class Broker(ZookeeperClient):
         success = False
         while not success:
             try:
-                self.info(f'Attempting bind to port {self.sub_reg_port}')
+                self.debug(f'Attempting bind to port {self.sub_reg_port}')
                 self.sub_reg_socket.bind(f'tcp://*:{self.sub_reg_port}')
                 success = True
-                self.info(f'Successful bind to port {self.sub_reg_port}')
+                self.debug(f'Successful bind to port {self.sub_reg_port}')
             except:
                 try:
                     self.error(f'Port {self.sub_reg_port} already in use, attempting next port')

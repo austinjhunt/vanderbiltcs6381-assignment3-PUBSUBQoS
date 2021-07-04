@@ -66,12 +66,12 @@ class TestDriver:
         )
         # Min = 4 hosts, Max = 27 hosts
         results = []
-        for depth in range(2,4): # 2,3
-            for fanout in range(2,4): # 2,3
-                # Adjust the wait factor as number of hosts grows. fanout * 3 = (6->12)
-                centralized_perf_test.setWaitFactor(factor=depth*fanout)
-                result = centralized_perf_test.test_tree_topology(depth=depth, fanout=fanout)
-                results.append(result)
+        depth = 3
+        for fanout in range(2,4): # 2,3
+            # Adjust the wait factor as number of hosts grows. fanout * 3 = (6->12)
+            centralized_perf_test.setWaitFactor(factor=depth*fanout)
+            result = centralized_perf_test.test_tree_topology(depth=depth, fanout=fanout)
+            results.append(result)
         return results
 
 
@@ -85,12 +85,12 @@ class TestDriver:
         )
         # Min = 4 hosts, Max = 27 hosts
         results = []
-        for depth in range(2,4):
-            for fanout in range(2,4):
-                # Adjust the wait factor as number of hosts grows. fanout * 3 = (6->12)
-                decentralized_perf_test.setWaitFactor(factor=depth*fanout)
-                result = decentralized_perf_test.test_tree_topology(depth=depth, fanout=fanout)
-                results.append(result)
+        depth = 3
+        for fanout in range(2,4):
+            # Adjust the wait factor as number of hosts grows. fanout * 3 = (6->12)
+            decentralized_perf_test.setWaitFactor(factor=depth*fanout)
+            result = decentralized_perf_test.test_tree_topology(depth=depth, fanout=fanout)
+            results.append(result)
 
         return results
 

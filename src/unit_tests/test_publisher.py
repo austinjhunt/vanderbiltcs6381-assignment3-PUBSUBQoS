@@ -7,17 +7,13 @@ from src.unit_tests import *
 from src.lib.publisher import Publisher
 
 class TestPublisher(unittest.TestCase):
-    broker = None
-    def setUp(self):
-        # Create a publisher object.
-        # centralized and decentralized have no affect on
-        # topology-independent units to be tested.
+    def __init__(self, *args, **kwargs):
         self.topics = ['A','B','C']
-        # Publisher requires a broker to configure. Don't configure for unit testing.
         self.publisher = Publisher(
             topics=self.topics,
             sleep_period=0.3,
         )
+        super(TestPublisher, self).__init__(*args, **kwargs)
 
     def test_topics(self):
         # Publisher should store all topics passed on construction.
