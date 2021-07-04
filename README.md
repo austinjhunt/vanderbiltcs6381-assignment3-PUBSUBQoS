@@ -147,7 +147,7 @@ Zookeeper Server - Terminal Window #1.
 ### Testing with Mininet
 
 #### FIRST, start the Mininet and open xterm from host 1 to host 7
-1. `sudo mn -topo tree,depth=2,fanout=3`
+1. `sudo mn --topo tree,depth=2,fanout=3`
 2. `xterm h1`
 3. `xterm h2`
 4. `xterm h3`
