@@ -141,7 +141,7 @@ Zookeeper Server - Terminal Window #1.
     1. `python3 driver.py --subscriber 1 --verbose --max_event_count 60 --zookeeper_host 127.0.0.1:2181 --topics B --filename s2_central_direct.txt --centralized`
 5. Terminate active broker, broker 1 (Terminal Window #2) by pressing CTRL + C on the broker. You should find the standby broker in Terminal Window #3 become active. You should also see the publisher and subscriber switch to the new broker in their logs.
 
-**Video Demo: https://youtu.be/F7_o7OdGvgA*
+**Video Demo: https://youtu.be/F7_o7OdGvgA**
 
 
 ### Testing with Mininet
