@@ -1,6 +1,0 @@
-DRIVER - Debug mode enabled
-DRIVER - Will autokill broker after 15 seconds
-BROKER139868409138384 - - Try to connect with ZooKeeper server: hosts = 10.0.0.1:2181
-BROKER139868409138384 - - ZooKeeper Current Status = LOST
-BROKER139868409138384 - - Current state is now = CONNECTED
-BROKER139868409138384 - - contenders: ['22ad2d47-e78e-46f7-8ff6-3b24a8039776', '7565f4a7-f98c-49be-a39c-25d487b921e7']
