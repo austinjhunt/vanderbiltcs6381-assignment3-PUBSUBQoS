@@ -124,9 +124,10 @@ def create_broker_without_zookeeper(broker):
     # Will call if broker event loop not indefinite
     broker.disconnect()
 
-def create_broker(indefinite=False, centralized=False, pub_reg_port=5555,
+def create_brokers(indefinite=False, centralized=False, pub_reg_port=5555,
     sub_reg_port=5556, autokill=None, max_event_count=15, zookeeper_hosts=['127.0.0.1:2181'],
-    verbose=False):
+    verbose=False,backup_pool_size=5, load_threshold=3):
+
     broker = Broker(
         centralized=centralized,
         indefinite=indefinite,
@@ -135,7 +136,8 @@ def create_broker(indefinite=False, centralized=False, pub_reg_port=5555,
         max_event_count=max_event_count,
         autokill=autokill,
         zookeeper_hosts=zookeeper_hosts,
-        verbose=verbose
+        verbose=verbose,
+        load_threshold=load_threshold
     )
     try:
         create_broker_with_zookeeper(broker)
@@ -148,6 +150,18 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Pass arguments to create publishers, subscribers, or an intermediate message broker')
     parser.add_argument('-v', '--verbose', help='increase output verbosity', action='store_true')
+
+    # LOAD BALANCING
+    parser.add_argument('-load', '--load_threshold', type=int,
+        help=(
+            'threshold of num_clients/num_brokers ratio at which to promote backup '
+            'replicas to primary replicas for new load distribution'), default=3, required=True)
+    parser.add_argument('-backup', '--backup_pool_size', type=int, default=5, required=True,
+        help=(
+            'how many broker replicas to include in the backup pool that are '
+            'promotable to primary replicas when load thresholds are met')
+    )
+
     # Choose type of entity
     parser.add_argument('-pub', '--publisher',  type=int,
         help='pass this followed by an integer N to create N publishers on this host')
@@ -300,7 +314,7 @@ if __name__ == "__main__":
         if args.autokill:
             autokill = args.autokill
             logger.debug(f"Will autokill broker after {autokill} seconds", extra=driver_logging_prefix)
-        create_broker(
+        create_brokers(
             centralized=args.centralized,
             pub_reg_port=args.pub_reg_port,
             sub_reg_port=args.sub_reg_port,
@@ -308,5 +322,7 @@ if __name__ == "__main__":
             max_event_count=args.max_event_count if args.max_event_count else 15,
             autokill=autokill,
             zookeeper_hosts=args.zookeeper_hosts,
-            verbose=args.verbose
+            verbose=args.verbose,
+            backup_pool_size=args.backup_pool_size,
+            load_threshold=args.load_threshold
         )
