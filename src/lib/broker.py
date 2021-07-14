@@ -12,6 +12,30 @@ import netifaces
 import sys
 import time
 
+# If we want to use the ratio of clients to brokers as the threshold for creating new replicas,
+# then a broker cannot be responsible for triggering this because a broker does not know
+# how many other brokers exist, it only knows how many subscribers/publishers have registered with itself.
+# Can't even use driver, because driver only ever creates one Sub / one Pub / one Broker for a given driver.py call.
+# Does not maintain a count or a list of active brokers / clients.
+
+# Idea. When you create a broker, broker increments a /brokercount znode value.
+# When you create a pub or sub, it increments a /brokerclientcount znode value.
+# A separate LoadBalancer entity watches BOTH of these znodes for changes. When one changes,
+# if (brokerclientcount / brokercount) ratio is equal to threshold and load is increasing, promote one of the backups.
+# if (brokerclientcount / brokercount) ratio is equal to threshold and load is decreasing, demote one of the primaries to a backup.
+# How do we distinguish between increasing and decreasing load?
+# LoadBalancer can maintain an internal current_broker_count and current_broker_client_count state. When one
+# of those znode values change, read it and if it's higher than current value, load is increasing, if it's less than current value, load is decreasing.
+
+
+
+# How do we handle promotion independently of the existing /broker leader election / fault tolerance znode?
+# Create a /promotetoprimary znode on startup of system.
+# Tell all of the BACKUP replicas (not active/promoted yet) to watch /promoteelection znode for changes. On change,
+# broker tries to create a /promoted znode. If successful, that is the broker that gets promoted to primary replica. Broker
+# joins system and then deletes /promoted which is not watched (doesn't trigger anything) but will be used for next round of promotions.
+
+
 
 
 class Broker(ZookeeperClient):
@@ -20,7 +44,8 @@ class Broker(ZookeeperClient):
     #################################################################
     def __init__(self, centralized=False, indefinite=False, max_event_count=15,
         zookeeper_hosts=['127.0.0.1:2181'], pub_reg_port=5555, sub_reg_port=5556, autokill=None,
-        verbose=False):
+        verbose=False, load_threshold=3):
+
         self.verbose = verbose
         self.centralized = centralized
         self.prefix = {'prefix': f'BROKER({id(self)}'}
