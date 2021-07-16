@@ -20,7 +20,7 @@ class Publisher(ZookeeperClient):
         broker_address='127.0.0.1',
         topics=[], sleep_period=1, bind_port=5556,
         indefinite=False, max_event_count=15,zookeeper_hosts=["127.0.0.1:2181"],
-        verbose=False):
+        verbose=False, zone_number=1):
         """ Constructor
         args:
         - broker_address (str) - IP address of broker (port 5556)
@@ -48,7 +48,8 @@ class Publisher(ZookeeperClient):
         self.set_logger()
 
         # Set up initial config for ZooKeeper client.
-        super().__init__(zookeeper_hosts)
+        # FIXME: publisher needs to be aware of what zone it belongs to for load balancing.
+        super().__init__(zookeeper_hosts, zone_number=zone_number)
         self.WATCH_FLAG = False
         self.info(f"Successfully initialized publisher object (PUB{id(self)})")
 
@@ -70,24 +71,6 @@ class Publisher(ZookeeperClient):
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
 
-    def get_znode_value (self):
-        """ ******************* retrieve a znode value  ************************ """
-        try:
-            self.debug ("Checking if {} exists (it better be)".format(self.zk_name))
-            if self.zk.exists (self.zk_name):
-                self.debug ("{} znode indeed exists; get value".format(self.zk_name))
-                # Now acquire the value and stats of that znode
-                #value,stat = self.zk.get (self.zk_name, watch=self.watch)
-                value,stat = self.zk.get (self.zk_name)
-                self.znode_value = value.decode("utf-8")
-                self.debug(("Details of znode {}: value = {}, stat = {}".format (self.zk_name, value, stat)))
-                self.debug(f"Values stored in field znode_value is {self.znode_value}")
-            else:
-                self.debug ("{} znode does not exist, why?".format(self.zk_name))
-        except:
-            self.debug("Exception thrown checking for exists/get: ", sys.exc_info()[0])
-            return
-
     def update_broker_info(self):
         if self.znode_value != None:
             self.debug("Getting broker information from znode_value")
@@ -105,7 +88,7 @@ class Publisher(ZookeeperClient):
         # To overcome the need for this, Kazoo has come up with a decorator.
         # Decorators can be of two kinds: watching for data on a znode changing,
         # and children on a znode changing
-        @self.zk.DataWatch(self.zk_name)
+        @self.zk.DataWatch(self.broker_leader_znode)
         def dump_data_change (data, stat, event):
             if event == None:
                 self.WATCH_FLAG = True
@@ -119,7 +102,7 @@ class Publisher(ZookeeperClient):
                 self.context.destroy()
                 self.debug("Update Broker Information")
                 self.debug(f"Data changed for znode: data={data},stat={stat}")
-                self.get_znode_value()
+                self.get_znode_value(znode_name=self.broker_leader_znode)
                 self.update_broker_info()
                 self.debug("Reconfiguring...")
                 self.configure()

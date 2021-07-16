@@ -17,7 +17,7 @@ class Broker(ZookeeperClient):
     #################################################################
     def __init__(self, centralized=False, indefinite=False, max_event_count=15,
         zookeeper_hosts=['127.0.0.1:2181'], pub_reg_port=5555, sub_reg_port=5556, autokill=None,
-        verbose=False, load_threshold=3):
+        verbose=False, load_threshold=3, zone_number=1):
 
         self.verbose = verbose
         self.centralized = centralized
@@ -56,7 +56,8 @@ class Broker(ZookeeperClient):
         self.used_ports = []
 
         # Initialize configuration for ZooKeeper client
-        super().__init__(zookeeper_hosts=zookeeper_hosts)
+        # FIXME: broker needs to be aware of what zone it belongs to
+        super().__init__(zookeeper_hosts=zookeeper_hosts, zone_number=zone_number)
 
         # this is for write into the znode about the broker information
         self.pub_reg_port = pub_reg_port
@@ -83,16 +84,42 @@ class Broker(ZookeeperClient):
     def debug(self, msg):
         self.logger.debug(msg, extra=self.prefix)
 
+    def increment_primary_replica_count_znode(self):
+        # Get current count
+        current_primary_replica_count = self.get_znode_value(
+            znode_name=self.primary_replica_count_znode
+        )
+        try:
+            current_primary_replica_count = int(current_primary_replica_count)
+        except Exception as e:
+            self.error(str(e))
+            current_primary_replica_count = 0
+        self.modify_znode_value(
+            znode_name=self.primary_replica_count_znode,
+            znode_value=current_primary_replica_count + 1
+        )
+
+    def initialize_primary_replica_count_znode(self):
+        self.create_znode(znode_name=self.primary_replica_count_znode)
+        self.modify_znode_value(
+            znode_name=self.primary_replica_count_znode,
+            znode_value=1
+        )
+
     def leader_function(self):
-        self.debug(f"I am the leader {str(self.zk_instance_id)}")
-        self.debug(f"Create a Znode with my information")
-        if self.zk.exists(self.zk_name):
-            ## FIXME: since znode /broker is ephemeral, then its existence implies liveness of another leader
-            self.debug(f"{self.zk_name} znode exists : only modify the value)")
-            self.modify_znode_value(self.znode_value.encode('utf-8'))
+        self.debug(f"Broker {str(self.zk_instance_id)} is the leader; updating leader broker znode with info")
+        # This is now a primary replica. Increment or initialize primary replica count znode.
+        if self.zk.exists(self.primary_replica_count_znode):
+            self.increment_primary_replica_count_znode()
         else:
-            self.debug(f"{self.zk_name} znode does not exists : create one)")
-            self.create_znode()
+            self.initialize_primary_replica_count_znode()
+
+        if self.zk.exists(self.broker_leader_znode):
+            self.debug(f"{self.broker_leader_znode} znode exists : only modify the value)")
+            self.modify_znode_value(znode_name=self.broker_leader_znode, znode_value=self.znode_value.encode('utf-8'))
+        else:
+            self.debug(f"{self.broker_leader_znode} znode does not exists : create one)")
+            self.create_znode(znode_name=self.broker_leader_znode)
         # the following does not necessarily change
         self.debug("Configure Myself")
         self.configure()

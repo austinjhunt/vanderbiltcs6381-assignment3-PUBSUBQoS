@@ -18,7 +18,7 @@ class Subscriber(ZookeeperClient):
     def __init__(self, broker_address='127.0.0.1', filename=None,
         topics=[], indefinite=False,
         max_event_count=15, centralized=False, zookeeper_hosts=["127.0.0.1:2181"],
-        verbose=False):
+        verbose=False, zone_number=1):
         """ Constructor
         args:
         - broker_address - IP address of broker
@@ -35,7 +35,8 @@ class Subscriber(ZookeeperClient):
         self.centralized = centralized
         self.topics = topics # topic subscriber is interested in
         self.set_logger()
-        super().__init__(zookeeper_hosts=zookeeper_hosts)
+        # FIXME: subscriber needs to be aware of what zone it belongs to
+        super().__init__(zookeeper_hosts=zookeeper_hosts, zone_number=zone_number)
 
         if self.centralized:
             self.debug("Initializing subscriber to centralized broker")
@@ -96,7 +97,7 @@ class Subscriber(ZookeeperClient):
         """  Watch callback function invoked upon change to znode of interest.
         Watch effective only once so the client has to set the watch every time.
         Decorator zk.DataWatch used to overcome this. """
-        @self.zk.DataWatch(self.zk_name)
+        @self.zk.DataWatch(self.broker_leader_znode)
         def dump_data_change (data, stat, event):
             if event == None:
                 self.WATCH_FLAG = True
@@ -110,7 +111,7 @@ class Subscriber(ZookeeperClient):
                 self.sub_socket_dict.clear()
                 self.context.destroy()
                 self.debug(f"Data changed for znode: data={data},stat={stat}")
-                self.get_znode_value()
+                self.get_znode_value(znode_name=self.broker_leader_znode)
                 self.update_broker_info()
                 self.debug("Reconfiguring...")
                 self.configure()

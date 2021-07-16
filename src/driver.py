@@ -8,7 +8,7 @@ def create_publisher_with_zookeeper(publisher):
     """ Method to handle creation of publisher using zookeeper coordination"""
     publisher.connect_zk()
     publisher.start_session()
-    publisher.get_znode_value()
+    publisher.get_znode_value(znode_name=publisher.broker_leader_znode)
     publisher.update_broker_info()
     publisher.watch_znode_data_change()
     publisher.publish()
@@ -60,7 +60,7 @@ def create_subscriber_with_zookeeper(subscriber):
     """ Method to handle creation of a subscriber using ZooKeeper coordination """
     subscriber.connect_zk()
     subscriber.start_session()
-    subscriber.get_znode_value()
+    subscriber.get_znode_value(znode_name=subscriber.broker_leader_znode)
     subscriber.update_broker_info()
     subscriber.watch_znode_data_change()
     subscriber.notify()
