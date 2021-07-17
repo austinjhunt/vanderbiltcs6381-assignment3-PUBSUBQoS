@@ -1,7 +1,7 @@
-import socket as sock
 from .zookeeper_client import ZookeeperClient
 import zmq
 import logging
+import random
 import json
 import time
 import pickle
@@ -18,7 +18,7 @@ class Subscriber(ZookeeperClient):
     def __init__(self, broker_address='127.0.0.1', filename=None,
         topics=[], indefinite=False,
         max_event_count=15, centralized=False, zookeeper_hosts=["127.0.0.1:2181"],
-        verbose=False, zone_number=1):
+        verbose=False, requested=1):
         """ Constructor
         args:
         - broker_address - IP address of broker
@@ -35,8 +35,9 @@ class Subscriber(ZookeeperClient):
         self.centralized = centralized
         self.topics = topics # topic subscriber is interested in
         self.set_logger()
+        self.requested = requested
         # FIXME: subscriber needs to be aware of what zone it belongs to
-        super().__init__(zookeeper_hosts=zookeeper_hosts, zone_number=zone_number)
+        super().__init__(zookeeper_hosts=zookeeper_hosts, verbose=verbose)
 
         if self.centralized:
             self.debug("Initializing subscriber to centralized broker")
@@ -67,7 +68,7 @@ class Subscriber(ZookeeperClient):
         # port on broker to listen for notifications about new hosts
         # without competition/stealing from other subscriber poll()s
         self.notify_port = None
-        self.sub_reg_port = 5556
+        self.sub_reg_port = None
 
         # flag to prevent race condition between notify() and watch mechanism
         # that clears out connections
@@ -75,24 +76,36 @@ class Subscriber(ZookeeperClient):
 
         self.info(f"Successfully initialized subscriber object (SUB{id(self)})")
 
-    def set_logger(self):
-        self.prefix = {'prefix': f'SUB{id(self)}<{",".join(self.topics)}>'}
+    def assign_to_zone(self):
+        """ Random assignment to load balance across zones """
+        # This is the node this subscriber will watch for updated broker information in case of broker failure.
+        all_zones = self.zk.get_children("/primaries/")
+        self.zone = random.choice(all_zones)
+        self.debug(f"out of all zones ({all_zones}), choosing {self.zone}")
+        self.broker_leader_znode = f'/primaries/{self.zone}'
+        self.set_logger(prefix=f'SUB<{",".join(self.topics)}>:request={self.requested}:{self.zone}')
+
+    def set_logger(self, prefix=None ):
+        if not prefix:
+            self.prefix = {'prefix': f'SUB<{",".join(self.topics)}>'}
+        else:
+            self.prefix = {'prefix': prefix }
         self.logger = logging.getLogger(f'SUB{id(self)}')
         self.logger.setLevel(logging.DEBUG if self.verbose else logging.INFO)
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(prefix)s - %(message)s')
         handler.setFormatter(formatter)
+        for h in self.logger.handlers:
+            self.logger.removeHandler(h)
         self.logger.addHandler(handler)
 
-    def update_broker_info(self):
-        if self.znode_value != None:
-            self.debug("Getting broker information from znode_value")
-            self.broker_address = self.znode_value.split(",")[0]
-            self.sub_reg_port = self.znode_value.split(",")[2]
-            self.debug(f"Broker Address: {self.broker_address}")
-            self.debug(f"Broker Sub Reg Port: {self.sub_reg_port}")
+    def update_broker_info(self, znode_value=None):
+        self.debug("Getting broker information from znode_value")
+        self.broker_address = znode_value.split(",")[0]
+        self.sub_reg_port = znode_value.split(",")[2]
+        self.debug(f"Broker Address: {self.broker_address}")
+        self.debug(f"Broker Sub Reg Port: {self.sub_reg_port}")
 
-    # -----------------------------------------------------------------------
     def watch_znode_data_change(self):
         """  Watch callback function invoked upon change to znode of interest.
         Watch effective only once so the client has to set the watch every time.
@@ -102,6 +115,7 @@ class Subscriber(ZookeeperClient):
             if event == None:
                 self.WATCH_FLAG = True
                 self.debug("No ZNODE Event - First Watch Call! Initializing subscriber...")
+                self.update_broker_info(znode_value=self.get_znode_value(znode_name=self.broker_leader_znode))
                 self.configure()
                 self.WATCH_FLAG = False
             elif event.type == 'CHANGED':
@@ -111,14 +125,12 @@ class Subscriber(ZookeeperClient):
                 self.sub_socket_dict.clear()
                 self.context.destroy()
                 self.debug(f"Data changed for znode: data={data},stat={stat}")
-                self.get_znode_value(znode_name=self.broker_leader_znode)
-                self.update_broker_info()
+                self.update_broker_info(znode_value=self.get_znode_value(znode_name=self.broker_leader_znode))
                 self.debug("Reconfiguring...")
                 self.configure()
                 self.WATCH_FLAG = False
             elif event.type == 'DELETED':
                 self.debug("ZNODE DELETED")
-
 
     def configure(self):
         """ Method to perform initial configuration of Subscriber entity """
@@ -154,7 +166,7 @@ class Subscriber(ZookeeperClient):
     def register_sub(self):
         """ Register self with broker """
         self.debug(f"Registering with broker at {self.broker_address}:{self.sub_reg_port}")
-        message_dict = {'address': self.get_host_address(), 'id': self.id, 'topics': self.topics}
+        message_dict = {'address': self.get_host_address(), 'id': self.id, 'topics': self.topics, 'requested': self.requested}
         message = json.dumps(message_dict, indent=4)
         self.broker_reg_socket.send_string(message)
         self.debug(f"Sent registration message: {json.dumps(message)}")
@@ -186,6 +198,9 @@ class Subscriber(ZookeeperClient):
         # about all publisher addresses publishing that topic. Listen for those first.
         # They are over once 'register_pub' is no longer in message.
         # value is a list of publisher addresses to listen to or a single address
+
+        # OFFERED V REQUESTED dominance relationship is enforced by broker before
+        # it sends the notification to this subscriber. Assume satisfied.
         self.debug("Setting up direct publisher connections")
         for item in notification:
             # each item = { 'register_pub': { 'addresses': addresses,  'topic': t } }
@@ -258,16 +273,21 @@ class Subscriber(ZookeeperClient):
         # received_message = self.sub_socket_dict[topic].recv_string()
         [topic, received_message] = self.sub_socket_dict[topic].recv_multipart()
         received_message = pickle.loads(received_message)
-        self.received_message_list.append(
-            {
-                'publisher': received_message['publisher'],
-                'topic': received_message['topic'],
-                'total_time_seconds': time.time() - float(received_message['publish_time'])
-            }
-        )
         self.debug(f'Received: <{json.dumps(received_message)}>')
-
-
+        # Received message is a list of messages structured as a sliding window whose max
+        # size is the publisher source's "offered" value. Must be >= sub's requested size to process.
+        if len(received_message) >= self.requested:
+            self.info(f"Received message length ({len(received_message)}) >= requested ({self.requested})!")
+            for historical_message in received_message:
+                self.received_message_list.append(
+                    {
+                        'publisher': historical_message['publisher'],
+                        'topic': historical_message['topic'],
+                        'total_time_seconds': time.time() - float(historical_message['publish_time'])
+                    }
+                )
+        else:
+            self.debug("Received message smaller than what I requested. Not processing.")
 
     def notify(self):
         """ Method to poll for published events (or notifications about
@@ -319,7 +339,6 @@ class Subscriber(ZookeeperClient):
                                 self.parse_publish_event(topic=topic)
                 else:
                     self.debug("SWITCHING BROKER.")
-
 
     def write_stored_messages(self):
         """ Method to write all stored messages to filename passed to constructor """

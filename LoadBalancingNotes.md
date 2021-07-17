@@ -24,8 +24,3 @@ Thinking of a zone as a subset of the pub/sub system for which a specific primar
 ### How do we distinguish between increasing and decreasing load?
 LoadBalancer can maintain an internal current_broker_count and current_broker_client_count state. When current_broker_client_count znode changes, read it and if it's higher than current internal current_broker_client_count value, load is increasing. if it's less than current value, load is decreasing. Update internal counts on every watch change event.
 
-
-<!--
-## How do we handle promotion independently of the existing /broker leader election / fault tolerance znode?
-This part is not necessary if load balancer randomly selects from list of backups and calls .promote() Create a /promoteelection znode on startup of system. Tell all of the BACKUP replicas (not active/promoted yet) to watch /promoteelection znode for changes. This znode will be changed by the LoadBalancer whenever it is handling a promotion. On change, each backup broker tries to create a /promoted znode. If successful, that is the broker that gets promoted to primary replica. Only one will be able to create it. Broker gets promoted, joins system and then deletes /promoted znode which is not watched (doesn't trigger anything) but will be used for next round of promotions. -->
-

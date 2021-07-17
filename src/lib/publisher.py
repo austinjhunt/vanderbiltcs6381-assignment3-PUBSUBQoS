@@ -1,13 +1,11 @@
-import socket as sock
 from .zookeeper_client import ZookeeperClient
+import random
 import zmq
 import logging
 import time
-import datetime
 import json
 import pickle
 import netifaces
-import uuid
 import sys
 
 class Publisher(ZookeeperClient):
@@ -20,10 +18,10 @@ class Publisher(ZookeeperClient):
         broker_address='127.0.0.1',
         topics=[], sleep_period=1, bind_port=5556,
         indefinite=False, max_event_count=15,zookeeper_hosts=["127.0.0.1:2181"],
-        verbose=False, zone_number=1):
+        verbose=False, offered=1):
         """ Constructor
         args:
-        - broker_address (str) - IP address of broker (port 5556)
+        - broker_address (str) - IP address of broker
         - own_address (str) - IP of host running this publisher
         - topics (list) - list of topics to publish
         - sleep_period (int) - number of seconds to sleep between each publish event
@@ -44,14 +42,31 @@ class Publisher(ZookeeperClient):
         self.broker_reg_socket = None
         self.pub_socket = None
         self.pub_port = None
-        self.pub_reg_port = 5555
+        # Get this from zookeeper. Will change dynamically for different primary publishers if on localhost,
+        # since port can only be used by one broker at a time.
+        #self.pub_reg_port = 5555
+        self.pub_reg_port = None
         self.set_logger()
+        self.offered = offered
+        # Maintain a sliding window of historical events/messages published of length <offered>
+        self.sliding_history = []
 
         # Set up initial config for ZooKeeper client.
         # FIXME: publisher needs to be aware of what zone it belongs to for load balancing.
-        super().__init__(zookeeper_hosts, zone_number=zone_number)
+        super().__init__(zookeeper_hosts, verbose=verbose)
+
+
         self.WATCH_FLAG = False
         self.info(f"Successfully initialized publisher object (PUB{id(self)})")
+
+    def assign_to_zone(self):
+        """ Random assignment to load balance across zones """
+        # This is the node this subscriber will watch for updated broker information in case of broker failure.
+        all_zones = self.zk.get_children("/primaries/")
+        self.zone = random.choice(all_zones)
+        self.debug(f"out of all zones ({all_zones}), choosing {self.zone}")
+        self.broker_leader_znode = f'/primaries/{self.zone}'
+        self.set_logger(prefix=f'PUB<{",".join(self.topics)}>:offer={self.offered}:{self.zone}')
 
     def debug(self, msg):
         self.logger.debug(msg, extra=self.prefix)
@@ -62,22 +77,27 @@ class Publisher(ZookeeperClient):
     def error(self, msg):
         self.logger.error(msg, extra=self.prefix)
 
-    def set_logger(self):
-        self.prefix = {'prefix': f'PUB{id(self)}<{",".join(self.topics)}>'}
+    def set_logger(self, prefix=None):
+        if not prefix:
+            self.prefix = {'prefix': f'PUB<{",".join(self.topics)}>'}
+        else:
+            self.prefix = {'prefix': prefix}
         self.logger = logging.getLogger(f'PUB{id(self)}')
         self.logger.setLevel(logging.DEBUG if self.verbose else logging.INFO)
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(prefix)s - %(message)s')
         handler.setFormatter(formatter)
+        for h in self.logger.handlers:
+            self.logger.removeHandler(h)
         self.logger.addHandler(handler)
 
-    def update_broker_info(self):
-        if self.znode_value != None:
-            self.debug("Getting broker information from znode_value")
-            self.broker_address = self.znode_value.split(",")[0]
-            self.pub_reg_port = self.znode_value.split(",")[1]
-            self.debug(f"Broker address: {self.broker_address}")
-            self.debug(f"Broker Pub Reg Port: {self.pub_reg_port}")
+    def update_broker_info(self, znode_value=None):
+
+        self.debug("Getting broker information from znode_value")
+        self.broker_address = znode_value.split(",")[0]
+        self.pub_reg_port = znode_value.split(",")[1]
+        self.debug(f"Broker address: {self.broker_address}")
+        self.debug(f"Broker Pub Reg Port: {self.pub_reg_port}")
 
     # -----------------------------------------------------------------------
     def watch_znode_data_change(self):
@@ -93,6 +113,7 @@ class Publisher(ZookeeperClient):
             if event == None:
                 self.WATCH_FLAG = True
                 self.debug("No ZNODE Event - First Watch Call! Initializing publisher...")
+                self.update_broker_info(znode_value=self.get_znode_value(znode_name=self.broker_leader_znode))
                 self.configure()
                 self.WATCH_FLAG = False
             elif event.type == 'CHANGED':
@@ -102,8 +123,7 @@ class Publisher(ZookeeperClient):
                 self.context.destroy()
                 self.debug("Update Broker Information")
                 self.debug(f"Data changed for znode: data={data},stat={stat}")
-                self.get_znode_value(znode_name=self.broker_leader_znode)
-                self.update_broker_info()
+                self.update_broker_info(znode_value=self.get_znode_value(znode_name=self.broker_leader_znode))
                 self.debug("Reconfiguring...")
                 self.configure()
                 self.WATCH_FLAG = False
@@ -152,9 +172,9 @@ class Publisher(ZookeeperClient):
 
     def register_pub(self):
         """ Method to register this publisher with the broker """
-        self.debug(f"Registering with broker at {self.broker_address}:5555")
+        self.debug(f"Registering with broker at {self.broker_address}:{self.pub_reg_port}")
         message_dict = {'address': self.get_host_address(), 'topics': self.topics,
-            'id': self.id}
+            'id': self.id, 'offered': self.offered}
         message = json.dumps(message_dict, indent=4)
         self.debug(f"Sending registration message: {message}")
         self.broker_reg_socket.send_string(message)
@@ -193,7 +213,11 @@ class Publisher(ZookeeperClient):
             'publish_time': time.time()
         }
         topic = self.topics[iteration % len(self.topics)].encode('utf8')
-        event = [b'%b' % topic, pickle.dumps(event)]
+        if len(self.sliding_history) == self.offered:
+            # Remove the oldest historical message
+            self.sliding_history.pop(0)
+        self.sliding_history.append(event)
+        event = [b'%b' % topic, pickle.dumps(self.sliding_history)]
         return event
 
 

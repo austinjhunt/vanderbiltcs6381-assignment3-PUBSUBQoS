@@ -1,10 +1,12 @@
 from hashlib import new
-from src.lib.zookeeper_client import ZookeeperClient
+from .zookeeper_client import ZookeeperClient
 import logging
 import random
+from time import sleep
 
 class LoadBalancer(ZookeeperClient):
-    def __init__(self, clients_per_primary_threshold=3, verbose=False, backup_brokers=[], primary_brokers=[]):
+    def __init__(self, clients_per_primary_threshold=3, verbose=False,
+        backup_brokers=[], primary_brokers=[], zookeeper_hosts=["127.0.0.1:2181"]):
         """
         Arguments:
         - client_broker_ratio_threshold (int) - ratio of clients (pubs or subs in system) to primary
@@ -16,16 +18,37 @@ class LoadBalancer(ZookeeperClient):
         self.broker_client_count = 0
         self.load_balance_threshold = clients_per_primary_threshold
         self.set_logger()
-        self.primary_brokers = []
-        self.backup_brokers = [] # Promotable to primary
+        self.primary_brokers = primary_brokers
+        self.backup_brokers = backup_brokers # Promotable to primary
         self.max_zone = 0
         self.zones = {}
+            #   zones = {
             #   1 : {
             #       "primary_broker": broker object,
             #       "publishers" : [ pub in zone, pub in zone, etc. ],
             #       "subscribers": [ sub in zone, sub in zone, etc. ],
             #       "clients_per_primary" : <some ratio> - each zone has its own ratio
-            # },
+            #   }, .... }
+        super().__init__(zookeeper_hosts=zookeeper_hosts)
+        # Start a clear Zookeeper session
+        self.connect_zk()
+        self.start_session()
+        self.clear_zookeeper_nodes()
+
+        # Create a znode to keep track of new brokers. Each new broker that gets created will
+        # write itself as a child of this znode with a znode name of its id.
+        # self.create_znode(znode_name=self.all_primary_brokers_znode, znode_value="all active primary brokers")
+
+    def clear_zookeeper_nodes(self):
+        for znode in ["/leaders", "/counts", "/primary_brokers"]:
+            self.delete_znode(znode_name=znode, recursive=True)
+
+    def balance_act(self):
+        self.debug("Starting balance act :)")
+        while True:
+            self.debug("sleeping...")
+            sleep(1)
+
     def add_broker_to_backup_pool(self, broker=None):
         self.backup_brokers.append(broker)
 
@@ -107,35 +130,27 @@ class LoadBalancer(ZookeeperClient):
         self.create_new_primary_broker_zone(primary_broker=new_primary_broker)
         self.backup_brokers.remove(new_primary_broker)
 
-
     def dissolve_primary_broker_zone(self, zone=None):
-        # IMPLEMENT
-        pass
-    def redistribute_load(self, publishers=[], subscribers=[]):
-        # IMPLEMENT
-        pass
-    def assign_publisher_to_zone(self, publisher=None):
-        # IMPLEMENT
-        pass
-    def assign_subscriber_to_zone(self, subscriber=None):
-        # IMPLEMENT
-        pass
+        self.zones.pop(zone)
 
+    def assign_publisher_to_zone(self, publisher=None, zone=None):
+        """ Assign a publisher to a zone """
+        if zone in self.zones:
+            if publisher not in self.zones[zone]['publishers']:
+                self.zones[zone]['publishers'].append(publisher)
 
-    def watch_for_zone_leader_failure(self):
-        """ Watch each zone for leader failure; if leader of a zone fails, promote a
-        backup to become primary replica (leader) of that zone.
-        Znode structure is: /leaders/zone_<zoneNumber> where the zone_<zoneNumber> contains
-        the information for zone's current leader/primary replica. (leader = primary replica) """
-        @self.zk.ChildrenWatch("/leaders/")
-        def handle_change(children):
-            # Calls immediately and then every time a child (a zone leader znode) changes.
-            if event == None:
-                pass
-            elif event.type == "CHANGED":
+    def assign_subscriber_to_zone(self, subscriber=None, zone=None):
+        """ Assign a subscriber to a zone """
+        if zone in self.zones:
+            if subscriber not in self.zones[zone]['subscribers']:
+                self.zones[zone]['publishers'].append(subscriber)
 
-        pass
-    def watch_znode_data_change(self):
+    def watch_primary_brokers_leave_join(self):
+        @self.zk.ChildrenWatch(self.all_primary_brokers_znode)
+        def my_func(children):
+            self.debug(f"Children (primary brokers): type=({type(children)}), val = {children}")
+
+    def watch_primary_broker_count_change(self):
         """ Watch for new / leaving primary broker replicas """
         @self.zk.DataWatch(self.primary_replica_count_znode)
         def dump_data_change (data, stat, event):
@@ -144,8 +159,7 @@ class LoadBalancer(ZookeeperClient):
             elif event.type == 'CHANGED':
                 primary_broker_replica_count = self.get_primary_broker_replica_count()
                 if primary_broker_replica_count > self.primary_broker_replica_count:
-                    # Increasing number of primary replicas.
-                    self.redistribute_load()
+                    self.debug("Increased capacity! New broker.")
                 elif primary_broker_replica_count < self.primary_broker_replica_count:
                     # A primary broker has left. Do we need to promote a backup to fill its spot?
                     if self.need_to_promote_backup():
@@ -153,7 +167,7 @@ class LoadBalancer(ZookeeperClient):
             elif event.type == 'DELETED':
                 pass
 
-    def watch_znode_data_change(self):
+    def watch_client_count_change(self):
         """ Watch for new / leaving pubs/subs"""
         @self.zk.DataWatch(self.broker_client_count_znode)
         def dump_data_change (data, stat, event):
