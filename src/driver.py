@@ -126,6 +126,8 @@ def create_broker_with_zookeeper(broker):
     broker.setup_fault_tolerance_znode()
     broker.setup_shared_state_znode()
     broker.setup_load_balancing_znode()
+    broker.watch_shared_state_publishers()
+    broker.watch_shared_state_subscribers()
     broker.zk_run_election()
 
 def create_broker_without_zookeeper(broker):
@@ -235,7 +237,8 @@ if __name__ == "__main__":
             'if used with -sub, receive published events indefinitely with created subscriber(s)'
         ))
     parser.add_argument('-b', '--broker_address', type=str, help=(
-        'required with --publisher/--subscriber; provide the IP address of the broker'
+        'required with --publisher/--subscriber; provide the IP address '
+        'of the broker; not needed with ZooKeeper usage'
     ) )
     parser.add_argument('-hist', '--history', type=int, default=1, required=False,
         help=(

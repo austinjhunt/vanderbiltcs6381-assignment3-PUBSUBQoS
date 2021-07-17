@@ -48,11 +48,9 @@ class Broker(ZookeeperClient):
         #           'id': str
         #       }]
         # }
+
         self.subscribers = {}
         self.publishers = {}
-
-
-
         #  The zmq context
         self.context = None
         # we will use the poller to poll for incoming data
@@ -177,12 +175,16 @@ class Broker(ZookeeperClient):
     def watch_shared_state_publishers(self):
         @self.zk.ChildrenWatch('/shared_state/publishers/')
         def changed_publishers(children):
+            self.debug('Publishers shared state changed!')
             # Each znode name under publishers is an address of a publisher
             # The znode value is json: {topics: <list>, offered: int } -> offered is the offered sliding window/history
             current_internally_stored_pubs = self.get_all_publisher_ids()
             for pub_id in children:
                 if pub_id not in current_internally_stored_pubs:
+                    self.debug(f'New publisher {pub_id}')
                     publisher_info = self.get_znode_value(znode_name=f'/shared_state/publishers/{pub_id}')
+                    self.debug(f'New pub info: {publisher_info}')
+                    publisher_info = json.loads(publisher_info)
                     topics = publisher_info['topics']
                     offered = publisher_info['offered']
                     pub_addr = publisher_info['address']
@@ -192,26 +194,32 @@ class Broker(ZookeeperClient):
                             'offered': int(offered),
                             'id': pub_id
                         }
+                        self.debug(f'Adding publisher to publishers[{topic}]')
                         if topic in self.publishers:
                             self.publishers[topic].append(pub_data)
                         else:
                             self.publishers[topic] = [pub_data]
-
-            # Also handle if change was a subscriber leaving (trim internal subscribers to match zookeeper)
+            # Also handle if change was a subscriber leaving 
+            # (trim internal subscribers to match zookeeper)
             for pub_id in current_internally_stored_pubs:
                 if pub_id not in children:
+                    self.debug(f'Removing a publisher: {pub_id}')
                     self.remove_publisher(pub_id=pub_id)
 
     def watch_shared_state_subscribers(self):
         """ Watch for new / """
         @self.zk.ChildrenWatch('/shared_state/subscribers/')
         def changed_subscribers(children):
+            self.info('Subscribers shared state changed!')
             # Each znode name under subscribers is an address of a subscriber
             # The znode value is json: {topics: <list>, requested: int } -> requested is the requested sliding window/history
             current_internally_stored_subs = self.get_all_subscriber_ids()
             for sub_id in children:
                 if sub_id not in current_internally_stored_subs:
+                    self.debug(f'New subscriber! {sub_id}')
                     subscriber_info = self.get_znode_value(znode_name=f'/shared_state/subscribers/{sub_id}')
+                    self.debug(f'New sub info: {subscriber_info}')
+                    subscriber_info = json.loads(subscriber_info)
                     topics = subscriber_info['topics']
                     requested = subscriber_info['requested']
                     sub_addr = subscriber_info['address']
@@ -221,6 +229,7 @@ class Broker(ZookeeperClient):
                             'requested': int(requested),
                             'id': sub_id
                         }
+                        self.debug(f'Adding sub to subscribers[{topic}]')
                         if topic in self.subscribers:
                             self.subscribers[topic].append(sub_data)
                         else:
@@ -228,6 +237,7 @@ class Broker(ZookeeperClient):
             # Also handle if change was a subscriber leaving (trim internal subscribers to match zookeeper)
             for sub_id in current_internally_stored_subs:
                 if sub_id not in children:
+                    self.debug(f'Removing subscriber {sub_id}')
                     self.remove_subscriber(sub_id=sub_id)
 
     def setup_fault_tolerance_znode(self):
@@ -541,6 +551,13 @@ class Broker(ZookeeperClient):
                 self.sub_reg_socket.send_string(json.dumps(reply_sub_dict, indent=4))
 
             self.debug("Subscriber registered successfully")
+            # Add the 'topics' key to subscriber data then write to zookeeper node in shared state. 
+            # This notifies the other brokers (all of which watch shared state) about new sub. 
+            sub_data['topics'] = topics
+            self.create_znode(
+                znode_name=f"/shared_state/subscribers/{sub_id}",
+                znode_value=json.dumps(sub_data)
+            ) 
         except Exception as e:
             self.error(e)
 
@@ -682,12 +699,23 @@ class Broker(ZookeeperClient):
                 # directly to this new publisher.
                 # This starts a while loop on the subscriber.
                 self.notify_subscribers(pub_reg_dict['topics'], pub_address=pub_address)
+
             response = {'success': 'registration success'}
+            # Add the 'topics' key to publisher data then write to zookeeper node in shared state. 
+            # This notifies the other brokers (all of which watch shared state) about new pub. 
+            pub_data['topics'] = pub_reg_dict['topics']
+            self.create_znode(
+                znode_name=f"/shared_state/publishers/{pub_id}",
+                znode_value=json.dumps(pub_data)
+            ) 
+
         except Exception as e:
             response = {'error': f'registration failed due to exception: {e}'}
         self.debug(f"Sending response: {response}")
         self.pub_reg_socket.send_string(json.dumps(response))
         self.debug("Publisher Registration Succeeded")
+
+        
 
     def get_host_address(self):
         """ Method to return IP address of current host.
