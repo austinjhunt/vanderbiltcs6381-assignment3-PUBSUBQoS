@@ -37,16 +37,22 @@ class TestZookeeperClient(unittest.TestCase):
 
     @unittest.skipIf(not connected, "Not connected to ZooKeeper. You need to start ZK service.")
     def test_create_znode(self):
-        assert(self.zookeeper_client.create_znode())
+        assert(self.zookeeper_client.create_znode(znode_name=self.zookeeper_client.broker_leader_znode))
+
+    @unittest.skipIf(not connected, "Not connected to ZooKeeper. You need to start ZK service.")
+    def test_delete_znode(self):
+        assert(self.zookeeper_client.create_znode(znode_name=self.zookeeper_client.broker_leader_znode))
+        assert(self.zookeeper_client.delete_znode(znode_name=self.zookeeper_client.broker_leader_znode))
 
     @unittest.skipIf(not connected, "Not connected to ZooKeeper. You need to start ZK service.")
     def test_get_znode_value(self):
-        self.zookeeper_client.create_znode(znode_value="Test Value")
-        assert(self.zookeeper_client.get_znode_value() == "Test Value")
+        self.zookeeper_client.create_znode(znode_name=self.zookeeper_client.broker_leader_znode, znode_value="Test Value")
+        assert(self.zookeeper_client.get_znode_value(znode_name=self.zookeeper_client.broker_leader_znode) == "Test Value")
 
     @unittest.skipIf(not connected, "Not connected to ZooKeeper. You need to start ZK service.")
     def test_modify_znode_value(self):
         # Create a znode then set its value
-        self.zookeeper_client.create_znode()
+        self.zookeeper_client.create_znode(znode_name=self.zookeeper_client.broker_leader_znode)
         assert(self.zookeeper_client.modify_znode_value(
-            "this is a new value") == "this is a new value")
+            znode_name=self.zookeeper_client.broker_leader_znode,
+            znode_value="this is a new value") == "this is a new value")

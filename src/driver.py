@@ -1,15 +1,20 @@
 import argparse
+from json import load
 import logging
+from lib.zookeeper_client import ZookeeperClient
 from lib.publisher import Publisher
 from lib.subscriber import Subscriber
 from lib.broker import Broker
+from lib.loadbalancer import LoadBalancer
 
 def create_publisher_with_zookeeper(publisher):
     """ Method to handle creation of publisher using zookeeper coordination"""
     publisher.connect_zk()
     publisher.start_session()
-    publisher.get_znode_value()
-    publisher.update_broker_info()
+    publisher.assign_to_zone()
+    publisher.update_broker_info(
+        znode_value=publisher.get_znode_value(znode_name=publisher.broker_leader_znode)
+        )
     publisher.watch_znode_data_change()
     publisher.publish()
     # Will call if not running indefinitely
@@ -24,7 +29,7 @@ def create_publisher_without_zookeeper(publisher):
 
 def create_publishers(count=1, topics=[], broker_address='127.0.0.1',
     sleep_period=1, bind_port=5556, indefinite=False, max_event_count=15,
-    zookeeper_hosts=['127.0.0.1:2181'],verbose=False):
+    zookeeper_hosts=['127.0.0.1:2181'],verbose=False, offered=1):
     """ Method to create a set of publishers.
     In order to run multiple subscribers simultaneously,
     need to use multiprocessing library, because Publisher.publish() will block for i in range(count)
@@ -37,7 +42,7 @@ def create_publishers(count=1, topics=[], broker_address='127.0.0.1',
 
     pubs = {}
     for i in range(count):
-        pubs[i] = Publisher(
+        pubs[0] = Publisher(
             topics=topics,
             broker_address=broker_address,
             sleep_period=sleep_period,
@@ -45,7 +50,8 @@ def create_publishers(count=1, topics=[], broker_address='127.0.0.1',
             indefinite=indefinite,
             max_event_count=max_event_count,
             zookeeper_hosts=zookeeper_hosts,
-            verbose=verbose
+            verbose=verbose,
+            offered=offered
         )
         try:
             create_publisher_with_zookeeper(pubs[i])
@@ -60,8 +66,10 @@ def create_subscriber_with_zookeeper(subscriber):
     """ Method to handle creation of a subscriber using ZooKeeper coordination """
     subscriber.connect_zk()
     subscriber.start_session()
-    subscriber.get_znode_value()
-    subscriber.update_broker_info()
+    subscriber.assign_to_zone()
+    subscriber.update_broker_info(
+        znode_value=subscriber.get_znode_value(znode_name=subscriber.broker_leader_znode)
+    )
     subscriber.watch_znode_data_change()
     subscriber.notify()
     subscriber.write_stored_messages()
@@ -77,7 +85,7 @@ def create_subscriber_without_zookeeper(subscriber):
 
 def create_subscribers(count=1, filename=None, broker_address='127.0.0.1',
      centralized=False, topics=[], indefinite=False, max_event_count=15,
-     zookeeper_hosts=['127.0.0.1:2181'],verbose=False):
+     zookeeper_hosts=['127.0.0.1:2181'],verbose=False,requested=1):
     """ Method to create a set of subscribers. In order to run multiple subscribers simultaneously,
     need to use multiprocessing library, because Subscriber.listen() will block for i in range(count)
     if run sequentially. E.g. subscriber 2 on the same host will not ever get to listen for updates
@@ -92,7 +100,8 @@ def create_subscribers(count=1, filename=None, broker_address='127.0.0.1',
             indefinite=indefinite,
             max_event_count=max_event_count,
             zookeeper_hosts=zookeeper_hosts,
-            verbose=verbose
+            verbose=verbose,
+            requested=requested
         )
         try:
             create_subscriber_with_zookeeper(subs[i])
@@ -114,8 +123,12 @@ def create_broker_with_zookeeper(broker):
     """
     broker.connect_zk()
     broker.start_session()
+    broker.setup_fault_tolerance_znode()
+    broker.setup_shared_state_znode()
+    broker.setup_load_balancing_znode()
+    broker.watch_shared_state_publishers()
+    broker.watch_shared_state_subscribers()
     broker.zk_run_election()
-
 
 def create_broker_without_zookeeper(broker):
     """" Method to handle creation of broker without zookeeper coordination """
@@ -126,7 +139,7 @@ def create_broker_without_zookeeper(broker):
 
 def create_brokers(indefinite=False, centralized=False, pub_reg_port=5555,
     sub_reg_port=5556, autokill=None, max_event_count=15, zookeeper_hosts=['127.0.0.1:2181'],
-    verbose=False,backup_pool_size=5, load_threshold=3):
+    verbose=False,primary=False,zone=1):
 
     broker = Broker(
         centralized=centralized,
@@ -137,7 +150,8 @@ def create_brokers(indefinite=False, centralized=False, pub_reg_port=5555,
         autokill=autokill,
         zookeeper_hosts=zookeeper_hosts,
         verbose=verbose,
-        load_threshold=load_threshold
+        primary=primary,
+        zone=zone
     )
     try:
         create_broker_with_zookeeper(broker)
@@ -146,17 +160,38 @@ def create_brokers(indefinite=False, centralized=False, pub_reg_port=5555,
         # If you interrupt/cancel a broker, be sure to disconnect/clean all sockets
         broker.disconnect()
 
+def create_load_balancer(backup_pool_size=5, load_threshold=3,verbose=False,
+    zookeeper_hosts=['127.0.0.1:2181']):
+    """ Create a load balancer to auto scale primary broker replicas with increased/decreased
+    load, where load is quantified as clients (pubs + subs) per primary broker. Each primary
+    broker has its own zone. Each zone must also stay within threshold. """
+    # When creating a zone with a primary broker, go ahead and assign one backup to that same zone
+    # so it (itself) can watch the leader election for that zone and jump in when necessary without the
+    # load balancer.
+    load_balancer = LoadBalancer(
+        clients_per_primary_threshold=load_threshold,
+        verbose=verbose,
+        zookeeper_hosts=zookeeper_hosts
+        )
+    load_balancer.watch_primary_brokers_leave_join()
+    load_balancer.watch_client_count_change()
+    load_balancer.watch_primary_broker_count_change()
+    load_balancer.balance_act()
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Pass arguments to create publishers, subscribers, or an intermediate message broker')
     parser.add_argument('-v', '--verbose', help='increase output verbosity', action='store_true')
 
     # LOAD BALANCING
+    parser.add_argument('-lb', '--load_balancer', action='store_true',
+    help='create a load balancer to automatically scale primary broker replicas with increased/decreased load')
+
     parser.add_argument('-load', '--load_threshold', type=int,
         help=(
             'threshold of num_clients/num_brokers ratio at which to promote backup '
-            'replicas to primary replicas for new load distribution'), default=3, required=True)
-    parser.add_argument('-backup', '--backup_pool_size', type=int, default=5, required=True,
+            'replicas to primary replicas for new load distribution'), default=3, required=False)
+    parser.add_argument('-bs', '--backup_pool_size', type=int, default=5, required=False,
         help=(
             'how many broker replicas to include in the backup pool that are '
             'promotable to primary replicas when load thresholds are met')
@@ -201,11 +236,17 @@ if __name__ == "__main__":
             'if used with -pub, publish events indefinitely from created publisher(s). '
             'if used with -sub, receive published events indefinitely with created subscriber(s)'
         ))
-
-    # Required with --publisher and --subscriber
     parser.add_argument('-b', '--broker_address', type=str, help=(
-        'required with --publisher/--subscriber; provide the IP address of the broker'
+        'required with --publisher/--subscriber; provide the IP address '
+        'of the broker; not needed with ZooKeeper usage'
     ) )
+    parser.add_argument('-hist', '--history', type=int, default=1, required=False,
+        help=(
+            'Optional with --publisher/--subscriber. Provide a sliding window size for messages. Applied to all --topics arguments. '
+            'If used with pub, it is the number of offered historical messages. If '
+            'used with sub, it is the number of requested historical messages. Offered must be >= requested for a given topic '
+            'for broker to match a pub with a sub for that topic.'))
+
 
     # Required with --publisher
     parser.add_argument('-bp', '--bind_port', type=int,
@@ -219,6 +260,15 @@ if __name__ == "__main__":
         help="which port of the broker will be used to receive pub registration")
     parser.add_argument('-srp', '--sub_reg_port', type=int, default=5556,
         help="which port of the broker will be used to receive sub registration")
+    parser.add_argument('-p', '--primary', action='store_true',
+    help=(
+        'Use with --broker. If passed, use broker as a primary replica. '
+        'If not used, broker runs in background as backup, promotable by LB to primary.'))
+    parser.add_argument('-zo', '--zone', type=int,
+    help=(
+        'required with --broker, both with and without --primary. indicate which zone '
+        'the broker should be assigned to for fault tolerance in that zone (e.g. 0, 1, 2, etc.). '
+        'Load is balanced across zones.'))
 
     # Optional with --broker (for ZooKeeper testing; auto kill a broker after
     # N seconds to trigger new leader election)
@@ -226,7 +276,9 @@ if __name__ == "__main__":
         help=(
             'Optional with --broker. Auto kill a broker after N (--autokill N) seconds '
             '(to test leader election with multiple brokers)'))
-    #################################################################
+
+    parser.add_argument('-clearzk', '--clear_zookeeper', action='store_true', required=False,
+        help='utility to empty out the zookeeper znodes')
 
     args = parser.parse_args()
 
@@ -275,7 +327,8 @@ if __name__ == "__main__":
             indefinite=args.indefinite if args.indefinite else False,
             max_event_count=args.max_event_count if args.max_event_count else 15,
             zookeeper_hosts=args.zookeeper_hosts,
-            verbose=args.verbose
+            verbose=args.verbose,
+            offered=args.history,
             )
 
     elif args.subscriber:
@@ -303,13 +356,16 @@ if __name__ == "__main__":
             indefinite=args.indefinite if args.indefinite else False,
             max_event_count=args.max_event_count if args.max_event_count else 15,
             zookeeper_hosts=args.zookeeper_hosts,
-            verbose=args.verbose
+            verbose=args.verbose,
+            requested=args.history
             )
     if args.broker:
         if args.filename:
             raise argparse.ArgumentTypeError(
                 '--filename not a valid argument with --publisher type. only works with --subscriber'
                 )
+        if not args.zone:
+            raise Exception("the --zone/-zo argument is required with --broker")
         autokill = None
         if args.autokill:
             autokill = args.autokill
@@ -323,6 +379,23 @@ if __name__ == "__main__":
             autokill=autokill,
             zookeeper_hosts=args.zookeeper_hosts,
             verbose=args.verbose,
-            backup_pool_size=args.backup_pool_size,
-            load_threshold=args.load_threshold
+            primary=args.primary,
+            zone=args.zone
         )
+
+    if args.load_balancer:
+        create_load_balancer(
+            backup_pool_size=args.backup_pool_size,
+            load_threshold=args.load_threshold,
+            verbose=args.verbose,
+            zookeeper_hosts=args.zookeeper_hosts)
+
+    if args.clear_zookeeper:
+        if len(args.zookeeper_hosts) == 0:
+            raise Exception("Please provide zookeeper host address with --clear_zookeeper, e.g. 127.0.0.1:2181")
+        zk = ZookeeperClient(zookeeper_hosts=args.zookeeper_hosts,verbose=True)
+        zk.set_logger()
+        zk.connect_zk()
+        zk.start_session()
+        zk.clear_zookeeper_nodes()
+        zk.stop_session()
