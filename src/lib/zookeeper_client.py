@@ -18,7 +18,7 @@ class ZookeeperClient:
         self.verbose = verbose
 
     def clear_zookeeper(self):
-        for znode in self.zk.get_children("/"):
+        for znode in ['/shared_state','/topics','/primaries']:
             self.delete_znode(znode_name=znode, recursive=True)
 
     def debug(self, msg):

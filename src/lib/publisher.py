@@ -6,6 +6,7 @@ import time
 import json
 import pickle
 import netifaces
+import uuid
 import sys
 
 class Publisher(ZookeeperClient):
@@ -30,7 +31,7 @@ class Publisher(ZookeeperClient):
         - max_event_count (int) - if not (indefinite), max number of events/updates to publish
         """
         self.verbose = verbose
-        self.id = id(self)
+        self.id = str(id(self))
         self.broker_address = broker_address
         # self.own_address = own_address
         self.topics = topics

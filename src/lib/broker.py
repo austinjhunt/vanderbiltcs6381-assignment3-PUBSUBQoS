@@ -177,7 +177,7 @@ class Broker(ZookeeperClient):
         def changed_publishers(children):
             self.debug('Publishers shared state changed!')
             # Each znode name under publishers is an address of a publisher
-            # The znode value is json: {topics: <list>, offered: int } -> offered is the offered sliding window/history
+            # znode value is JSON/publisher info
             current_internally_stored_pubs = self.get_all_publisher_ids()
             for pub_id in children:
                 if pub_id not in current_internally_stored_pubs:
@@ -199,7 +199,9 @@ class Broker(ZookeeperClient):
                             self.publishers[topic].append(pub_data)
                         else:
                             self.publishers[topic] = [pub_data]
-            # Also handle if change was a subscriber leaving 
+                    # Finally, notify existing subscribers about new publisher!
+                    self.notify_subscribers(topics=topics, pub_address=pub_addr)
+            # Also handle if change was a subscriber leaving
             # (trim internal subscribers to match zookeeper)
             for pub_id in current_internally_stored_pubs:
                 if pub_id not in children:
@@ -470,6 +472,12 @@ class Broker(ZookeeperClient):
         topics = dc['topics']
         address = dc['address']
         sub_id = dc['id']
+        sub_znode = f'/shared_state/subscribers/{sub_id}'
+        try:
+            self.delete_znode(znode_name=sub_znode)
+        except Exception as e:
+            self.error(f'Exception when deleting pub znode {sub_znode}: {str(e)}')
+
         if not self.centralized:
             notify_port = dc['notify_port']
             self.used_ports.remove(notify_port)
@@ -516,8 +524,10 @@ class Broker(ZookeeperClient):
             sub_data = {
                 'address': sub_address,
                 'requested': requested,
-                'id': sub_id
+                'id': sub_id,
+                'topics': topics
                 }
+            self.debug(f'New subscriber info: {sub_data}')
             for topic in topics:
                 if topic not in self.subscribers.keys():
                     self.subscribers[topic] = [sub_data]
@@ -551,13 +561,12 @@ class Broker(ZookeeperClient):
                 self.sub_reg_socket.send_string(json.dumps(reply_sub_dict, indent=4))
 
             self.debug("Subscriber registered successfully")
-            # Add the 'topics' key to subscriber data then write to zookeeper node in shared state. 
-            # This notifies the other brokers (all of which watch shared state) about new sub. 
-            sub_data['topics'] = topics
+            # Write to zookeeper node in shared state.
+            # This notifies the other brokers (all of which watch shared state) about new sub.
             self.create_znode(
                 znode_name=f"/shared_state/subscribers/{sub_id}",
                 znode_value=json.dumps(sub_data)
-            ) 
+            )
         except Exception as e:
             self.error(e)
 
@@ -576,15 +585,17 @@ class Broker(ZookeeperClient):
         """ Determine if the offered vs. requested dominance relationship is satisfied between a publisher and a subscriber """
         sub_requested = None
         pub_offered = None
+        self.debug(f"Checking offered vs. requested relation between sub {sub_id} and pub {pub_id}")
         for pub_list in self.publishers.values():
             for pub in pub_list:
                 if pub['id'] == pub_id:
-                    pub_offered = pub['offered']
+                    pub_offered = int(pub['offered'])
                     break
+        self.debug(f"Subscribers: {self.subscribers.values()}")
         for sub_list in self.subscribers.values():
             for sub in sub_list:
                 if sub['id'] == sub_id:
-                    sub_requested = sub['requested']
+                    sub_requested = int(sub['requested'])
         return pub_offered >= sub_requested
 
     def notify_subscribers(self, topics, pub_address=None, sub_id=None):
@@ -608,6 +619,7 @@ class Broker(ZookeeperClient):
             message = json.dumps(message)
             # Send to notify socket for each subscriber
             for sub_id, notify_socket in self.notify_sub_sockets.items():
+                self.debug('Checking dominance relation between offered/requested')
                 if self.dominance_relationship_satisfied(pub_id=pub_id, sub_id=sub_id):
                     self.debug(f"Sending notification to sub: {sub_id}")
                     notify_socket.send_string(message)
@@ -622,6 +634,7 @@ class Broker(ZookeeperClient):
                 if t in self.publishers:
                     for publisher in self.publishers[t]:
                         pub_id = publisher['id']
+                        self.debug(f'notify_subscribers::sub_id={sub_id}')
                         if self.dominance_relationship_satisfied(pub_id=pub_id,sub_id=sub_id):
                             addresses.append(publisher['address'])
                         else:
@@ -649,6 +662,11 @@ class Broker(ZookeeperClient):
         topics = dc['topics']
         address = dc['address']
         pub_id = dc['id']
+        pub_znode = f'/shared_state/publishers/{pub_id}'
+        try:
+            self.delete_znode(znode_name=pub_znode)
+        except Exception as e:
+            self.error(f'Exception when deleting pub znode {pub_znode}: {str(e)}')
         for t in topics:
             # If this is the only publisher of a topic, remove the topic from
             # self.publishers and from self.receive_socket_dict
@@ -672,22 +690,24 @@ class Broker(ZookeeperClient):
         Register (or disconnect) a publisher as a publisher of a given topic,
         e.g. 1.2.3.4 registering as publisher of topic "XYZ" """
         try:
-            # the format of the registration string is a json
-            # '{ "address":"1234", "topics":['A', 'B']}'
             pub_reg_string = self.pub_reg_socket.recv_string()
             self.debug(f"Publisher Registration Started: {pub_reg_string}")
             pub_reg_dict = json.loads(pub_reg_string)
-            # Handle disconnect if requested
             if 'disconnect' in pub_reg_dict:
                 response = self.disconnect_pub(msg=pub_reg_dict)
-                # send response
                 self.pub_reg_socket.send_string(response)
                 return
             pub_address = pub_reg_dict['address']
             offered = int(pub_reg_dict['offered'])
             pub_id = pub_reg_dict['id']
-            pub_data = {'address': pub_address, 'offered': offered, 'id': pub_id}
-            for topic in pub_reg_dict['topics']:
+            topics = pub_reg_dict['topics']
+            pub_data = {
+                'address': pub_address,
+                'offered': offered,
+                'id': pub_id,
+                'topics': topics
+                }
+            for topic in topics:
                 if topic not in self.publishers.keys():
                     self.publishers[topic] = [pub_data]
                 else:
@@ -701,13 +721,12 @@ class Broker(ZookeeperClient):
                 self.notify_subscribers(pub_reg_dict['topics'], pub_address=pub_address)
 
             response = {'success': 'registration success'}
-            # Add the 'topics' key to publisher data then write to zookeeper node in shared state. 
-            # This notifies the other brokers (all of which watch shared state) about new pub. 
-            pub_data['topics'] = pub_reg_dict['topics']
+            # write to zookeeper node in shared state.
+            # This notifies the other brokers (all of which watch shared state) about new pub.
             self.create_znode(
                 znode_name=f"/shared_state/publishers/{pub_id}",
                 znode_value=json.dumps(pub_data)
-            ) 
+            )
 
         except Exception as e:
             response = {'error': f'registration failed due to exception: {e}'}
@@ -715,7 +734,7 @@ class Broker(ZookeeperClient):
         self.pub_reg_socket.send_string(json.dumps(response))
         self.debug("Publisher Registration Succeeded")
 
-        
+
 
     def get_host_address(self):
         """ Method to return IP address of current host.
