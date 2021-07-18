@@ -5,7 +5,6 @@ from lib.zookeeper_client import ZookeeperClient
 from lib.publisher import Publisher
 from lib.subscriber import Subscriber
 from lib.broker import Broker
-from lib.loadbalancer import LoadBalancer
 
 def create_publisher_with_zookeeper(publisher):
     """ Method to handle creation of publisher using zookeeper coordination"""
@@ -161,42 +160,10 @@ def create_brokers(indefinite=False, centralized=False, pub_reg_port=5555,
         # If you interrupt/cancel a broker, be sure to disconnect/clean all sockets
         broker.disconnect()
 
-def create_load_balancer(backup_pool_size=5, load_threshold=3,verbose=False,
-    zookeeper_hosts=['127.0.0.1:2181']):
-    """ Create a load balancer to auto scale primary broker replicas with increased/decreased
-    load, where load is quantified as clients (pubs + subs) per primary broker. Each primary
-    broker has its own zone. Each zone must also stay within threshold. """
-    # When creating a zone with a primary broker, go ahead and assign one backup to that same zone
-    # so it (itself) can watch the leader election for that zone and jump in when necessary without the
-    # load balancer.
-    load_balancer = LoadBalancer(
-        clients_per_primary_threshold=load_threshold,
-        verbose=verbose,
-        zookeeper_hosts=zookeeper_hosts
-        )
-    load_balancer.watch_primary_brokers_leave_join()
-    load_balancer.watch_client_count_change()
-    load_balancer.watch_primary_broker_count_change()
-    load_balancer.balance_act()
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Pass arguments to create publishers, subscribers, or an intermediate message broker')
     parser.add_argument('-v', '--verbose', help='increase output verbosity', action='store_true')
-
-    # LOAD BALANCING
-    parser.add_argument('-lb', '--load_balancer', action='store_true',
-    help='create a load balancer to automatically scale primary broker replicas with increased/decreased load')
-
-    parser.add_argument('-load', '--load_threshold', type=int,
-        help=(
-            'threshold of num_clients/num_brokers ratio at which to promote backup '
-            'replicas to primary replicas for new load distribution'), default=3, required=False)
-    parser.add_argument('-bs', '--backup_pool_size', type=int, default=5, required=False,
-        help=(
-            'how many broker replicas to include in the backup pool that are '
-            'promotable to primary replicas when load thresholds are met')
-    )
 
     # Choose type of entity
     parser.add_argument('-pub', '--publisher',  type=int,
@@ -383,13 +350,6 @@ if __name__ == "__main__":
             primary=args.primary,
             zone=args.zone
         )
-
-    if args.load_balancer:
-        create_load_balancer(
-            backup_pool_size=args.backup_pool_size,
-            load_threshold=args.load_threshold,
-            verbose=args.verbose,
-            zookeeper_hosts=args.zookeeper_hosts)
 
     if args.clear_zookeeper:
         if len(args.zookeeper_hosts) == 0:
