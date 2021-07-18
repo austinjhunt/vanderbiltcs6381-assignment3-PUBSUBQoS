@@ -16,7 +16,8 @@ def create_publisher_with_zookeeper(publisher):
         znode_value=publisher.get_znode_value(znode_name=publisher.broker_leader_znode)
         )
     publisher.watch_znode_data_change()
-    publisher.publish()
+    # publisher.publish()
+    publisher.publish_with_priority_control()
     # Will call if not running indefinitely
     publisher.disconnect()
 

@@ -59,6 +59,18 @@ class Publisher(ZookeeperClient):
         self.WATCH_FLAG = False
         self.info(f"Successfully initialized publisher object (PUB{id(self)})")
 
+        ###############################################################################
+        # BEGIN: Addition For Publisher Control
+        # a list to keep track of if have the priority for a particular topic
+        # by default it is all False
+        self.topics_priority = [False for i in self.topics]
+        # a list to store all the locks for quick release after publishing
+        self.topics_locks = [None for i in self.topics]
+        # for identification purpose
+        self.instanceId = str(uuid.uuid4())
+        # END: Addition For Publisher Control
+        ###############################################################################
+
     def assign_to_zone(self):
         """ Random assignment to load balance across zones """
         # This is the node this subscriber will watch for updated broker information in case of broker failure.
@@ -220,10 +232,52 @@ class Publisher(ZookeeperClient):
         event = [b'%b' % topic, pickle.dumps(self.sliding_history)]
         return event
 
+    ###############################################################################
+    # BEGIN: Addition For Publisher Control
+    def generate_publish_event_by_topic(self, topic_index, iteration=0):
+        """ for a particular topic, first it will try to create a lock
+        if a lock is obtained, then it means the publisher is the leader
+        for the topic and the pulisher can publish this topic
+        if a lock cannot be obtained, then it means the publisher is not the leader
+        and the publisher cannot publish this topic
+        """
+        # make sure the path exists for a particular topics
+        self.zk.ensure_path(f"/topics/{self.topics[topic_index]}")
+
+        # if don't have the priority, check to see if it is available
+        # if it is available, the flag will be turned into True
+        if not self.topics_priority[topic_index]:
+            self.topics_locks[topic_index] = self.zk.Lock(f"/topics/{self.topics[topic_index]}", self.instanceId)
+            # specify blocking=False so that it will return immediately rather than being blocked
+            self.topics_priority[topic_index] = self.topics_locks[topic_index].acquire(blocking=False)
+
+        # if the flag is True, then publish the event
+        # else publish a message saying that don't have the priority
+        if self.topics_priority[topic_index]:
+            event = {
+                # Send this to subscriber even if broker is anonymizing so performance can be analyzed.
+                'publisher': self.get_host_address(),
+                # If only N topics, then N+1 publish event will publish first topic over again
+                'topic': self.topics[topic_index],
+                'publish_time': time.time()
+            }
+            topic = self.topics[topic_index].encode('utf8')
+            if len(self.sliding_history) == self.offered:
+                # Remove the oldest historical message
+                self.sliding_history.pop(0)
+            self.sliding_history.append(event)
+            event = [b'%b' % topic, pickle.dumps(self.sliding_history)]
+            return event
+        else:
+            return False
+    # END: Addition For Publisher Control
+    ###############################################################################
+
 
     def publish(self):
         """ Method to publish events either indefinitely or until a max event count
-        is reached """
+        is reached
+        """
         self.debug("Publish Start")
         if self.indefinite:
             i = 0
@@ -251,8 +305,66 @@ class Publisher(ZookeeperClient):
                 else:
                     self.debug("SWITCHING BROKER")
 
+    ###############################################################################
+    # BEGIN: Addition For Publisher Control
+    def publish_with_priority_control(self):
+        """
+        Modified publish with the priority control over topic
+        """
+        self.debug("Publish Start")
+        if self.indefinite:
+            i = 0
+            while True:
+                if not self.WATCH_FLAG:
+                    for topic_index in range(len(self.topics)):
+                        event = self.generate_publish_event_by_topic(topic_index, iteration=i)
+                        # if the generate_publish_event_by_topic return False,
+                        # it means it does not have the priority
+                        if not event:
+                            topic = self.topics[topic_index]
+                            self.debug(f'Do not have priority for {topic}')
+                            continue
+                        self.debug(f'Sending event: [{event}]')
+                        self.pub_socket.send_multipart(event)
+                        time.sleep(self.sleep_period)
+                        i += 1
+                else:
+                    self.debug("SWITCHING BROKER")
+        else:
+            event_count = 0
+            while event_count < self.max_event_count:
+                if not self.WATCH_FLAG:
+                    for topic_index in range(len(self.topics)):
+                        event = self.generate_publish_event_by_topic(topic_index, iteration=event_count)
+                        # if the generate_publish_event_by_topic return False,
+                        # it means it does not have the priority
+                        if not event:
+                            topic = self.topics[topic_index]
+                            self.debug(f'Do not have priority for {topic}')
+                            continue
+                        self.debug(f'Sending event: [{event}]')
+                        self.pub_socket.send_multipart(event)
+                        time.sleep(self.sleep_period)
+                        event_count += 1
+                else:
+                    self.debug("SWITCHING BROKER")
+    # END: Addition For Publisher Control
+    ###############################################################################
+
+
     def disconnect(self):
         """ Method to disconnect from the pub/sub network """
+        ###############################################################################
+        # BEGIN: Addition For Publisher Control
+        # release all the locks and close the ZooKeeper session
+        self.debug("Release all locks if any and close zooKeeper sessions")
+        for lock in self.topics_locks:
+            lock.release()
+        self.zk.stop()
+        self.zk.close()
+        # END: Addition For Publisher Control
+        ###############################################################################
+
         # Close all sockets associated with this context
         # Tell broker publisher is disconnecting. Remove from storage.
         self.debug("Disconnect")
