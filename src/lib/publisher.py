@@ -217,6 +217,7 @@ class Publisher(ZookeeperClient):
         """ Try to create a lock for topic. If obtained, publisher is leader for
         topic can publish. If not obtained, publisher not leader for topic, cannot publish.
         """
+        topic_index = topic_index % len(self.topics)
         # make sure the path exists for a particular topic
         self.zk.ensure_path(f"/topics/{self.topics[topic_index]}")
 

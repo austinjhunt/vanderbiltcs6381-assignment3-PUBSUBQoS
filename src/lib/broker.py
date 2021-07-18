@@ -12,11 +12,7 @@ import netifaces
 import sys
 import time
 
-# NOT USING primary ARG
 class Broker(ZookeeperClient):
-    #################################################################
-    # constructor
-    #################################################################
     def __init__(self, centralized=False, indefinite=False, max_event_count=15,
         zookeeper_hosts=['127.0.0.1:2181'], pub_reg_port=5555, sub_reg_port=5556, autokill=None,
         verbose=False, zone=1, primary=False ):
@@ -82,6 +78,7 @@ class Broker(ZookeeperClient):
         # this is for write into the znode about the broker information
         self.pub_reg_port = pub_reg_port
         self.sub_reg_port = sub_reg_port
+
         self.info(f"Successfully initialized broker object (BROKER{id(self)})")
 
     def get_all_publisher_addresses(self):
@@ -239,7 +236,6 @@ class Broker(ZookeeperClient):
             # Also handle if change was a subscriber leaving (trim internal subscribers to match zookeeper)
             for sub_id in current_internally_stored_subs:
                 if sub_id not in children:
-                    self.debug(f'Removing subscriber {sub_id}')
                     self.remove_subscriber(sub_id=sub_id)
 
     def setup_fault_tolerance_znode(self):
@@ -284,6 +280,8 @@ class Broker(ZookeeperClient):
         else:
             self.debug(f"{self.broker_leader_znode} znode does not exist: creating!")
             self.create_znode(znode_name=self.broker_leader_znode,znode_value=self.broker_info)
+        self.debug('Updating current system load znode')
+        self.update_current_system_load_znode()
         try:
             self.event_loop()
             # Reached if not indefinite
@@ -475,6 +473,7 @@ class Broker(ZookeeperClient):
         sub_znode = f'/shared_state/subscribers/{sub_id}'
         try:
             self.delete_znode(znode_name=sub_znode)
+            self.update_current_system_load_znode()
         except Exception as e:
             self.error(f'Exception when deleting pub znode {sub_znode}: {str(e)}')
 
@@ -567,6 +566,9 @@ class Broker(ZookeeperClient):
                 znode_name=f"/shared_state/subscribers/{sub_id}",
                 znode_value=json.dumps(sub_data)
             )
+            # Also update current system load znode!
+            self.update_current_system_load_znode()
+
         except Exception as e:
             self.error(e)
 
@@ -665,6 +667,7 @@ class Broker(ZookeeperClient):
         pub_znode = f'/shared_state/publishers/{pub_id}'
         try:
             self.delete_znode(znode_name=pub_znode)
+            self.update_current_system_load_znode()
         except Exception as e:
             self.error(f'Exception when deleting pub znode {pub_znode}: {str(e)}')
         for t in topics:
@@ -727,12 +730,28 @@ class Broker(ZookeeperClient):
                 znode_name=f"/shared_state/publishers/{pub_id}",
                 znode_value=json.dumps(pub_data)
             )
+            # Also update current system load znode!
+            self.update_current_system_load_znode()
 
         except Exception as e:
             response = {'error': f'registration failed due to exception: {e}'}
         self.debug(f"Sending response: {response}")
         self.pub_reg_socket.send_string(json.dumps(response))
         self.debug("Publisher Registration Succeeded")
+
+    def update_current_system_load_znode(self):
+        """ Assumption; the /shared_state/[publishers,subscribers] and
+        /primaries children znodes are always updated before this gets called,
+        so we can just read the current values and update the /shared_state/current_load znode"""
+        num_publishers = len(self.zk.get_children("/shared_state/publishers/"))
+        num_subscribers = len(self.zk.get_children("/shared_state/subscribers/"))
+        num_clients_total = num_publishers + num_subscribers
+        num_zones = len(self.zk.get_children("/primaries/"))
+        updated_system_load = num_clients_total / num_zones
+        self.modify_znode_value(
+            znode_name="/shared_state/current_load",
+            znode_value=updated_system_load
+        )
 
 
 
@@ -774,6 +793,7 @@ class Broker(ZookeeperClient):
         try:
             self.info("Disconnecting. Destroying ZMQ context..")
             self.context.destroy()
+            # Don't destroy the zone!
             exit_code = 0
         except Exception as e:
             self.error(f"Failed to destroy context: {e}")
