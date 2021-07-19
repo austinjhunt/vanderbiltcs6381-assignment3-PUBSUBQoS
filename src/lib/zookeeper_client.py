@@ -6,7 +6,7 @@ import sys
 from kazoo.client import KazooClient, KazooState
 import logging
 class ZookeeperClient:
-    def __init__(self, zookeeper_hosts=["127.0.0.1:2181"],verbose=False):
+    def __init__(self, zookeeper_hosts=["127.0.0.1:2181"],verbose=False, use_logger=False):
         try:
             self.zk_hosts = ','.join(zookeeper_hosts)
         except TypeError:
@@ -16,9 +16,11 @@ class ZookeeperClient:
         self.zk = None
         self.zk_instance_id = str(uuid.uuid4())
         self.verbose = verbose
+        if use_logger:
+            self.set_logger()
 
     def clear_zookeeper(self):
-        for znode in self.zk.get_children("/"):
+        for znode in ['/shared_state','/topics','/primaries']:
             self.delete_znode(znode_name=znode, recursive=True)
 
     def debug(self, msg):
@@ -82,15 +84,16 @@ class ZookeeperClient:
         return success
 
     def close_connection(self):
+        success = False
         try:
             # now disconnect from the server
             self.zk.close()
+            success = True
         except:
             self.error(f"Exception thrown in close (): {sys.exc_info()[0]}")
-            return
+        return success
 
     def get_znode_value (self, znode_name=""):
-        """ ******************* retrieve a znode value  ************************ """
         try:
             self.debug (f"Checking if Znode {znode_name} exists")
             if self.zk.exists (znode_name):
@@ -158,6 +161,7 @@ class ZookeeperClient:
                 # Now see if the value was changed
                 value, stat = self.zk.get(znode_name)
                 self.debug(f"New value at znode {znode_name}: value = {value}, stat = {stat}")
+                value = value.decode("utf-8")
             else:
                 self.debug(f"{znode_name} znode does not exist")
         except Exception as e:

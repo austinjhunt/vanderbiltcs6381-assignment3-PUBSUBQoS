@@ -28,7 +28,7 @@ class Subscriber(ZookeeperClient):
         - max_event_count (int) - if not (indefinite), max number of relevant published updates to receive
          """
         self.verbose = verbose
-        self.id = id(self)
+        self.id = str(id(self))
         self.filename = filename
         self.broker_address = broker_address
         # self.own_address = own_address

@@ -18,7 +18,8 @@ class TestSubscriber(unittest.TestCase):
         # Subscriber requires a broker to configure. Don't configure for unit testing.
         self.subscriber = Subscriber(
             topics=self.topics,
-            filename=self.filename
+            filename=self.filename,
+            verbose=False
             )
 
     def test_centralized(self):

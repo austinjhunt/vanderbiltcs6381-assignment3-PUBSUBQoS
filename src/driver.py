@@ -1,11 +1,11 @@
 import argparse
 from json import load
 import logging
+from lib.backuppool import BackupPool
 from lib.zookeeper_client import ZookeeperClient
 from lib.publisher import Publisher
 from lib.subscriber import Subscriber
 from lib.broker import Broker
-from lib.loadbalancer import LoadBalancer
 
 def create_publisher_with_zookeeper(publisher):
     """ Method to handle creation of publisher using zookeeper coordination"""
@@ -16,8 +16,7 @@ def create_publisher_with_zookeeper(publisher):
         znode_value=publisher.get_znode_value(znode_name=publisher.broker_leader_znode)
         )
     publisher.watch_znode_data_change()
-    # publisher.publish()
-    publisher.publish_with_priority_control()
+    publisher.publish()
     # Will call if not running indefinitely
     publisher.disconnect()
 
@@ -161,42 +160,10 @@ def create_brokers(indefinite=False, centralized=False, pub_reg_port=5555,
         # If you interrupt/cancel a broker, be sure to disconnect/clean all sockets
         broker.disconnect()
 
-def create_load_balancer(backup_pool_size=5, load_threshold=3,verbose=False,
-    zookeeper_hosts=['127.0.0.1:2181']):
-    """ Create a load balancer to auto scale primary broker replicas with increased/decreased
-    load, where load is quantified as clients (pubs + subs) per primary broker. Each primary
-    broker has its own zone. Each zone must also stay within threshold. """
-    # When creating a zone with a primary broker, go ahead and assign one backup to that same zone
-    # so it (itself) can watch the leader election for that zone and jump in when necessary without the
-    # load balancer.
-    load_balancer = LoadBalancer(
-        clients_per_primary_threshold=load_threshold,
-        verbose=verbose,
-        zookeeper_hosts=zookeeper_hosts
-        )
-    load_balancer.watch_primary_brokers_leave_join()
-    load_balancer.watch_client_count_change()
-    load_balancer.watch_primary_broker_count_change()
-    load_balancer.balance_act()
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Pass arguments to create publishers, subscribers, or an intermediate message broker')
     parser.add_argument('-v', '--verbose', help='increase output verbosity', action='store_true')
-
-    # LOAD BALANCING
-    parser.add_argument('-lb', '--load_balancer', action='store_true',
-    help='create a load balancer to automatically scale primary broker replicas with increased/decreased load')
-
-    parser.add_argument('-load', '--load_threshold', type=int,
-        help=(
-            'threshold of num_clients/num_brokers ratio at which to promote backup '
-            'replicas to primary replicas for new load distribution'), default=3, required=False)
-    parser.add_argument('-bs', '--backup_pool_size', type=int, default=5, required=False,
-        help=(
-            'how many broker replicas to include in the backup pool that are '
-            'promotable to primary replicas when load thresholds are met')
-    )
 
     # Choose type of entity
     parser.add_argument('-pub', '--publisher',  type=int,
@@ -207,7 +174,7 @@ if __name__ == "__main__":
         help='pass this followed by 1 to create 1 (max) broker on this host')
 
     ## new argument for ZooKeeper
-    parser.add_argument('-z', '--zookeeper_hosts', action='append',
+    parser.add_argument('-z', '--zookeeper_hosts', action='append', required=True,
         help=('zookeeper hosts and the port. Typical are 127.0.0.1:2181 for localhosts'))
 
     ## For --subscriber; file to write stored messages to only if not using --indefinite
@@ -281,6 +248,25 @@ if __name__ == "__main__":
     parser.add_argument('-clearzk', '--clear_zookeeper', action='store_true', required=False,
         help='utility to empty out the zookeeper znodes')
 
+
+    # Load balancing
+    parser.add_argument('-thresh', '--load_threshold', type=int, default=3,
+        help=(
+            'threshold at which to promote one of the "extra" backup broker '
+            'replicas to a primary, which is the same thing as auto-spinning '
+            'up a new zone. Use a number, e.g. 1,2,3, where load is quantified '
+            'as (brokers + clients) / (zones). Ex: 2 brokers + 2 clients and 1 '
+            'zone is a load of 4. If --load_threshold is 4, then adding one '
+            'more pub or sub would trigger a new zone IFF you have also created a '
+            'pool of extra brokers with --backup'
+        ))
+
+    parser.add_argument('-ba', '--backup', action='store_true',
+        help=(
+            'create a BackupPool process that auto-creates new zones for load balancing '
+            'when system load meets --load_threshold value.'
+        ))
+
     args = parser.parse_args()
 
     if args.broker and args.broker > 1:
@@ -325,7 +311,7 @@ if __name__ == "__main__":
             topics=args.topics,
             sleep_period=args.sleep if args.sleep else 1,
             bind_port=args.bind_port if args.bind_port else 5556,
-            indefinite=args.indefinite if args.indefinite else False,
+            indefinite=args.indefinite,
             max_event_count=args.max_event_count if args.max_event_count else 15,
             zookeeper_hosts=args.zookeeper_hosts,
             verbose=args.verbose,
@@ -354,7 +340,7 @@ if __name__ == "__main__":
             broker_address=args.broker_address,
             centralized=args.centralized,
             topics=args.topics,
-            indefinite=args.indefinite if args.indefinite else False,
+            indefinite=args.indefinite,
             max_event_count=args.max_event_count if args.max_event_count else 15,
             zookeeper_hosts=args.zookeeper_hosts,
             verbose=args.verbose,
@@ -375,7 +361,7 @@ if __name__ == "__main__":
             centralized=args.centralized,
             pub_reg_port=args.pub_reg_port,
             sub_reg_port=args.sub_reg_port,
-            indefinite=args.indefinite if args.indefinite else False,
+            indefinite=args.indefinite,
             max_event_count=args.max_event_count if args.max_event_count else 15,
             autokill=autokill,
             zookeeper_hosts=args.zookeeper_hosts,
@@ -384,13 +370,6 @@ if __name__ == "__main__":
             zone=args.zone
         )
 
-    if args.load_balancer:
-        create_load_balancer(
-            backup_pool_size=args.backup_pool_size,
-            load_threshold=args.load_threshold,
-            verbose=args.verbose,
-            zookeeper_hosts=args.zookeeper_hosts)
-
     if args.clear_zookeeper:
         if len(args.zookeeper_hosts) == 0:
             raise Exception("Please provide zookeeper host address with --clear_zookeeper, e.g. 127.0.0.1:2181")
@@ -398,5 +377,18 @@ if __name__ == "__main__":
         zk.set_logger()
         zk.connect_zk()
         zk.start_session()
-        zk.clear_zookeeper_nodes()
+        zk.clear_zookeeper()
         zk.stop_session()
+
+    if args.backup:
+        logger.debug(f'Creating an elastic backup pool of brokers with load threshold {args.load_threshold} ')
+        backup_pool = BackupPool(
+            zookeeper_hosts=args.zookeeper_hosts,
+            centralized=args.centralized,
+            indefinite=args.indefinite,
+            max_event_count=args.max_event_count if args.max_event_count else 15,
+            verbose=args.verbose,
+            threshold=args.load_threshold,
+        )
+        backup_pool.watch_system_load()
+        backup_pool.wait_for_trigger()
