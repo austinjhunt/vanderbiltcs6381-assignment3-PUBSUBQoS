@@ -34,6 +34,7 @@ We also now use ZooKeeper to maintain shared state across all of the brokers, pa
 6. When a subscriber disconnects, it tells the broker before disconnecting, and the broker removes its respective znode from the children of the `/shared_state/subscriber` znode
 
 This allows the brokers in the various load-balanced zones to know about a global state across all of the zones so that cross-zone matchmaking between publishers and subscribers can still work.
+
 #### Load Monitoring and Auto-Broker Provisioning
 In order to achieve dynamic scaling according to system load, we use another ZooKeeper znode called `/shared_state/current_load`. Here's how it is used:
 1. We have a BackupPool process that watches this znode for data changes with @DataWatch.
@@ -41,7 +42,8 @@ In order to achieve dynamic scaling according to system load, we use another Zoo
 2. Whenever a new publisher or a subscriber registers OR disconnects with any broker in any zone, update `/shared_state/current_load` to reflect the current value of the following formula: (num_publishers + num_subscribers) / (num_zones). Generally speaking, registration means load increase, disconnection means load decrease.
 #### Watch Event
 In the previous iteration, each publisher and subscriber set a watch on the znode **/broker** which would store the information about the current leader, or primary, broker, which most recently won the `/electionpath` election. Now, as we have made the elections zone-specific with `/elections/zone_<zoneNumber>`, we have also made this primary broker info storage zone specific, since each zone has its own primary, or leader. So instead of writing its information to `/broker` when a broker becomes a zone leader, it writes its information to `/primaries/zone_<zoneNumber>` when it becomes a zone leader. In return, the publishers and subscribers, after getting randomly assigned to a zone on creation, watch the respective `/primaries/zone_<zoneNumber>` to obtain the most updated information about their current broker leader. If it changes, that means the previous primary/leader broker has died or has been manually terminated and they register with the next broker contender who wins the zone's election.
-## Set Up Your Development Environment
+ 
+## Set Up Your Development Environment 
 To work with this system, you should do the following:
 1. Install [VirtualBox](https://www.virtualbox.org/)
 2. Set up an Ubuntu Desktop 20.04 virtual machine within VirtualBox. You can download the Ubuntu .iso file [here](https://ubuntu.com/download/server). You can follow [these instructions](https://www.youtube.com/watch?v=x5MhydijWmc) to set up your Ubuntu VM. Proceed when finished setting up your VM and it's started.
