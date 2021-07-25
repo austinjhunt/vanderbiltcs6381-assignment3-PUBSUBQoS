@@ -133,9 +133,6 @@ class ZookeeperClient:
     def znode_exists(self, znode_name=None):
         return self.zk.exists(znode_name)
 
-    def clear_zookeeper_nodes(self):
-        self.delete_znode("/", recursive=True)
-
     def delete_znode(self, znode_name=None, recursive=False):
         success = False
         try:
