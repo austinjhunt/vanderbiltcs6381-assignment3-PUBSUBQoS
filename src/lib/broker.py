@@ -276,7 +276,7 @@ class Broker(ZookeeperClient):
         self.configure()
         if self.zk.exists(self.broker_leader_znode):
             self.debug(f"{self.broker_leader_znode} znode exists : only modify the value)")
-            self.modify_znode_value(znode_name=self.broker_leader_znode, znode_value=self.broker_info.encode('utf-8'))
+            self.modify_znode_value(znode_name=self.broker_leader_znode, znode_value=self.broker_info)
         else:
             self.debug(f"{self.broker_leader_znode} znode does not exist: creating!")
             self.create_znode(znode_name=self.broker_leader_znode,znode_value=self.broker_info)

@@ -1,0 +1,345 @@
+DRIVER - Debug mode enabled
+SUB<A,B,C> - Initializing subscriber to centralized broker
+SUB<A,B,C> - Successfully initialized subscriber object (SUB139866800191808)
+SUB<A,B,C> - Try to connect with ZooKeeper server: hosts = 10.0.0.1:2181
+SUB<A,B,C> - ZooKeeper Current Status = LOST
+SUB<A,B,C> - Current state is now = CONNECTED
+SUB<A,B,C> - out of all zones (['zone_1', 'zone_2']), choosing zone_2
+SUB<A,B,C>:request=1:zone_2 - Checking if Znode /primaries/zone_2 exists
+SUB<A,B,C>:request=1:zone_2 - Details of znode /primaries/zone_2: value = b'10.0.0.3,5555,5556', stat = ZnodeStat(czxid=5817, mzxid=5817, ctime=1627231871278, mtime=1627231871278, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=18, numChildren=0, pzxid=5817)
+SUB<A,B,C>:request=1:zone_2 - Getting broker information from znode_value
+SUB<A,B,C>:request=1:zone_2 - Broker Address: 10.0.0.3
+SUB<A,B,C>:request=1:zone_2 - Broker Sub Reg Port: 5556
+SUB<A,B,C>:request=1:zone_2 - No ZNODE Event - First Watch Call! Initializing subscriber...
+SUB<A,B,C>:request=1:zone_2 - Checking if Znode /primaries/zone_2 exists
+SUB<A,B,C>:request=1:zone_2 - Details of znode /primaries/zone_2: value = b'10.0.0.3,5555,5556', stat = ZnodeStat(czxid=5817, mzxid=5817, ctime=1627231871278, mtime=1627231871278, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=18, numChildren=0, pzxid=5817)
+SUB<A,B,C>:request=1:zone_2 - Getting broker information from znode_value
+SUB<A,B,C>:request=1:zone_2 - Broker Address: 10.0.0.3
+SUB<A,B,C>:request=1:zone_2 - Broker Sub Reg Port: 5556
+SUB<A,B,C>:request=1:zone_2 - Configure Start
+SUB<A,B,C>:request=1:zone_2 - Initializing
+SUB<A,B,C>:request=1:zone_2 - Setting the context object
+SUB<A,B,C>:request=1:zone_2 - Setting the poller objects
+SUB<A,B,C>:request=1:zone_2 - Connecting to register with broker
+SUB<A,B,C>:request=1:zone_2 - Registering with broker at 10.0.0.3:5556
+SUB<A,B,C>:request=1:zone_2 - Sent registration message: "{\n    \"address\": \"10.0.0.4\",\n    \"id\": \"139866800191808\",\n    \"topics\": [\n        \"A\",\n        \"B\",\n        \"C\"\n    ],\n    \"requested\": 1\n}"
+SUB<A,B,C>:request=1:zone_2 - Registration start msg from broker: {'A': 13934, 'B': 16001, 'C': 14093}
+SUB<A,B,C>:request=1:zone_2 - Broker port dict: {'A': 13934, 'B': 16001, 'C': 14093}
+SUB<A,B,C>:request=1:zone_2 - Registering topic socket <zmq.sugar.socket.Socket object at 0x7f3546424dc0> with poller
+SUB<A,B,C>:request=1:zone_2 - Connecting to broker for topic <A> at tcp://10.0.0.3:13934
+SUB<A,B,C>:request=1:zone_2 - Getting Topic A from broker at 10.0.0.3:13934
+SUB<A,B,C>:request=1:zone_2 - Registering topic socket <zmq.sugar.socket.Socket object at 0x7f3546424e80> with poller
+SUB<A,B,C>:request=1:zone_2 - Connecting to broker for topic <B> at tcp://10.0.0.3:16001
+SUB<A,B,C>:request=1:zone_2 - Getting Topic B from broker at 10.0.0.3:16001
+SUB<A,B,C>:request=1:zone_2 - Registering topic socket <zmq.sugar.socket.Socket object at 0x7f3546424ee0> with poller
+SUB<A,B,C>:request=1:zone_2 - Connecting to broker for topic <C> at tcp://10.0.0.3:14093
+SUB<A,B,C>:request=1:zone_2 - Getting Topic C from broker at 10.0.0.3:14093
+SUB<A,B,C>:request=1:zone_2 - Successfully set up broker topic/port connections
+SUB<A,B,C>:request=1:zone_2 - Registration successful
+SUB<A,B,C>:request=1:zone_2 - Configure Stop
+SUB<A,B,C>:request=1:zone_2 - Subscribe Start
+SUB<A,B,C>:request=1:zone_2 - Start to receive message
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231885.0249698}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231885.1313374}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231885.4201221}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231885.5617983}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231885.6670966}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231885.7733228}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231885.8767204}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231885.985503}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231886.2246902}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231886.3319936}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231886.440539}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231886.5466852}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231886.6574893}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231886.7977197}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231886.9126425}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231887.0194507}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231887.1434093}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231887.2523663}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231887.3601592}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231887.4711604}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231887.5801852}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231887.682352}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231887.7858634}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231887.8884413}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231887.9940763}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231888.101166}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231888.2352343}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231888.3386028}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231888.4425867}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231888.5550973}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231888.665602}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231888.770452}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231888.8733487}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231888.9769335}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231889.086309}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231889.1905553}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231889.2960548}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231889.4038353}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231889.5093982}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231889.6124918}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231889.7171257}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231889.8246825}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231889.930201}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231890.0355334}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231890.2022495}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231890.3079531}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231890.4140985}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231890.5225167}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231890.6282175}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231890.731605}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231890.8384907}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231890.9406183}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231891.0567935}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231891.1770759}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231891.2798975}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231891.387714}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231891.5346837}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231891.6442626}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231891.7475588}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231891.8605275}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231891.9842677}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231892.0958817}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231892.2023335}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231892.3069277}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231892.4159436}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231892.5238423}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231892.6313791}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231892.743671}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231892.865484}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231892.971475}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231893.0836766}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231893.214973}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231893.33012}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231893.438163}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231893.5450034}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231893.6501064}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231893.7522907}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231893.8636165}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231893.9722462}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231894.0757244}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231894.1923866}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231894.2974346}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231894.4130864}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231894.5211632}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231894.6293876}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231894.7449481}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231894.8683727}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231894.9765973}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231895.0842407}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231895.1938727}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231895.296309}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231895.4051623}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231895.5635276}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231895.6716359}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231895.7780457}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231895.8819866}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231895.98479}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic C
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "C", "publish_time": 1627231896.087771}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic A
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "A", "publish_time": 1627231896.1975527}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Waiting for publish event for topic B
+SUB<A,B,C>:request=1:zone_2 - Received: <[{"publisher": "10.0.0.6:5556", "topic": "B", "publish_time": 1627231896.3021975}]>
+SUB<A,B,C>:request=1:zone_2 - Received message length (1) >= requested (1)!
+SUB<A,B,C>:request=1:zone_2 - Writing all stored messages to /mnt/dev/assign3/src/performance_tests/data/centralized/tree-d3f2-8hosts/subscriber-0.csv
+SUB<A,B,C>:request=1:zone_2 - Disconnecting, telling broker: {'disconnect': {'id': '139866800191808', 'address': '10.0.0.4', 'topics': ['A', 'B', 'C'], 'notify_port': None}}
+SUB<A,B,C>:request=1:zone_2 - Broker response: {"disconnect": "success"} 
+SUB<A,B,C>:request=1:zone_2 - Destroying ZMQ context, closing all sockets

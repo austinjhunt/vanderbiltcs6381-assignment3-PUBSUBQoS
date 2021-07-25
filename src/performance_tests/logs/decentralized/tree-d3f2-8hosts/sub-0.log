@@ -1,0 +1,62 @@
+DRIVER - Debug mode enabled
+SUB<A,B,C> - Initializing subscriber to direct publishers
+SUB<A,B,C> - Successfully initialized subscriber object (SUB139656427534656)
+SUB<A,B,C> - Try to connect with ZooKeeper server: hosts = 10.0.0.1:2181
+SUB<A,B,C> - ZooKeeper Current Status = LOST
+SUB<A,B,C> - Current state is now = CONNECTED
+SUB<A,B,C> - out of all zones (['zone_1', 'zone_2']), choosing zone_1
+SUB<A,B,C>:request=1:zone_1 - Checking if Znode /primaries/zone_1 exists
+SUB<A,B,C>:request=1:zone_1 - Details of znode /primaries/zone_1: value = b"b'10.0.0.2,5555,5556'", stat = ZnodeStat(czxid=5814, mzxid=12148, ctime=1627231869567, mtime=1627232204377, version=2, cversion=0, aversion=0, ephemeralOwner=0, dataLength=21, numChildren=0, pzxid=5814)
+SUB<A,B,C>:request=1:zone_1 - Getting broker information from znode_value
+SUB<A,B,C>:request=1:zone_1 - Broker Address: b'10.0.0.2
+SUB<A,B,C>:request=1:zone_1 - Broker Sub Reg Port: 5556'
+SUB<A,B,C>:request=1:zone_1 - No ZNODE Event - First Watch Call! Initializing subscriber...
+SUB<A,B,C>:request=1:zone_1 - Checking if Znode /primaries/zone_1 exists
+SUB<A,B,C>:request=1:zone_1 - Details of znode /primaries/zone_1: value = b"b'10.0.0.2,5555,5556'", stat = ZnodeStat(czxid=5814, mzxid=12148, ctime=1627231869567, mtime=1627232204377, version=2, cversion=0, aversion=0, ephemeralOwner=0, dataLength=21, numChildren=0, pzxid=5814)
+SUB<A,B,C>:request=1:zone_1 - Getting broker information from znode_value
+SUB<A,B,C>:request=1:zone_1 - Broker Address: b'10.0.0.2
+SUB<A,B,C>:request=1:zone_1 - Broker Sub Reg Port: 5556'
+SUB<A,B,C>:request=1:zone_1 - Configure Start
+SUB<A,B,C>:request=1:zone_1 - Initializing
+SUB<A,B,C>:request=1:zone_1 - Setting the context object
+SUB<A,B,C>:request=1:zone_1 - Setting the poller objects
+SUB<A,B,C>:request=1:zone_1 - Connecting to register with broker
+Invalid argument
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 162, in _log_func_exception
+    result = self._func(data, stat, event)
+  File "/mnt/dev/assign3/src/lib/subscriber.py", line 121, in dump_data_change
+    self.configure()
+  File "/mnt/dev/assign3/src/lib/subscriber.py", line 151, in configure
+    self.broker_reg_socket.connect(f"tcp://{self.broker_address}:{self.sub_reg_port}")
+  File "/usr/lib/python3.8/site-packages/zmq/sugar/socket.py", line 194, in connect
+    super().connect(addr)
+  File "zmq/backend/cython/socket.pyx", line 573, in zmq.backend.cython.socket.Socket.connect
+  File "zmq/backend/cython/checkrc.pxd", line 28, in zmq.backend.cython.checkrc._check_rc
+zmq.error.ZMQError: Invalid argument
+Traceback (most recent call last):
+  File "driver.py", line 337, in <module>
+    subscribers = create_subscribers(
+  File "driver.py", line 107, in create_subscribers
+    create_subscriber_with_zookeeper(subs[i])
+  File "driver.py", line 73, in create_subscriber_with_zookeeper
+    subscriber.watch_znode_data_change()
+  File "/mnt/dev/assign3/src/lib/subscriber.py", line 116, in watch_znode_data_change
+    def dump_data_change (data, stat, event):
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 152, in __call__
+    self._get_data()
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 37, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 206, in _get_data
+    self._log_func_exception(data, stat, event)
+  File "/usr/lib/python3.8/site-packages/kazoo/recipe/watchers.py", line 162, in _log_func_exception
+    result = self._func(data, stat, event)
+  File "/mnt/dev/assign3/src/lib/subscriber.py", line 121, in dump_data_change
+    self.configure()
+  File "/mnt/dev/assign3/src/lib/subscriber.py", line 151, in configure
+    self.broker_reg_socket.connect(f"tcp://{self.broker_address}:{self.sub_reg_port}")
+  File "/usr/lib/python3.8/site-packages/zmq/sugar/socket.py", line 194, in connect
+    super().connect(addr)
+  File "zmq/backend/cython/socket.pyx", line 573, in zmq.backend.cython.socket.Socket.connect
+  File "zmq/backend/cython/checkrc.pxd", line 28, in zmq.backend.cython.checkrc._check_rc
+zmq.error.ZMQError: Invalid argument

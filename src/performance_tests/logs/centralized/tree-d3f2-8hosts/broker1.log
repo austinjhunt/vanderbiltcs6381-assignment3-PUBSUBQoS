@@ -1,0 +1,107 @@
+DRIVER - Debug mode enabled
+DRIVER - Will autokill broker after 15 seconds
+BROKER<zone_1> - Successfully initialized broker object (BROKER140049506892096)
+BROKER<zone_1> - Try to connect with ZooKeeper server: hosts = 10.0.0.1:2181
+BROKER<zone_1> - ZooKeeper Current Status = LOST
+BROKER<zone_1> - Current state is now = CONNECTED
+BROKER<zone_1> - Setting up shared state znode for multiple primary brokers
+BROKER<zone_1> - Creating znode /shared_state/ with value container of shared state among primary brokers
+BROKER<zone_1> - Creating znode /shared_state/publishers/ with value shared state container of all active publishers
+BROKER<zone_1> - Creating znode /shared_state/subscribers/ with value shared state container of all active subscribers
+BROKER<zone_1> - initializing /primaries/ znode if not exists
+BROKER<zone_1> - Creating znode /primaries with value container of all primary brokers
+BROKER<zone_1> - Publishers shared state changed!
+BROKER<zone_1> - Subscribers shared state changed!
+BROKER<zone_1,backup> - I am currently a contender/backup for zone_1
+BROKER<zone_1,backup> - contenders for /elections/zone_1: []
+BROKER<zone_1,primary> - I (0d8ba9f6-cfa5-4130-8611-da63a8337acd) AM LEADER OF /elections/zone_1
+BROKER<zone_1,primary> - Storing my information in /primaries/zone_1
+BROKER<zone_1,primary> - Configuring myself!
+BROKER<zone_1,primary> - Configure Start
+BROKER<zone_1,primary> - Opening two REP sockets for publisher registration and subscriber registration
+BROKER<zone_1,primary> - Attempting bind to port 5555
+BROKER<zone_1,primary> - Successful bind to port 5555
+BROKER<zone_1,primary> - Attempting bind to port 5556
+BROKER<zone_1,primary> - Successful bind to port 5556
+BROKER<zone_1,primary> - Enabling publisher registration on port 5555
+BROKER<zone_1,primary> - Enabling subscriber registration on port 5556
+BROKER<zone_1,primary> - Register sockets with a ZMQ poller
+BROKER<zone_1,primary> - Configure Stop
+BROKER<zone_1,primary> - /primaries/zone_1 znode does not exist: creating!
+BROKER<zone_1,primary> - Creating znode /primaries/zone_1 with value 10.0.0.2,5555,5556
+BROKER<zone_1,primary> - Updating current system load znode
+BROKER<zone_1,primary> - Setting a new value = 0.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode does not exist
+BROKER<zone_1,primary> - Start Event Loop
+BROKER<zone_1,primary> - Begin indefinite event poll loop
+BROKER<zone_1,primary> - Subscribers shared state changed!
+BROKER<zone_1,primary> - New subscriber! 139866800191808
+BROKER<zone_1,primary> - Checking if Znode /shared_state/subscribers/139866800191808 exists
+BROKER<zone_1,primary> - Details of znode /shared_state/subscribers/139866800191808: value = b'{"address": "10.0.0.4", "requested": 1, "id": "139866800191808", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=5819, mzxid=5819, ctime=1627231871674, mtime=1627231871674, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=91, numChildren=0, pzxid=5819)
+BROKER<zone_1,primary> - New sub info: {"address": "10.0.0.4", "requested": 1, "id": "139866800191808", "topics": ["A", "B", "C"]}
+BROKER<zone_1,primary> - Adding sub to subscribers[A]
+BROKER<zone_1,primary> - Adding sub to subscribers[B]
+BROKER<zone_1,primary> - Adding sub to subscribers[C]
+BROKER<zone_1,primary> - Publisher Registration Started: {
+    "address": "10.0.0.6:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": "140417714731328",
+    "offered": 1
+}
+BROKER<zone_1,primary> - Creating znode /shared_state/publishers/140417714731328 with value {"address": "10.0.0.6:5556", "offered": 1, "id": "140417714731328", "topics": ["A", "B", "C"]}
+BROKER<zone_1,primary> - Publishers shared state changed!
+BROKER<zone_1,primary> - Setting a new value = 1.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode does not exist
+BROKER<zone_1,primary> - Sending response: {'success': 'registration success'}
+BROKER<zone_1,primary> - Publisher Registration Succeeded
+BROKER<zone_1,primary> - Updating receive socket to 'subscribe' to publisher
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
+BROKER<zone_1,primary> - Subscribers shared state changed!
+BROKER<zone_1,primary> - New subscriber! 140632010283328
+BROKER<zone_1,primary> - Checking if Znode /shared_state/subscribers/140632010283328 exists
+BROKER<zone_1,primary> - Details of znode /shared_state/subscribers/140632010283328: value = b'{"address": "10.0.0.5", "requested": 1, "id": "140632010283328", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=5828, mzxid=5828, ctime=1627231872998, mtime=1627231872998, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=91, numChildren=0, pzxid=5828)
+BROKER<zone_1,primary> - New sub info: {"address": "10.0.0.5", "requested": 1, "id": "140632010283328", "topics": ["A", "B", "C"]}
+BROKER<zone_1,primary> - Adding sub to subscribers[A]
+BROKER<zone_1,primary> - Adding sub to subscribers[B]
+BROKER<zone_1,primary> - Adding sub to subscribers[C]
+BROKER<zone_1,primary> - Publisher Registration Started: {
+    "address": "10.0.0.8:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": "139883519203648",
+    "offered": 1
+}
+BROKER<zone_1,primary> - Creating znode /shared_state/publishers/139883519203648 with value {"address": "10.0.0.8:5556", "offered": 1, "id": "139883519203648", "topics": ["A", "B", "C"]}
+BROKER<zone_1,primary> - Publishers shared state changed!
+BROKER<zone_1,primary> - Setting a new value = 2.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode does not exist
+BROKER<zone_1,primary> - Sending response: {'success': 'registration success'}
+BROKER<zone_1,primary> - Publisher Registration Succeeded
+BROKER<zone_1,primary> - Updating receive socket to 'subscribe' to publisher
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - Publishers shared state changed!
+BROKER<zone_1,primary> - New publisher 140015159327040
+BROKER<zone_1,primary> - Checking if Znode /shared_state/publishers/140015159327040 exists
+BROKER<zone_1,primary> - Details of znode /shared_state/publishers/140015159327040: value = b'{"address": "10.0.0.7:5556", "offered": 1, "id": "140015159327040", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=5832, mzxid=5832, ctime=1627231873308, mtime=1627231873308, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=94, numChildren=0, pzxid=5832)
+BROKER<zone_1,primary> - New pub info: {"address": "10.0.0.7:5556", "offered": 1, "id": "140015159327040", "topics": ["A", "B", "C"]}
+BROKER<zone_1,primary> - Adding publisher to publishers[A]
+BROKER<zone_1,primary> - Adding publisher to publishers[B]
+BROKER<zone_1,primary> - Adding publisher to publishers[C]
+BROKER<zone_1,primary> - Notifying subscribers
+BROKER<zone_1,primary> - Autokilling broker
+BROKER<zone_1,primary> - Disconnect
+BROKER<zone_1,primary> - Disconnecting. Destroying ZMQ context..

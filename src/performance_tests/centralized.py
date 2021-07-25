@@ -33,6 +33,7 @@ class CentralizedPerformanceTest(PerformanceTest):
             f'python3 driver.py '
             '--broker 1 --verbose '
             f'--zookeeper_host {zookeeper_host} '
+            '--zone 1 '
             f'--indefinite ' # max event count only matters for subscribers who write files at end.
             f'--centralized ' # CENTRALIZED TESTING
             # ZooKeeper test - autokill first broker after 15 seconds to allow second leader election
@@ -49,6 +50,7 @@ class CentralizedPerformanceTest(PerformanceTest):
         broker_command_2 = (
             f'python3 driver.py '
             '--broker 1 --verbose '
+            '--zone 2 '
             f'--zookeeper_host {zookeeper_host} '
             f'--indefinite ' # max event count only matters for subscribers who write files at end.
             f'--centralized ' # CENTRALIZED TESTING

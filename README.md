@@ -92,7 +92,7 @@ The main underlying architecture of the publish/subscribe system is described in
 
 For instructions on executing the unit tests, see the [Unit Tests README](src/unit_tests/README.md).
 
-## Performance Testing
+## Performance Testing (Plot Generation)
 
 To test the performance of this framework (specifically latency for message dissemination across both centralized and decentralized dissemination), we rely on the same underlying performance testing module of the original project, [documented here.](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB/tree/master/src/performance_tests#readme)
 
