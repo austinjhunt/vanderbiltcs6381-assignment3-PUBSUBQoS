@@ -216,7 +216,7 @@ Zookeeper Client - Terminal Window #1.
    1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics A`
 5. Create the subscriber in Terminal Window #5. **Note: this subscriber will register with the broker in Terminal Window #3**
    1. `python3 driver.py --subscriber 1 --centralized -v -i -z 127.0.0.1:2181 --topics A`
-6. Create the subscriber in Terminal Window #6. **Note: once this publisher is started, the load threshold exceeds 2. The backup pool process in Terminal Window #2 will provision a new broker (in a new zone) and the publisher will register with the broker in Terminal Window #2**
+6. Create the subscriber in Terminal Window #6. **Note: once this publisher is started, the load threshold exceeds 2. The backup pool process in Terminal Window #2 will provision a new broker (in a new zone) and the publisher will register with the new, auto-provisioned broker in Terminal Window #2**
    1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics B`
 
 **Video Demo: https://youtu.be/Uj8v2G5gzA8**
