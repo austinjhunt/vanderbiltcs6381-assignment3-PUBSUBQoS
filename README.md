@@ -1,6 +1,8 @@
 # A Python Framework for Multi-Broker Publish/Subscribe Distributed Systems Built With [ZeroMQ, an asynchronous messaging library](https://zeromq.org/) and [Apache Zookeeper](https://zookeeper.apache.org), a distributed coordination service
 
 ## [Watch this video demonstration of the framework on YouTube](https://youtu.be/a9ziTc_xPyA)
+Note: the ZooKeeper service was already running on localhost (127.0.0.1) port 2181 in the above video demonstration.
+
 
 This project is the 3rd iteration of a Python framework for creating distributed **publish/subscribe** systems on virtualized networks. It builds on [this project, the second iteration](https://github.com/austinjhunt/vanderbiltcs6381-assignment2-ZOOKEEPER), which built on [this project, the first iteration](https://github.com/austinjhunt/vanderbiltcs6381-assignment1-ZMQPUBSUB). It offers a framework for spinning up a publish/subscribe system either on a single host or on a virtualized network with a tool like [Mininet](http://mininet.org/). It offers two main models of message dissemination, namely centralized dissemination (message broker forwards all messages from publisher to subscriber and decouples/anonymizes their communication) and decentralized dissemination (publisher and subscriber speak directly with each other after broker matches them with each other).
 
@@ -146,7 +148,7 @@ Zookeeper Client - Terminal Window #1.
   2. Publishers 2 - Terminal Window #5.
      1. `python3 driver.py --publisher 1 --centralized --verbose --max_event_count 60 --sleep 1 -z 127.0.0.1:2181 --topics A --topics C`
   3. Publishers 3 - Terminal Window #6.
-     1. `python3 driver.py --publisher 1 --centralized --verbose --max_event_count 60 --sleep 1 -z 127.0.0.1:2181 --topics B --topics C`    
+     1. `python3 driver.py --publisher 1 --centralized --verbose --max_event_count 60 --sleep 1 -z 127.0.0.1:2181 --topics B --topics C`
 
 #### Observations
 1. Since publisher 1 is publishing A and B, when publisher 2 is activated, it can only publish C and in the terminal it will show that `I don't have priority of A`
@@ -206,15 +208,15 @@ Zookeeper Client - Terminal Window #1.
 #### Steps
 1. Cd into src directory of project
 `cd src/`
-2. Create the backup pool in Terminal Window #2. **Note: with load_threshold of 2, each broker can only take 2 clients (in this example, we have one publisher and one subscriber). Once the load threshold on a broker is over 2, this backup will became an active broker.**
+2. Create the backup pool in Terminal Window #2. **Note: with load_threshold of 2, each broker can only take 2 clients (in this example, we have one publisher and one subscriber). Once the clients-per-broker ratio exceeds 2 (the threshold), this backup pool process will automatically provision a new broker and assign it as a leader for a brand new zone for more distributed load balancing.**
    1. `python3 driver.py --load_threshold 2 --backup -v -i -z 127.0.0.1:2181`
-3. Create a broker in Terminal Window #3. **Note: this is the broker that takes initial clients. It can only have 2 clients since the load_threhold is setup as 2 in the prior step. Once the threshold has been reached, the backup in prior step will become active and start to take new clients.**
+3. Create a broker in Terminal Window #3. **Note: We are assigning this broker to zone 1. Since it is the first broker in zone 1, it becomes the leader for zone 1. Any additional brokers added to zone 1 will enter an election for zone 1 and become contenders for zone 1 leadership. The primary broker for the zone can only have 2 clients (pubs/subs) since the load_threhold is setup as 2 in the prior step. Once the threshold has been reached, the backup pool process will automatically provision one new broker process and assign it to a brand new zone.**
    1. `python3 driver.py --broker 1 -z 127.0.0.1:2181 --zone 1 -i -v --centralized --pub_reg_port 10000 --sub_reg_port 10001`
 4. Create the publisher in Terminal Window #4. **Note: this publisher will register with the broker in Terminal Window #3**
    1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics A`
 5. Create the subscriber in Terminal Window #5. **Note: this subscriber will register with the broker in Terminal Window #3**
    1. `python3 driver.py --subscriber 1 --centralized -v -i -z 127.0.0.1:2181 --topics A`
-6. Create the subscriber in Terminal Window #6. **Note: once this publisher is started, the load threshold exceeds 2. The backup in Terminal Window #2 will become active and the publisher will register with the broker in Terminal Window #2**
+6. Create the subscriber in Terminal Window #6. **Note: once this publisher is started, the load threshold exceeds 2. The backup pool process in Terminal Window #2 will provision a new broker (in a new zone) and the publisher will register with the new, auto-provisioned broker in Terminal Window #2**
    1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics B`
 
 **Video Demo: https://youtu.be/Uj8v2G5gzA8**

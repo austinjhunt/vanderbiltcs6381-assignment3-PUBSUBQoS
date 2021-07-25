@@ -104,6 +104,7 @@ class Subscriber(ZookeeperClient):
         # self.broker_address = znode_value.split(",")[0]
         # self.sub_reg_port = znode_value.split(",")[2]
         # temporary fix
+        self.debug(f'Znode value = {znode_value}')
         self.broker_address = znode_value.split(",")[0].replace('b', '').replace("'", "")
         self.sub_reg_port = znode_value.split(",")[2].replace("'", "")
         self.debug(f"Broker Address: {self.broker_address}")
