@@ -126,11 +126,18 @@ Zookeeper Server - Terminal Window #1.
 1. `cd /opt/`
 2. `sudo zookeeper/bin/zkServer.sh start`
 
+#### Second, clear up some ZooKeeper files to avoid any conflicts.
+
+Zookeeper Client - Terminal Window #1.
+1. `cd /opt/`
+2. `sudo zookeeper/bin/zkCli.sh -server 127.0.0.1:2181`
+3. Once in the Client, `deleteall /primaries`
+
 #### Steps
 1. Cd into src directory of project
 `cd src/`
 2. Create the backup pool in Terminal Window #2.
-   1. `python3 driver.py --load_threhold 4 --backup -v -i -z 127.0.0.1:2181`
+   1. `python3 driver.py --load_threshold 4 --backup -v -i -z 127.0.0.1:2181`
 3. Create a broker in Terminal Window #3
    1. `python3 driver.py --broker 1 -z 127.0.0.1:2181 --zone 1 -i -v --centralized --pub_reg_port 10000 --sub_reg_port 10001`
 4. Create three publishers
@@ -158,11 +165,18 @@ Zookeeper Server - Terminal Window #1.
 1. `cd /opt/`
 2. `sudo zookeeper/bin/zkServer.sh start`
 
+#### Second, clear up some ZooKeeper files to avoid any conflicts.
+
+Zookeeper Client - Terminal Window #1.
+1. `cd /opt/`
+2. `sudo zookeeper/bin/zkCli.sh -server 127.0.0.1:2181`
+3. Once in the Client, `deleteall /primaries`
+
 #### Steps
 1. Cd into src directory of project
 `cd src/`
 2. Create the backup pool in Terminal Window #2.
-   1. `python3 driver.py --load_threhold 4 --backup -v -i -z 127.0.0.1:2181`
+   1. `python3 driver.py --load_threshold 4 --backup -v -i -z 127.0.0.1:2181`
 3. Create a broker in Terminal Window #3
    1. `python3 driver.py --broker 1 -z 127.0.0.1:2181 --zone 1 -i -v --centralized --pub_reg_port 10000 --sub_reg_port 10001`
 4. Create the publisher in Terminal Window #4
@@ -182,17 +196,25 @@ Zookeeper Server - Terminal Window #1.
 1. `cd /opt/`
 2. `sudo zookeeper/bin/zkServer.sh start`
 
+#### Second, clear up some ZooKeeper files to avoid any conflicts.
+
+Zookeeper Client - Terminal Window #1.
+1. `cd /opt/`
+2. `sudo zookeeper/bin/zkCli.sh -server 127.0.0.1:2181`
+3. Once in the Client, `deleteall /primaries`
 
 #### Steps
 1. Cd into src directory of project
 `cd src/`
-2. Create the backup pool in Terminal Window #2.
-   1. `python3 driver.py --load_threhold 2 --backup -v -i -z 127.0.0.1:2181`
-3. Create a broker in Terminal Window #3
+2. Create the backup pool in Terminal Window #2. **Note: with load_threshold of 2, each broker can only take 2 clients (in this example, we have one publisher and one subscriber). Once the load threshold on a broker is over 2, this backup will became an active broker.**
+   1. `python3 driver.py --load_threshold 2 --backup -v -i -z 127.0.0.1:2181`
+3. Create a broker in Terminal Window #3. **Note: this is the broker that takes initial clients. It can only have 2 clients since the load_threhold is setup as 2 in the prior step. Once the threshold has been reached, the backup in prior step will become active and start to take new clients.**
    1. `python3 driver.py --broker 1 -z 127.0.0.1:2181 --zone 1 -i -v --centralized --pub_reg_port 10000 --sub_reg_port 10001`
-4. Create the publisher in Terminal Window #4
-  1. `python3 driver.py --publisher 1 --centralized --verbose --max_event_count 30 --sleep 1 -z 127.0.0.1:2181 --topics A`
-5. Create the subscriber in Terminal Window #5
-  1. `python3 driver.py --subscriber 1 --centralized --verbose --max_event_count 30 -z 127.0.0.1:2181 --topics A`
-6. Create the subscriber in Terminal Window #6
-  1. `python3 driver.py --subscriber 1 --centralized --verbose --max_event_count 30 -z 127.0.0.1:2181 --topics A`
+4. Create the publisher in Terminal Window #4. **Note: this publisher will register with the broker in Terminal Window #3**
+  1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics A`
+5. Create the subscriber in Terminal Window #5. **Note: this subscriber will register with the broker in Terminal Window #3**
+  1. `python3 driver.py --subscriber 1 --centralized -v -i -z 127.0.0.1:2181 --topics A`
+6. Create the subscriber in Terminal Window #6. **Note: once this publisher is started, the load threshold exceeds 2. The backup in Terminal Window #2 will become active and the publisher will register with the broker in Terminal Window #2**
+  1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics B`
+
+**Video Demo: https://youtu.be/Uj8v2G5gzA8**
