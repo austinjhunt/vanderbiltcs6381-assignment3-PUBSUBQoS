@@ -8,6 +8,6 @@ The network communication and related performance are analyzed in the [performan
 **You should execute these steps within the Ubuntu VM that you set up using the main project README instructions. You need to be running the ZooKeeper service in the VM for these tests to run. If that service is not running, execute `/opt/zookeeper/bin/zkServer.sh start`**
 To run the unit tests:
 1. `cd` into the root of the project
-2. Run the command `python -m unittest discover` to automatically discover all tests and run them
+2. Run the command `python3 -m unittest discover` to automatically discover all tests and run them
 
 
