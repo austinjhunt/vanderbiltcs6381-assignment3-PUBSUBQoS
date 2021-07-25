@@ -111,6 +111,7 @@ class Publisher(ZookeeperClient):
         # it is very werid that self.broker_address  will become b'127.0.0.1
         # seems like something is going wrong with the decoding?
         # temporary fix
+        self.debug(f'Znode value = {znode_value}')
         self.broker_address = znode_value.split(",")[0].replace('b', '').replace("'", "")
         self.pub_reg_port = znode_value.split(",")[1]
         self.debug(f"Broker address: {self.broker_address}")
