@@ -128,12 +128,9 @@ Zookeeper Server - Terminal Window #1.
 1. `cd /opt/`
 2. `sudo zookeeper/bin/zkServer.sh start`
 
-#### Second, clear up some ZooKeeper files to avoid any conflicts.
-
-Zookeeper Client - Terminal Window #1.
-1. `cd /opt/`
-2. `sudo zookeeper/bin/zkCli.sh -server 127.0.0.1:2181`
-3. Once in the Client, `deleteall /primaries`
+#### Second, clear Zookeeper to avoid potential conflicts.
+1. CD into the `src/` directory of the project: `cd src`
+2. Clear Zookeeper tree: `python3 driver.py --clear_zookeeper -z 127.0.0.1:2181`
 
 #### Steps
 1. Cd into src directory of project
@@ -167,12 +164,9 @@ Zookeeper Server - Terminal Window #1.
 1. `cd /opt/`
 2. `sudo zookeeper/bin/zkServer.sh start`
 
-#### Second, clear up some ZooKeeper files to avoid any conflicts.
-
-Zookeeper Client - Terminal Window #1.
-1. `cd /opt/`
-2. `sudo zookeeper/bin/zkCli.sh -server 127.0.0.1:2181`
-3. Once in the Client, `deleteall /primaries`
+#### Second, clear Zookeeper to avoid potential conflicts.
+1. CD into the `src/` directory: `cd src`
+2. Clear Zookeeper tree: `python3 driver.py --clear_zookeeper -z 127.0.0.1:2181`
 
 #### Steps
 1. Cd into src directory of project
@@ -198,13 +192,9 @@ Zookeeper Server - Terminal Window #1.
 1. `cd /opt/`
 2. `sudo zookeeper/bin/zkServer.sh start`
 
-#### Second, clear up some ZooKeeper files to avoid any conflicts.
-
-Zookeeper Client - Terminal Window #1.
-1. `cd /opt/`
-2. `sudo zookeeper/bin/zkCli.sh -server 127.0.0.1:2181`
-3. Once in the Client, `deleteall /primaries`
-
+#### Second, clear Zookeeper to avoid potential conflicts.
+1. CD into the `src/` directory of the project: `cd src`
+2. Clear Zookeeper tree: `python3 driver.py --clear_zookeeper -z 127.0.0.1:2181`
 #### Steps
 1. Cd into src directory of project
 `cd src/`
