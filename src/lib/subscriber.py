@@ -101,12 +101,10 @@ class Subscriber(ZookeeperClient):
 
     def update_broker_info(self, znode_value=None):
         self.debug("Getting broker information from znode_value")
-        # self.broker_address = znode_value.split(",")[0]
-        # self.sub_reg_port = znode_value.split(",")[2]
-        # temporary fix
-        self.debug(f'Znode value = {znode_value}')
-        self.broker_address = znode_value.split(",")[0].replace('b', '').replace("'", "")
-        self.sub_reg_port = znode_value.split(",")[2].replace("'", "")
+        if isinstance(znode_value, bytes):
+            znode_value = znode_value.decode('utf-8')
+        self.broker_address = znode_value.split(",")[0]
+        self.sub_reg_port = znode_value.split(",")[2]
         self.debug(f"Broker Address: {self.broker_address}")
         self.debug(f"Broker Sub Reg Port: {self.sub_reg_port}")
 
