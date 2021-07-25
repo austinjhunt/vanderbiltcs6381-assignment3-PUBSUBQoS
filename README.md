@@ -42,8 +42,8 @@ In order to achieve dynamic scaling according to system load, we use another Zoo
 2. Whenever a new publisher or a subscriber registers OR disconnects with any broker in any zone, update `/shared_state/current_load` to reflect the current value of the following formula: (num_publishers + num_subscribers) / (num_zones). Generally speaking, registration means load increase, disconnection means load decrease.
 #### Watch Event
 In the previous iteration, each publisher and subscriber set a watch on the znode **/broker** which would store the information about the current leader, or primary, broker, which most recently won the `/electionpath` election. Now, as we have made the elections zone-specific with `/elections/zone_<zoneNumber>`, we have also made this primary broker info storage zone specific, since each zone has its own primary, or leader. So instead of writing its information to `/broker` when a broker becomes a zone leader, it writes its information to `/primaries/zone_<zoneNumber>` when it becomes a zone leader. In return, the publishers and subscribers, after getting randomly assigned to a zone on creation, watch the respective `/primaries/zone_<zoneNumber>` to obtain the most updated information about their current broker leader. If it changes, that means the previous primary/leader broker has died or has been manually terminated and they register with the next broker contender who wins the zone's election.
- 
-## Set Up Your Development Environment 
+
+## Set Up Your Development Environment
 To work with this system, you should do the following:
 1. Install [VirtualBox](https://www.virtualbox.org/)
 2. Set up an Ubuntu Desktop 20.04 virtual machine within VirtualBox. You can download the Ubuntu .iso file [here](https://ubuntu.com/download/server). You can follow [these instructions](https://www.youtube.com/watch?v=x5MhydijWmc) to set up your Ubuntu VM. Proceed when finished setting up your VM and it's started.
@@ -105,131 +105,116 @@ There are several interesting observations can be made from the tests that have 
 
 ## Test Steps for Peer Review
 
-The following is a list of steps you can take to perform two quick tests on the framework without dealing with all of the automation. The tests can be conducted in localhost environment and in mininet environment. For each environment, there are the test for decentralized mode (where pubs and subs are in direct contact) and centralized mode (where the broker forwards all messages).
+The following is a list of steps you can take to perform quick tests on each of the three new functions
+separately.
 
-### These commands have been tested on an Ubuntu 20.04 VM. Each command can be executed in its own terminal window alongside other terminal windows.
+** Please Note: Common default 2181 is used as the port for zookeeper. If different port is used, when providing the `zookeeper_host` argument, it should be changed accordingly. **
 
-### Testing with localhost
+** Please Note: the Test Steps shown below are for localhost environment.
+The command can be easily modified for mininet environment by specifying the
+zooKeeper host with the `-z` option in the commands. For example, if h1 is the ZooKeeper
+host, then it should be `-z 10.0.0.1:2181` **
+
+** Please Note: the Test Steps shown below are for the Centralized mode.
+The commands can be easily modified to use the Decentralized mode by removing the `--centralized` option in the commands. **
+
+### Test for Ownership strength
 
 #### FIRST, start ZooKeeper Service (if not already started)
 
-** Please Note: Common default 2181 is used as the port for zookeeper. If different port is used, when providing the `zookeeper_host` argument, it should be changed accordingly. **
+Zookeeper Server - Terminal Window #1.
+1. `cd /opt/`
+2. `sudo zookeeper/bin/zkServer.sh start`
+
+#### Second, clear up some ZooKeeper files to avoid any conflicts.
+
+Zookeeper Client - Terminal Window #1.
+1. `cd /opt/`
+2. `sudo zookeeper/bin/zkCli.sh -server 127.0.0.1:2181`
+3. Once in the Client, `deleteall /primaries`
+
+#### Steps
+1. Cd into src directory of project
+`cd src/`
+2. Create the backup pool in Terminal Window #2.
+   1. `python3 driver.py --load_threshold 4 --backup -v -i -z 127.0.0.1:2181`
+3. Create a broker in Terminal Window #3
+   1. `python3 driver.py --broker 1 -z 127.0.0.1:2181 --zone 1 -i -v --centralized --pub_reg_port 10000 --sub_reg_port 10001`
+4. Create three publishers
+  1. Publishers 1 - Terminal Window #4.
+     1. `python3 driver.py --publisher 1 --centralized --verbose --max_event_count 30 --sleep 1 -z 127.0.0.1:2181 --topics A --topics B`
+  2. Publishers 2 - Terminal Window #5.
+     1. `python3 driver.py --publisher 1 --centralized --verbose --max_event_count 60 --sleep 1 -z 127.0.0.1:2181 --topics A --topics C`
+  3. Publishers 3 - Terminal Window #6.
+     1. `python3 driver.py --publisher 1 --centralized --verbose --max_event_count 60 --sleep 1 -z 127.0.0.1:2181 --topics B --topics C`    
+
+#### Observations
+1. Since publisher 1 is publishing A and B, when publisher 2 is activated, it can only publish C and in the terminal it will show that `I don't have priority of A`
+2. Since both B and C are taken, when publisher 3 is activated, it cannot publish anything and in the terminal it will keep showing that `I don't have priority of B` and `I don't have priority of C`
+3. After publisher 1 finishes and leaves, publisher 2 now has the priority of A and it will publish A and C. Also,
+publisher 3 now has the priority of B and start to publish B. However, publisher 3 still does not have priority of C and will still show that `I don't have priority of C`
+4. After publisher 2 finishes and leaves, publisher 3 now has the priority of C and it will publish B and C.
+
+**Video Demo: https://youtu.be/oPqkSF9-Z7s**
+
+### Test for History
+
+#### FIRST, start ZooKeeper Service (if not already started)
 
 Zookeeper Server - Terminal Window #1.
 1. `cd /opt/`
-2. `zookeeper/bin/zkServer.sh start`
+2. `sudo zookeeper/bin/zkServer.sh start`
 
-#### Steps for Decentralized Testing
-1. Cd into src directory of project
-`cd src/`
-2. Create TWO decentralized brokers. Since it is on the same localhost for the two brokers, each broker has its own set of ports opened for publisher registration and subscriber registration.
-   1. Broker 1 - Terminal Window #2.
-      1. `python3 driver.py --broker 1 --verbose --indefinite --zookeeper_host 127.0.0.1:2181 --pub_reg_port 10000 --sub_reg_port 10001`
-   2. Broker 2 - Terminal Window #3.
-      1. `python3 driver.py --broker 1 --verbose --indefinite --zookeeper_host 127.0.0.1:2181 --pub_reg_port 20000 --sub_reg_port 20001`
-3. Create TWO publishers
-  1. Publishers 1 - Terminal Window #4.
-     1. `python3 driver.py --publisher 1 --verbose --max_event_count 120 --sleep 0.5 --zookeeper_host 127.0.0.1:2181 --topics A --topics B`
-  2. Publishers 2 - Terminal Window #5.
-     1. `python3 driver.py --publisher 1 --verbose --max_event_count 120 --sleep 0.5 --zookeeper_host 127.0.0.1:2181 --topics B --topics D`
-4. Create TWO subscribers. Each subscriber will write the message that they have received to a txt file
- 1. Subscriber 1 - Terminal Window #6.
-    1. `python3 driver.py --subscriber 1 --verbose --max_event_count 60 --zookeeper_host 127.0.0.1:2181 --topics A --topics D --filename s1_local_direct.txt`
- 2. Subscriber 2 - Terminal Window #7.
-    1. `python3 driver.py --subscriber 1 --verbose --max_event_count 60 --zookeeper_host 127.0.0.1:2181 --topics B --filename s2_local_direct.txt`
-5. Terminate active broker, broker 1 (Terminal Window #2) by pressing CTRL + C on the broker. You should find the standby broker in Terminal Window #3 become active. You should also see the publisher and subscriber switch to the new broker in their logs.
-#### Steps for Centralized Testing
-** Please Note: To make everything centralized, the `--centralized` parameter needs to be provided when create the broker, publisher and subscriber. All other remain the same **
+#### Second, clear up some ZooKeeper files to avoid any conflicts.
 
-1. Cd into src directory of project
-`cd src/`
-2. Create TWO decentralized brokers. Since it is on the same localhost for the two brokers, each broker has its own set of ports opened for publisher registration and subscriber registration.
-   1. Broker 1 - Terminal Window #2.
-      1. `python3 driver.py --broker 1 --verbose --indefinite --zookeeper_host 127.0.0.1:2181 --pub_reg_port 10000 --sub_reg_port 10001 --centralized`
-   2. Broker 2 - Terminal Window #3.
-      1. `python3 driver.py --broker 1 --verbose --indefinite --zookeeper_host 127.0.0.1:2181 --pub_reg_port 20000 --sub_reg_port 20001 --centralized`
-3. Create TWO publishers
-  1. Publishers 1 - Terminal Window #4.
-     1. `python3 driver.py --publisher 1 --verbose --max_event_count 120 --sleep 0.5 --zookeeper_host 127.0.0.1:2181 --topics A --topics B --centralized`
-  2. Publishers 2 - Terminal Window #5.
-     1. `python3 driver.py --publisher 1 --verbose --max_event_count 120 --sleep 0.5 --zookeeper_host 127.0.0.1:2181 --topics B --topics D --centralized`
-4. Create TWO subscribers. Each subscriber will write the message that they have received to a txt file
- 1. Subscriber 1 - Terminal Window #6.
-    1. `python3 driver.py --subscriber 1 --verbose --max_event_count 60 --zookeeper_host 127.0.0.1:2181 --topics A --topics D --filename s1_central_direct.txt --centralized`
- 2. Subscriber 2 - Terminal Window #7.
-    1. `python3 driver.py --subscriber 1 --verbose --max_event_count 60 --zookeeper_host 127.0.0.1:2181 --topics B --filename s2_central_direct.txt --centralized`
-5. Terminate active broker, broker 1 (Terminal Window #2) by pressing CTRL + C on the broker. You should find the standby broker in Terminal Window #3 become active. You should also see the publisher and subscriber switch to the new broker in their logs.
-
-**Video Demo: https://youtu.be/F7_o7OdGvgA**
-
-
-### Testing with Mininet
-
-#### FIRST, start the Mininet and open xterm from host 1 to host 7
-1. `sudo mn --topo tree,depth=2,fanout=3`
-2. `xterm h1`
-3. `xterm h2`
-4. `xterm h3`
-5. `xterm h4`
-6. `xterm h5`
-7. `xterm h6`
-8. `xterm h7`
-
-#### Second, start ZooKeeper Service on h1 within the xterm window opened for h1
-
-** Please Note: within Mininet, the IP address for h1 is `10.0.0.1`. Since
-h1 is used as the ZooKeeper server, its IP address is passed in `zookeeper_host` argument.
-Other host can be used as well, but the corresponding IP address needs to be provided for the
-`zookeeper_host` argument**
-
-** Please Note: Common default 2181 is used as the port for zookeeper. If different port is used, when providing the `zookeeper_host` argument, it should be changed accordingly. **
-
-Zookeeper Server on h1.
+Zookeeper Client - Terminal Window #1.
 1. `cd /opt/`
-2. `zookeeper/bin/zkServer.sh start`
+2. `sudo zookeeper/bin/zkCli.sh -server 127.0.0.1:2181`
+3. Once in the Client, `deleteall /primaries`
 
-#### Steps for Decentralized Testing
+#### Steps
 1. Cd into src directory of project
 `cd src/`
-2. Create TWO decentralized brokers.
-   1. Broker 1 - Terminal window of h2.
-      1. `python3 driver.py --broker 1 --verbose --indefinite --zookeeper_host 10.0.0.1:2181`
-   2. Broker 2 - Terminal window of h3.
-      1. `python3 driver.py --broker 1 --verbose --indefinite --zookeeper_host 10.0.0.1:2181`
-3. Create TWO publishers
-  1. Publishers 1 - Terminal window of h4.
-     1. `python3 driver.py --publisher 1 --verbose --max_event_count 120 --sleep 0.5 --zookeeper_host 10.0.0.1:2181 --topics A --topics B`
-  2. Publishers 2 - Terminal window of h5.
-     1. `python3 driver.py --publisher 1 --verbose --max_event_count 120 --sleep 0.5 --zookeeper_host 10.0.0.1:2181 --topics B --topics D`
-4. Create TWO subscribers. Each subscriber will write the message that they have received to a txt file
- 1. Subscriber 1 - Terminal window of h6.
-    1. `python3 driver.py --subscriber 1 --verbose --max_event_count 60 --zookeeper_host 10.0.0.1:2181 --topics A --topics D --filename s1_mn_direct.txt`
- 2. Subscriber 2 - Terminal window of h7.
-    1. `python3 driver.py --subscriber 1 --verbose --max_event_count 60 --zookeeper_host 10.0.0.1:2181 --topics B --filename s2_mn_direct.txt`
-5. Terminate active broker, broker 1 (Terminal Window of h2) by pressing CTRL + C on the broker. You should find the standby broker of h3 become active. You should also see the publisher and subscriber switch to the new broker in their logs.
+2. Create the backup pool in Terminal Window #2.
+   1. `python3 driver.py --load_threshold 4 --backup -v -i -z 127.0.0.1:2181`
+3. Create a broker in Terminal Window #3
+   1. `python3 driver.py --broker 1 -z 127.0.0.1:2181 --zone 1 -i -v --centralized --pub_reg_port 10000 --sub_reg_port 10001`
+4. Create the publisher in Terminal Window #4
+   1. `python3 driver.py --publisher 1 --centralized --verbose --max_event_count 30 --sleep 1 -z 127.0.0.1:2181 --topics A --history 1`
+5. Create the subscriber in Terminal Window #5
+   1. `python3 driver.py --subscriber 1 --centralized --verbose --max_event_count 30 -z 127.0.0.1:2181 --topics A --history 3`
 
-**Video Demo: https://youtu.be/ryUrtIuSRdw**
+Since the history of the publisher is smaller than that of the subscriber, the subscriber will not accept the message. Next, let's modify the size of the publisher with `python3 driver.py --publisher 1 --centralized --verbose --max_event_count 30 --sleep 1 -z 127.0.0.1:2181 --topics A --history 5`. Now since the history of the publisher is larger than that of the subscriber, the subscriber will start to accept the messages.
 
-#### Steps for Centralized Testing
-** Please Note: To make everything centralized, the `--centralized` parameter needs to be provided when create the broker, publisher and subscriber. All other remain the same **
+**Video Demo: https://youtu.be/u6uyXINz94A**
 
+### Test for Load Balancing
+
+#### FIRST, start ZooKeeper Service (if not already started)
+
+Zookeeper Server - Terminal Window #1.
+1. `cd /opt/`
+2. `sudo zookeeper/bin/zkServer.sh start`
+
+#### Second, clear up some ZooKeeper files to avoid any conflicts.
+
+Zookeeper Client - Terminal Window #1.
+1. `cd /opt/`
+2. `sudo zookeeper/bin/zkCli.sh -server 127.0.0.1:2181`
+3. Once in the Client, `deleteall /primaries`
+
+#### Steps
 1. Cd into src directory of project
 `cd src/`
-2. Create TWO decentralized brokers.
-   1. Broker 1 - Terminal window of h2.
-      1. `python3 driver.py --broker 1 --verbose --indefinite --zookeeper_host 10.0.0.1:2181 --centralized`
-   2. Broker 2 - Terminal window of h3.
-      1. `python3 driver.py --broker 1 --verbose --indefinite --zookeeper_host 10.0.0.1:2181 --centralized`
-3. Create TWO publishers
-  1. Publishers 1 - Terminal window of h4.
-     1. `python3 driver.py --publisher 1 --verbose --max_event_count 120 --sleep 0.5 --zookeeper_host 10.0.0.1:2181 --topics A --topics B --centralized`
-  2. Publishers 2 - Terminal window of h5.
-     1. `python3 driver.py --publisher 1 --verbose --max_event_count 120 --sleep 0.5 --zookeeper_host 10.0.0.1:2181 --topics B --topics D --centralized`
-4. Create TWO subscribers. Each subscriber will write the message that they have received to a txt file
- 1. Subscriber 1 - Terminal window of h6.
-    1. `python3 driver.py --subscriber 1 --verbose --max_event_count 60 --zookeeper_host 10.0.0.1:2181 --topics A --topics D --filename s1_mn_central.txt --centralized`
- 2. Subscriber 2 - Terminal window of h7.
-    1. `python3 driver.py --subscriber 1 --verbose --max_event_count 60 --zookeeper_host 10.0.0.1:2181 --topics B --filename s2_mn_central.txt --centralized`
-5. Terminate active broker, broker 1 (Terminal Window of h2) by pressing CTRL + C on the broker. You should find the standby broker of h3 become active. You should also see the publisher and subscriber switch to the new broker in their logs.
+2. Create the backup pool in Terminal Window #2. **Note: with load_threshold of 2, each broker can only take 2 clients (in this example, we have one publisher and one subscriber). Once the load threshold on a broker is over 2, this backup will became an active broker.**
+   1. `python3 driver.py --load_threshold 2 --backup -v -i -z 127.0.0.1:2181`
+3. Create a broker in Terminal Window #3. **Note: this is the broker that takes initial clients. It can only have 2 clients since the load_threhold is setup as 2 in the prior step. Once the threshold has been reached, the backup in prior step will become active and start to take new clients.**
+   1. `python3 driver.py --broker 1 -z 127.0.0.1:2181 --zone 1 -i -v --centralized --pub_reg_port 10000 --sub_reg_port 10001`
+4. Create the publisher in Terminal Window #4. **Note: this publisher will register with the broker in Terminal Window #3**
+   1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics A`
+5. Create the subscriber in Terminal Window #5. **Note: this subscriber will register with the broker in Terminal Window #3**
+   1. `python3 driver.py --subscriber 1 --centralized -v -i -z 127.0.0.1:2181 --topics A`
+6. Create the subscriber in Terminal Window #6. **Note: once this publisher is started, the load threshold exceeds 2. The backup in Terminal Window #2 will become active and the publisher will register with the broker in Terminal Window #2**
+   1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics B`
 
-**Video Demo: https://youtu.be/jNFdwGUt5w0**
+**Video Demo: https://youtu.be/Uj8v2G5gzA8**
