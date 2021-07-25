@@ -211,10 +211,10 @@ Zookeeper Client - Terminal Window #1.
 3. Create a broker in Terminal Window #3. **Note: this is the broker that takes initial clients. It can only have 2 clients since the load_threhold is setup as 2 in the prior step. Once the threshold has been reached, the backup in prior step will become active and start to take new clients.**
    1. `python3 driver.py --broker 1 -z 127.0.0.1:2181 --zone 1 -i -v --centralized --pub_reg_port 10000 --sub_reg_port 10001`
 4. Create the publisher in Terminal Window #4. **Note: this publisher will register with the broker in Terminal Window #3**
-  1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics A`
+   1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics A`
 5. Create the subscriber in Terminal Window #5. **Note: this subscriber will register with the broker in Terminal Window #3**
-  1. `python3 driver.py --subscriber 1 --centralized -v -i -z 127.0.0.1:2181 --topics A`
+   1. `python3 driver.py --subscriber 1 --centralized -v -i -z 127.0.0.1:2181 --topics A`
 6. Create the subscriber in Terminal Window #6. **Note: once this publisher is started, the load threshold exceeds 2. The backup in Terminal Window #2 will become active and the publisher will register with the broker in Terminal Window #2**
-  1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics B`
+   1. `python3 driver.py --publisher 1 --centralized -v -i --sleep 2 -z 127.0.0.1:2181 --topics B`
 
 **Video Demo: https://youtu.be/Uj8v2G5gzA8**
