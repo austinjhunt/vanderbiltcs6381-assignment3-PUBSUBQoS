@@ -18,6 +18,7 @@ class PerformanceTest:
         self.successes = 0
         self.failures = 0
         self.comments = []
+        self.WAIT_FOR_ZK_START = 15
 
     def cleanup(self):
         """ Method to run the shell command mn -c to clean up existing mininet networks/resources
@@ -41,24 +42,65 @@ class PerformanceTest:
         as num events * event interval for pub sub to generate data """
         self.wait_factor = factor
 
+    def setup_backup_pool(self, network, log_folder):
+        backup_pool_command = (
+            f'python3 driver.py '
+            f'--backup '
+            f'--load_threshold 30 ' # auto provision new zone at 30 clients per zone
+            f'--verbose --indefinite '
+            f'-z {network.hosts[self.ZOOKEEPER_INDEX].IP()}:2181 &> '
+            f'{log_folder}/backupPool.log &'
+        )
+        network.hosts[self.BACKUP_POOL_INDEX].cmd(backup_pool_command)
+        time.sleep(3)
+        return network.hosts[self.BACKUP_POOL_INDEX].IP()
+
     def setup_zookeeper_server(self, network, log_folder, zkStartWait):
         """ Make the first host in the network the zookeeper server. MUST be created first."""
         self.debug("Starting zookeeper service, just a moment...")
         zookeeper_start_command = (
             '/opt/zookeeper/bin/zkServer.sh start '
-            f'&> {log_folder}/zkServer.log &'
+            f'&> {log_folder}/zkServerStart.log &'
         )
         network.hosts[self.ZOOKEEPER_INDEX].cmd(zookeeper_start_command)
+        self.debug(f'Sleeping for {zkStartWait} seconds')
         time.sleep(zkStartWait)
+        self.check_zookeeper_status(network, log_folder)
+        return network.hosts[self.ZOOKEEPER_INDEX].IP()
+
+    def check_zookeeper_status(self, network, log_folder):
+        self.debug("checking zookeeper service status...")
+        zookeeper_status_command = (
+            '/opt/zookeeper/bin/zkServer.sh status '
+            f'&> {log_folder}/zkServerStatus.log &'
+        )
+        network.hosts[self.ZOOKEEPER_INDEX].cmd(zookeeper_status_command)
+        self.debug(f'Sleeping for 2 seconds')
+        time.sleep(2)
+        return network.hosts[self.ZOOKEEPER_INDEX].IP()
+
+    def clear_zookeeper_nodes(self, network, log_folder):
+        """ Method to clear out zookeeper data. Use localhost because the command will be run on the
+        same host running zkServer.sh"""
+        self.debug("Clearing zookeeper service, just a moment...")
+        zookeeper_clear_command = (
+            f'python3 driver.py --clear_zookeeper -z '
+            f'127.0.0.1:2181 &> {log_folder}/zkServerClear.log &'
+        )
+        network.hosts[self.ZOOKEEPER_INDEX].cmd(zookeeper_clear_command)
+        self.debug("Sleeping for 5 seconds")
+        time.sleep(5)
         return network.hosts[self.ZOOKEEPER_INDEX].IP()
 
     def kill_zookeeper_server(self, network, log_folder):
         self.debug("Stopping zookeeper service, just a moment...")
         zookeeper_stop_command = (
             '/opt/zookeeper/bin/zkServer.sh stop '
-            f'&> {log_folder}/zkServer.log &'
+            f'&>> {log_folder}/zkServerStop.log &'
         )
         network.hosts[self.ZOOKEEPER_INDEX].cmd(zookeeper_stop_command)
+        time.sleep(3)
+        self.check_zookeeper_status(network, log_folder)
         return network.hosts[self.ZOOKEEPER_INDEX].IP()
 
     def create_network(self, topo=None):

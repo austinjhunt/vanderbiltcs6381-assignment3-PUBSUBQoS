@@ -1,211 +1,1102 @@
 DRIVER - Debug mode enabled
-BROKER<zone_2> - Successfully initialized broker object (BROKER140100116089152)
-BROKER<zone_2> - Try to connect with ZooKeeper server: hosts = 10.0.0.1:2181
-BROKER<zone_2> - ZooKeeper Current Status = LOST
-BROKER<zone_2> - Current state is now = CONNECTED
-BROKER<zone_2> - Setting up shared state znode for multiple primary brokers
-BROKER<zone_2> - initializing /primaries/ znode if not exists
-BROKER<zone_2> - Publishers shared state changed!
-BROKER<zone_2> - Subscribers shared state changed!
-BROKER<zone_2,backup> - I am currently a contender/backup for zone_2
-BROKER<zone_2,backup> - contenders for /elections/zone_2: []
-BROKER<zone_2,primary> - I (fb7af76e-d348-4b12-9118-574d8c2d88b3) AM LEADER OF /elections/zone_2
-BROKER<zone_2,primary> - Storing my information in /primaries/zone_2
-BROKER<zone_2,primary> - Configuring myself!
-BROKER<zone_2,primary> - Configure Start
-BROKER<zone_2,primary> - Opening two REP sockets for publisher registration and subscriber registration
-BROKER<zone_2,primary> - Attempting bind to port 5555
-BROKER<zone_2,primary> - Successful bind to port 5555
-BROKER<zone_2,primary> - Attempting bind to port 5556
-BROKER<zone_2,primary> - Successful bind to port 5556
-BROKER<zone_2,primary> - Enabling publisher registration on port 5555
-BROKER<zone_2,primary> - Enabling subscriber registration on port 5556
-BROKER<zone_2,primary> - Register sockets with a ZMQ poller
-BROKER<zone_2,primary> - Configure Stop
-BROKER<zone_2,primary> - /primaries/zone_2 znode does not exist: creating!
-BROKER<zone_2,primary> - Creating znode /primaries/zone_2 with value 10.0.0.3,5555,5556
-BROKER<zone_2,primary> - Updating current system load znode
-BROKER<zone_2,primary> - Setting a new value = 0.0 on znode /shared_state/current_load
-BROKER<zone_2,primary> - /shared_state/current_load znode does not exist
-BROKER<zone_2,primary> - Start Event Loop
-BROKER<zone_2,primary> - Begin indefinite event poll loop
-BROKER<zone_2,primary> - Event 1: subscriber
-BROKER<zone_2,primary> - Subscriber Registration Started
-BROKER<zone_2,primary> - New subscriber info: {'address': '10.0.0.4', 'requested': 1, 'id': '139866800191808', 'topics': ['A', 'B', 'C']}
-BROKER<zone_2,primary> - Topic A is being sent at port 13934
-BROKER<zone_2,primary> - Topic B is being sent at port 16001
-BROKER<zone_2,primary> - Topic C is being sent at port 14093
-BROKER<zone_2,primary> - Sending topic/ports: {'A': 13934, 'B': 16001, 'C': 14093}
-BROKER<zone_2,primary> - Subscriber registered successfully
-BROKER<zone_2,primary> - Creating znode /shared_state/subscribers/139866800191808 with value {"address": "10.0.0.4", "requested": 1, "id": "139866800191808", "topics": ["A", "B", "C"]}
-BROKER<zone_2,primary> - Subscribers shared state changed!
-BROKER<zone_2,primary> - Setting a new value = 0.5 on znode /shared_state/current_load
-BROKER<zone_2,primary> - /shared_state/current_load znode does not exist
-BROKER<zone_2,primary> - Publishers shared state changed!
-BROKER<zone_2,primary> - New publisher 140417714731328
-BROKER<zone_2,primary> - Checking if Znode /shared_state/publishers/140417714731328 exists
-BROKER<zone_2,primary> - Details of znode /shared_state/publishers/140417714731328: value = b'{"address": "10.0.0.6:5556", "offered": 1, "id": "140417714731328", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=5824, mzxid=5824, ctime=1627231872820, mtime=1627231872820, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=94, numChildren=0, pzxid=5824)
-BROKER<zone_2,primary> - New pub info: {"address": "10.0.0.6:5556", "offered": 1, "id": "140417714731328", "topics": ["A", "B", "C"]}
-BROKER<zone_2,primary> - Adding publisher to publishers[A]
-BROKER<zone_2,primary> - Adding publisher to publishers[B]
-BROKER<zone_2,primary> - Adding publisher to publishers[C]
-BROKER<zone_2,primary> - Notifying subscribers
-BROKER<zone_2,primary> - Event 4: subscriber
-BROKER<zone_2,primary> - Subscriber Registration Started
-BROKER<zone_2,primary> - New subscriber info: {'address': '10.0.0.5', 'requested': 1, 'id': '140632010283328', 'topics': ['A', 'B', 'C']}
-BROKER<zone_2,primary> - Sending topic/ports: {'A': 13934, 'B': 16001, 'C': 14093}
-BROKER<zone_2,primary> - Subscriber registered successfully
-BROKER<zone_2,primary> - Creating znode /shared_state/subscribers/140632010283328 with value {"address": "10.0.0.5", "requested": 1, "id": "140632010283328", "topics": ["A", "B", "C"]}
-BROKER<zone_2,primary> - Subscribers shared state changed!
-BROKER<zone_2,primary> - Setting a new value = 1.5 on znode /shared_state/current_load
-BROKER<zone_2,primary> - /shared_state/current_load znode does not exist
-BROKER<zone_2,primary> - Publishers shared state changed!
-BROKER<zone_2,primary> - New publisher 139883519203648
-BROKER<zone_2,primary> - Checking if Znode /shared_state/publishers/139883519203648 exists
-BROKER<zone_2,primary> - Details of znode /shared_state/publishers/139883519203648: value = b'{"address": "10.0.0.8:5556", "offered": 1, "id": "139883519203648", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=5830, mzxid=5830, ctime=1627231873165, mtime=1627231873165, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=94, numChildren=0, pzxid=5830)
-BROKER<zone_2,primary> - New pub info: {"address": "10.0.0.8:5556", "offered": 1, "id": "139883519203648", "topics": ["A", "B", "C"]}
-BROKER<zone_2,primary> - Adding publisher to publishers[A]
-BROKER<zone_2,primary> - Adding publisher to publishers[B]
-BROKER<zone_2,primary> - Adding publisher to publishers[C]
-BROKER<zone_2,primary> - Notifying subscribers
-BROKER<zone_2,primary> - Publisher Registration Started: {
+BROKER<zone_1> - Successfully initialized broker object (BROKER139622996003136)
+BROKER<zone_1> - Try to connect with ZooKeeper server: hosts = 10.0.0.1:2181
+BROKER<zone_1> - ZooKeeper Current Status = LOST
+BROKER<zone_1> - Current state is now = CONNECTED
+BROKER<zone_1> - Setting up shared state znode for multiple primary brokers
+BROKER<zone_1> - initializing /primaries/ znode if not exists
+BROKER<zone_1> - Publishers shared state changed!
+BROKER<zone_1> - Subscribers shared state changed!
+BROKER<zone_1,backup> - I am currently a contender/backup for zone_1
+BROKER<zone_1,backup> - contenders for /elections/zone_1: ['ce6f5400-1316-4430-942e-684e0a6e6a5d']
+BROKER<zone_1,backup> - Subscribers shared state changed!
+BROKER<zone_1,backup> - New subscriber! 140287870757184
+BROKER<zone_1,backup> - Checking if Znode /shared_state/subscribers/140287870757184 exists
+BROKER<zone_1,backup> - Details of znode /shared_state/subscribers/140287870757184: value = b'{"address": "10.0.0.6", "requested": 1, "id": "140287870757184", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=107046, mzxid=107046, ctime=1627347772640, mtime=1627347772640, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=91, numChildren=0, pzxid=107046)
+BROKER<zone_1,backup> - New sub info: {"address": "10.0.0.6", "requested": 1, "id": "140287870757184", "topics": ["A", "B", "C"]}
+BROKER<zone_1,backup> - Adding sub to subscribers[A]
+BROKER<zone_1,backup> - Adding sub to subscribers[B]
+BROKER<zone_1,backup> - Adding sub to subscribers[C]
+BROKER<zone_1,backup> - Subscribers shared state changed!
+BROKER<zone_1,backup> - New subscriber! 139759703218496
+BROKER<zone_1,backup> - Checking if Znode /shared_state/subscribers/139759703218496 exists
+BROKER<zone_1,backup> - Details of znode /shared_state/subscribers/139759703218496: value = b'{"address": "10.0.0.5", "requested": 1, "id": "139759703218496", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=107048, mzxid=107048, ctime=1627347772842, mtime=1627347772842, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=91, numChildren=0, pzxid=107048)
+BROKER<zone_1,backup> - New sub info: {"address": "10.0.0.5", "requested": 1, "id": "139759703218496", "topics": ["A", "B", "C"]}
+BROKER<zone_1,backup> - Adding sub to subscribers[A]
+BROKER<zone_1,backup> - Adding sub to subscribers[B]
+BROKER<zone_1,backup> - Adding sub to subscribers[C]
+BROKER<zone_1,backup> - Publishers shared state changed!
+BROKER<zone_1,backup> - New publisher 139751987444032
+BROKER<zone_1,backup> - Checking if Znode /shared_state/publishers/139751987444032 exists
+BROKER<zone_1,backup> - Details of znode /shared_state/publishers/139751987444032: value = b'{"address": "10.0.0.8:5556", "offered": 1, "id": "139751987444032", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=107050, mzxid=107050, ctime=1627347772942, mtime=1627347772942, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=94, numChildren=0, pzxid=107050)
+BROKER<zone_1,backup> - New pub info: {"address": "10.0.0.8:5556", "offered": 1, "id": "139751987444032", "topics": ["A", "B", "C"]}
+BROKER<zone_1,backup> - Adding publisher to publishers[A]
+BROKER<zone_1,backup> - Adding publisher to publishers[B]
+BROKER<zone_1,backup> - Adding publisher to publishers[C]
+BROKER<zone_1,backup> - Notifying subscribers
+BROKER<zone_1,backup> - Publishers shared state changed!
+BROKER<zone_1,backup> - New publisher 140593148066112
+BROKER<zone_1,backup> - Checking if Znode /shared_state/publishers/140593148066112 exists
+BROKER<zone_1,backup> - Details of znode /shared_state/publishers/140593148066112: value = b'{"address": "10.0.0.7:5556", "offered": 1, "id": "140593148066112", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=107052, mzxid=107052, ctime=1627347773033, mtime=1627347773033, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=94, numChildren=0, pzxid=107052)
+BROKER<zone_1,backup> - New pub info: {"address": "10.0.0.7:5556", "offered": 1, "id": "140593148066112", "topics": ["A", "B", "C"]}
+BROKER<zone_1,backup> - Adding publisher to publishers[A]
+BROKER<zone_1,backup> - Adding publisher to publishers[B]
+BROKER<zone_1,backup> - Adding publisher to publishers[C]
+BROKER<zone_1,backup> - Notifying subscribers
+BROKER<zone_1,backup> - Subscribers shared state changed!
+BROKER<zone_1,backup> - Removing subscriber 140287870757184
+BROKER<zone_1,backup> - Removing subscriber 140287870757184
+BROKER<zone_1,backup> - Removing subscriber 140287870757184
+BROKER<zone_1,primary> - I (613b129b-efbc-44d9-bc9a-a4ec7b83b653) AM LEADER OF /elections/zone_1
+BROKER<zone_1,primary> - Storing my information in /primaries/zone_1
+BROKER<zone_1,primary> - Configuring myself!
+BROKER<zone_1,primary> - Configure Start
+BROKER<zone_1,primary> - Opening two REP sockets for publisher registration and subscriber registration
+BROKER<zone_1,primary> - Attempting bind to port 5555
+BROKER<zone_1,primary> - Successful bind to port 5555
+BROKER<zone_1,primary> - Attempting bind to port 5556
+BROKER<zone_1,primary> - Successful bind to port 5556
+BROKER<zone_1,primary> - Enabling publisher registration on port 5555
+BROKER<zone_1,primary> - Enabling subscriber registration on port 5556
+BROKER<zone_1,primary> - Register sockets with a ZMQ poller
+BROKER<zone_1,primary> - Configure Stop
+BROKER<zone_1,primary> - /primaries/zone_1 znode exists : only modify the value)
+BROKER<zone_1,primary> - Setting a new value = 10.0.0.4,5555,5556 on znode /primaries/zone_1
+BROKER<zone_1,primary> - /primaries/zone_1 znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /primaries/zone_1: value = b'10.0.0.4,5555,5556', stat = ZnodeStat(czxid=107038, mzxid=107452, ctime=1627347768292, mtime=1627347783204, version=1, cversion=0, aversion=0, ephemeralOwner=0, dataLength=18, numChildren=0, pzxid=107038)
+BROKER<zone_1,primary> - Updating current system load znode
+BROKER<zone_1,primary> - Setting a new value = 3.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107456, ctime=1627347765265, mtime=1627347783316, version=7, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BROKER<zone_1,primary> - Start Event Loop
+BROKER<zone_1,primary> - Begin indefinite event poll loop
+BROKER<zone_1,primary> - Publisher Registration Started: {
+    "address": "10.0.0.8:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": "139751987444032",
+    "offered": 1
+}
+BROKER<zone_1,primary> - znode /shared_state/publishers/139751987444032 already exists
+BROKER<zone_1,primary> - Setting a new value = 3.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107460, ctime=1627347765265, mtime=1627347784329, version=8, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BROKER<zone_1,primary> - Sending response: {'success': 'registration success'}
+BROKER<zone_1,primary> - Publisher Registration Succeeded
+BROKER<zone_1,primary> - Updating receive socket to 'subscribe' to publisher
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - Publisher Registration Started: {
     "address": "10.0.0.7:5556",
     "topics": [
         "A",
         "B",
         "C"
     ],
-    "id": "140015159327040",
+    "id": "140593148066112",
     "offered": 1
 }
-BROKER<zone_2,primary> - Creating znode /shared_state/publishers/140015159327040 with value {"address": "10.0.0.7:5556", "offered": 1, "id": "140015159327040", "topics": ["A", "B", "C"]}
-BROKER<zone_2,primary> - Publishers shared state changed!
-BROKER<zone_2,primary> - Setting a new value = 2.5 on znode /shared_state/current_load
-BROKER<zone_2,primary> - /shared_state/current_load znode does not exist
-BROKER<zone_2,primary> - Sending response: {'success': 'registration success'}
-BROKER<zone_2,primary> - Publisher Registration Succeeded
-BROKER<zone_2,primary> - Updating receive socket to 'subscribe' to publisher
-BROKER<zone_2,primary> - 'Subscribing' to publisher 10.0.0.6:5556
-BROKER<zone_2,primary> - 'Subscribing' to publisher 10.0.0.8:5556
-BROKER<zone_2,primary> - 'Subscribing' to publisher 10.0.0.7:5556
-BROKER<zone_2,primary> - 'Subscribing' to publisher 10.0.0.6:5556
-BROKER<zone_2,primary> - 'Subscribing' to publisher 10.0.0.8:5556
-BROKER<zone_2,primary> - 'Subscribing' to publisher 10.0.0.7:5556
-BROKER<zone_2,primary> - 'Subscribing' to publisher 10.0.0.6:5556
-BROKER<zone_2,primary> - 'Subscribing' to publisher 10.0.0.8:5556
-BROKER<zone_2,primary> - 'Subscribing' to publisher 10.0.0.7:5556
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231885.0249698}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231885.1313374}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231885.4201221}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231885.5617983}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231885.6670966}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231885.7733228}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231885.8767204}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231885.985503}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231886.2246902}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231886.3319936}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231886.440539}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231886.5466852}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231886.6574893}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231886.7977197}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231886.9126425}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231887.0194507}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231887.1434093}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231887.2523663}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231887.3601592}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231887.4711604}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231887.5801852}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231887.682352}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231887.7858634}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231887.8884413}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231887.9940763}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231888.101166}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231888.2352343}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231888.3386028}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231888.4425867}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231888.5550973}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231888.665602}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231888.770452}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231888.8733487}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231888.9769335}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231889.086309}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231889.1905553}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231889.2960548}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231889.4038353}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231889.5093982}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231889.6124918}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231889.7171257}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231889.8246825}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231889.930201}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231890.0355334}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231890.2022495}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231890.3079531}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231890.4140985}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231890.5225167}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231890.6282175}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231890.731605}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231890.8384907}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231890.9406183}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231891.0567935}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231891.1770759}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231891.2798975}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231891.387714}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231891.5346837}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231891.6442626}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231891.7475588}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231891.8605275}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231891.9842677}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231892.0958817}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231892.2023335}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231892.3069277}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231892.4159436}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231892.5238423}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231892.6313791}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231892.743671}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231892.865484}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231892.971475}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231893.0836766}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231893.214973}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231893.33012}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231893.438163}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231893.5450034}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231893.6501064}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231893.7522907}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231893.8636165}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231893.9722462}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231894.0757244}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231894.1923866}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231894.2974346}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231894.4130864}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231894.5211632}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231894.6293876}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231894.7449481}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231894.8683727}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231894.9765973}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231895.0842407}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231895.1938727}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231895.296309}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231895.4051623}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231895.5635276}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231895.6716359}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231895.7780457}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231895.8819866}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231895.98479}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'C', 'publish_time': 1627231896.087771}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'A', 'publish_time': 1627231896.1975527}]>
-BROKER<zone_2,primary> - Forwarding Msg: <[{'publisher': '10.0.0.6:5556', 'topic': 'B', 'publish_time': 1627231896.3021975}]>
-BROKER<zone_2,primary> - Event 128: subscriber
-BROKER<zone_2,primary> - Subscriber Registration Started
-BROKER<zone_2,primary> - Disconnecting subscriber...
-BROKER<zone_2,primary> - Subscribers shared state changed!
-BROKER<zone_2,primary> - Removing subscriber 139866800191808
-BROKER<zone_2,primary> - Removing subscriber 139866800191808
-BROKER<zone_2,primary> - Removing subscriber 139866800191808
-BROKER<zone_2,primary> - Setting a new value = 2.0 on znode /shared_state/current_load
-BROKER<zone_2,primary> - /shared_state/current_load znode does not exist
-BROKER<zone_2,primary> - Event 129: subscriber
-BROKER<zone_2,primary> - Subscriber Registration Started
-BROKER<zone_2,primary> - Disconnecting subscriber...
-BROKER<zone_2,primary> - Subscribers shared state changed!
-BROKER<zone_2,primary> - Setting a new value = 1.5 on znode /shared_state/current_load
-BROKER<zone_2,primary> - /shared_state/current_load znode does not exist
+BROKER<zone_1,primary> - znode /shared_state/publishers/140593148066112 already exists
+BROKER<zone_1,primary> - Setting a new value = 3.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107471, ctime=1627347765265, mtime=1627347785431, version=9, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BROKER<zone_1,primary> - Sending response: {'success': 'registration success'}
+BROKER<zone_1,primary> - Publisher Registration Succeeded
+BROKER<zone_1,primary> - Updating receive socket to 'subscribe' to publisher
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - Event 6679: subscriber
+BROKER<zone_1,primary> - Subscriber Registration Started
+BROKER<zone_1,primary> - New subscriber info: {'address': '10.0.0.5', 'requested': 1, 'id': '139759703218496', 'topics': ['A', 'B', 'C']}
+BROKER<zone_1,primary> - Topic A is being sent at port 10844
+BROKER<zone_1,primary> - Topic B is being sent at port 19270
+BROKER<zone_1,primary> - Topic C is being sent at port 18181
+BROKER<zone_1,primary> - Sending topic/ports: {'A': 10844, 'B': 19270, 'C': 18181}
+BROKER<zone_1,primary> - Subscriber registered successfully
+BROKER<zone_1,primary> - znode /shared_state/subscribers/139759703218496 already exists
+BROKER<zone_1,primary> - Setting a new value = 3.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107476, ctime=1627347765265, mtime=1627347785560, version=10, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347785.1917152}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347785.4049935}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347785.6355739}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347785.6370873}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347785.7906947}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347785.804397}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347785.892378}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347785.9536686}]>
+BROKER<zone_1,primary> - Event 6687: subscriber
+BROKER<zone_1,primary> - Subscriber Registration Started
+BROKER<zone_1,primary> - Disconnecting subscriber...
+BROKER<zone_1,primary> - Subscribers shared state changed!
+BROKER<zone_1,primary> - Removing subscriber 139759703218496
+BROKER<zone_1,primary> - Removing subscriber 139759703218496
+BROKER<zone_1,primary> - Removing subscriber 139759703218496
+BROKER<zone_1,primary> - Removing subscriber 139759703218496
+BROKER<zone_1,primary> - Removing subscriber 139759703218496
+BROKER<zone_1,primary> - Removing subscriber 139759703218496
+BROKER<zone_1,primary> - Setting a new value = 2.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'2.0', stat = ZnodeStat(czxid=107032, mzxid=107492, ctime=1627347765265, mtime=1627347785973, version=11, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347786.007998}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347786.072529}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347786.1099997}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347786.1891344}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347786.2171106}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347786.30522}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347786.3186855}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347786.4224362}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347786.428747}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347786.5304394}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347786.5400848}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347786.6467805}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347786.6594868}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347786.7486331}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347786.7769275}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347786.8618786}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347786.8907707}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347786.9650774}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347787.009695}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347787.0749066}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347787.1319187}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347787.177136}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347787.2478678}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347787.28419}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347787.36288}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347787.3862123}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347787.4794798}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347787.4962397}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347787.5945873}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347787.5977957}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347787.711909}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347787.715214}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347787.813546}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347787.8307943}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347787.9242854}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347787.9437046}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347788.0261724}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347788.05728}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347788.1341493}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347788.1699948}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347788.2365952}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347788.2867563}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347788.3471441}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347788.3995776}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347788.4488854}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347788.5152102}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347788.556662}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347788.6293771}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347788.658141}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347788.7487235}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347788.7653542}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347788.8648844}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347788.866849}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347788.983692}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347788.989338}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347789.086464}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347789.1059847}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347789.1944988}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347789.2176878}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347789.2961252}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347789.3326273}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347789.404979}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347789.445856}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347789.5071144}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347789.5612814}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347789.6144695}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347789.6746907}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347789.7164602}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347789.791005}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347789.8246856}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347789.9051878}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347789.9271622}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347790.0201457}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347790.0364647}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347790.133144}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347790.1379356}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347790.2496405}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347790.252895}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347790.3512187}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347790.3656845}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347790.4602153}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347790.4803622}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347790.5630887}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347790.5952091}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347790.6727085}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347790.7074475}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347790.7744863}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347790.819599}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347790.8847618}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347790.9329014}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347790.9868674}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347791.0476925}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347791.0958488}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347791.1611438}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347791.1977751}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347791.277917}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347791.3046815}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347791.3912463}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347791.406233}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347791.5055768}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347791.512753}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347791.6151261}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347791.624121}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347791.7229319}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347791.7367518}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347791.824945}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347791.8521914}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347791.9338691}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347791.9675593}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347792.0358515}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347792.0826535}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347792.143459}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347792.1965842}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347792.245148}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347792.3217933}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347792.3584208}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347792.4385173}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347792.46089}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347792.5517452}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347792.569213}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347792.6668048}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347792.6707342}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347792.7903526}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347792.79454}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347792.891962}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347792.9071984}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347793.0026183}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347793.0241416}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347793.1046345}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347793.1385922}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347793.2158563}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347793.2507706}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347793.3175733}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347793.3637443}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347793.426097}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347793.4844408}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347793.5279968}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347793.6031756}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347793.6351776}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347793.7169771}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347793.7372165}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347793.8287914}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347793.8448288}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347793.9449131}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347793.9471073}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347794.0633848}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347794.06674}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347794.1649892}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347794.1849058}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347794.2734876}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347794.296782}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347794.3752778}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347794.409578}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347794.4836903}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347794.521653}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347794.5853603}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347794.6368668}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347794.6928797}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347794.7485633}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347794.794581}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347794.8631363}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347794.9026597}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347794.9764175}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347795.004412}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347795.0921144}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347795.1121123}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347795.2073464}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347795.213623}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347795.324971}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347795.3280325}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347795.4269705}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347795.441326}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347795.5357716}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347795.5588582}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347795.6375842}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347795.6726296}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347795.7462807}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347795.7858877}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347795.8479853}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347795.8990664}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347795.95656}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347796.0137613}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347796.0585341}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347796.1342063}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347796.16581}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347796.247203}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347796.267722}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347796.3617752}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347796.3742898}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347796.476054}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347796.4771612}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347796.5866053}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347796.5961828}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347796.6881335}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347796.7086694}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347796.795559}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347796.819829}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347796.8971934}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347796.934108}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347797.005141}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347797.0465794}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347797.1069615}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347797.1617093}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347797.2141972}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347797.2757783}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347797.3156943}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347797.3885198}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347797.4228017}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347797.5014005}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347797.5245535}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347797.612669}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347797.633099}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347797.7261744}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347797.7345576}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347797.8405201}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347797.8491476}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347797.9508426}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347797.954661}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347798.0614195}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347798.0715384}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347798.1630597}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347798.1837106}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347798.2732584}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347798.2948573}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347798.3747015}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347798.4081042}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347798.482469}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347798.5190725}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347798.5847101}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347798.6331906}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347798.6931112}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347798.7461846}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347798.7947438}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347798.8607287}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347798.9024117}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347798.9783545}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347799.0040603}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347799.0930898}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347799.110983}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347799.2062318}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347799.212706}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347799.3230917}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347799.3241513}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347799.4253464}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347799.4376485}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347799.5322587}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347799.5492303}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347799.6338036}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347799.6615613}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347799.743301}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347799.7737167}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347799.8452868}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347799.8914459}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347799.952472}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347800.002994}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347800.0543544}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347800.1156776}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347800.1628463}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347800.227069}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347800.2647133}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347800.3398325}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347800.3720698}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347800.4547248}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347800.4734313}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347800.5678487}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347800.5800889}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347800.6814876}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347800.6825845}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347800.7911906}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347800.7992551}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347800.894118}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347800.9131062}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347801.002622}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347801.03122}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347801.1045835}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347801.1452644}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347801.2161446}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347801.25747}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347801.3178196}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347801.3708622}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347801.4252892}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347801.4822953}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347801.5267754}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347801.5958815}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347801.6352005}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347801.708763}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347801.7364557}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347801.82204}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347801.843328}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347801.9335816}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347801.9445453}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347802.049495}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347802.0548172}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347802.1563323}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347802.1663775}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347802.2655723}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347802.2778893}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347802.3670824}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347802.393397}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347802.4748912}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347802.505708}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347802.576892}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347802.6181653}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347802.685118}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347802.7323873}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347802.7867925}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347802.8481643}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347802.8940408}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347802.9638033}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347802.9956307}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347803.0761282}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347803.103058}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347803.1890996}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347803.2044246}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347803.301563}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347803.3110209}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347803.4123595}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347803.4217484}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347803.5203514}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347803.535431}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347803.6221294}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347803.6484613}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347803.7304583}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347803.7690678}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347803.8322272}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347803.8819811}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347803.9394512}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347803.9958644}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347804.0410745}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347804.1169283}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347804.1502414}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347804.229983}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347804.2518728}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347804.3439536}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347804.3608606}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347804.4591575}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347804.4625223}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347804.5761845}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347804.579242}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347804.6788836}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347804.6905837}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347804.788564}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347804.8023584}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347804.8910432}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347804.9312706}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347804.9995418}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347805.0432882}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347805.101252}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347805.159146}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347805.2089937}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347805.2706618}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347805.3106575}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347805.4109712}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347805.418328}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347805.5210433}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347805.5369818}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347805.630486}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347805.6631048}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347805.7347322}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347805.7854688}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347805.842734}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347805.8996055}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347805.9446697}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347806.0181317}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347806.058958}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347806.1332736}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347806.1611857}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347806.2493746}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347806.2715259}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347806.3629248}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347806.3727598}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347806.4810236}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347806.4847195}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347806.5870497}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347806.5964222}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347806.699425}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347806.7110748}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347806.8027794}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347806.835755}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347806.9143033}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347806.9551315}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347807.0166707}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347807.0845675}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347807.1346307}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347807.198784}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347807.239434}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347807.388004}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347807.3967206}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347807.4907863}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347807.5170035}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347807.6043143}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347807.6584418}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347807.706457}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347807.787785}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347807.816344}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347807.9168806}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347807.920932}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347808.0355341}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347808.0405202}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347808.1387613}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347808.159773}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347808.2477074}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347808.2754197}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347808.349342}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347808.3896408}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347808.4579353}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347808.504343}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347808.559693}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347808.6210883}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347808.67513}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347808.7346728}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347808.7776155}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347808.8604646}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347808.8894567}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347808.9922066}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347809.0109916}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347809.1082695}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347809.1267803}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347809.2510922}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347809.266617}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347809.361522}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347809.3813915}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347809.4665148}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347809.506964}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347809.5803466}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347809.6322343}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347809.6841712}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347809.7487302}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347809.7944157}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347809.8711803}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347809.896762}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347809.9891512}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347810.0069468}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347810.1079576}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347810.1095552}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347810.2268596}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347810.2346075}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347810.3290157}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347810.3505547}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347810.4397461}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347810.463462}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347810.5421994}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347810.588111}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347810.6504428}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347810.7009284}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347810.753022}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347810.8344314}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347810.8731623}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347810.9502358}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347810.9750266}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347811.0681317}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347811.083794}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347811.1872725}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347811.2026393}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347811.2968132}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347811.3156853}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347811.3992598}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347811.4395523}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347811.510758}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347811.5559711}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347811.6133926}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347811.6797664}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347811.7248116}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347811.8198879}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347811.827839}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347811.9384665}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347811.9448047}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347812.047476}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347812.0718977}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347812.1606848}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347812.1860957}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347812.264095}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347812.3146849}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347812.3753982}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347812.428778}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347812.4778228}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347812.5463054}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347812.5858521}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347812.6618972}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347812.687768}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347812.7762463}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347812.7950556}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347812.8944166}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347812.8968}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347813.0124352}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347813.018004}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347813.115423}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347813.132098}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347813.224174}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347813.2473977}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347813.3259466}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347813.360243}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347813.4348898}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347813.4739192}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347813.53684}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347813.5900724}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347813.6448693}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347813.701682}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347813.7465928}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347813.8242922}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347813.8542054}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347813.9375577}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347813.9564886}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347814.0502589}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347814.0640185}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347814.1628625}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347814.1654322}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347814.2787173}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347814.2824867}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347814.3809092}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347814.4011507}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347814.4892519}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347814.5122843}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347814.5909443}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347814.6278882}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347814.6992264}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347814.739407}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347814.800899}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347814.8549604}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347814.9086883}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347814.9688945}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347815.0107038}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347815.0934126}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347815.1194532}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347815.2125604}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347815.2228403}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347815.3312168}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347815.3355978}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347815.440004}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347815.4496772}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347815.5488338}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347815.5662146}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347815.6507447}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347815.6846113}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347815.7608082}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347815.8081326}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347815.8633502}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347815.9212627}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347815.9714475}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347816.0340426}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347816.072944}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347816.14833}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347816.1806426}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347816.269119}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347816.2831044}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347816.383231}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347816.3959098}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347816.4982374}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347816.499157}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347816.612669}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347816.6189194}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347816.7149453}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347816.7346838}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347816.8319216}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347816.8532197}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347816.9344473}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347816.9732943}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347817.0441308}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347817.085539}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347817.1462848}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347817.2028534}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347817.259089}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347817.3234215}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347817.364708}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347817.4394867}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347817.4744158}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347817.5665443}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347817.5763142}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347817.7147264}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347817.7184267}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347817.817092}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347817.841498}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347817.9279432}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347817.954278}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347818.0308845}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347818.0742297}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347818.1400368}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347818.1904454}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347818.2426548}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347818.3272727}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347818.3511097}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347818.4391282}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347818.45304}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347818.5631342}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347818.5637705}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347818.6661081}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347818.680106}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347818.7748}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347818.79196}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347818.876734}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347818.9048767}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347818.9845026}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347819.0181537}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347819.0861053}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347819.1317086}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347819.193545}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347819.24641}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347819.2954202}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347819.3598983}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347819.4030116}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347819.4729865}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347819.5042636}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347819.5868711}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347819.6123302}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347819.7003314}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347819.7140155}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347819.8138394}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347819.8222098}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347819.9239464}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347819.9299355}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347820.0336137}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347820.046436}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347820.135333}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347820.162696}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347820.2439609}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347820.2766588}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347820.3455462}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347820.3900495}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347820.455225}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347820.5036185}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347820.5571082}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347820.6173737}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347820.666517}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347820.728781}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347820.768416}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347820.8437006}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347820.8761353}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347820.9624608}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347820.9794471}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347821.0809188}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347821.0906012}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347821.1921692}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347821.2020166}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347821.3031445}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347821.3150957}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347821.4048405}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347821.432095}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347821.5179505}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347821.5470822}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347821.6196501}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347821.6708164}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347821.7290852}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347821.7843232}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347821.8310018}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347821.896502}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347821.938119}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347822.0096705}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347822.0404296}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347822.1246603}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347822.146847}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347822.2377102}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347822.2484846}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347822.3704095}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347822.3735452}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347822.473607}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347822.4919589}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347822.5807128}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347822.6035476}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347822.6827023}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347822.7165227}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347822.7900643}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347822.829883}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347822.892239}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347822.9518843}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347823.0018091}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347823.0690274}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347823.1038797}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347823.184424}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347823.2121403}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347823.297478}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347823.3143759}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347823.4117224}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347823.4204266}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347823.5223153}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347823.5330877}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347823.6382043}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347823.6514826}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347823.741721}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347823.7687502}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347823.851278}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347823.8853097}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347823.953019}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347823.9996626}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347824.060944}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347824.1125143}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347824.1630204}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347824.226859}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347824.2715607}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347824.3396626}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347824.3737342}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347824.4528}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347824.4840744}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347824.5666358}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347824.585781}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347824.6792617}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347824.6929922}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347824.7934384}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347824.7949746}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347824.9081516}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347824.913112}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347825.0099857}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347825.0306752}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347825.118664}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347825.148539}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347825.2204082}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347825.262372}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347825.3292255}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347825.3771594}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347825.4309332}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347825.492786}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347825.5394335}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347825.6099682}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347825.6410797}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347825.7239606}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347825.7498183}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347825.839206}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347825.851968}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347825.9586082}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347825.9631412}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347826.0657008}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347826.0750165}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347826.1827343}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347826.1961617}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347826.284922}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347826.311812}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347826.3958936}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347826.43222}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347826.497591}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347826.5508208}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347826.6043625}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347826.6681938}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347826.7060444}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347826.7834322}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347826.8163438}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347826.8980422}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347826.9184046}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347827.014228}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347827.0257783}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347827.1278327}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347827.1289873}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347827.2397306}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347827.2480881}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347827.3420422}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347827.3617263}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347827.4503744}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347827.475159}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347827.5520318}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347827.5900753}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347827.6603525}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347827.7043788}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347827.7621324}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347827.819132}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347827.869695}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347827.9318714}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347827.9715655}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347828.0476785}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347828.0793755}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347828.1609256}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347828.1810184}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347828.2769897}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347828.287609}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347828.3897436}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347828.3908901}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347828.5047238}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347828.5129359}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347828.6077998}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347828.626937}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347828.7171745}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347828.7415311}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347828.8191645}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347828.8554413}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347828.9284756}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347828.9687617}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347829.0302687}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347829.0813427}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347829.1379538}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347829.1928115}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347829.2395635}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347829.3054686}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347829.3479884}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347829.418652}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347829.4493313}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347829.53433}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347829.5696592}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347829.6902556}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347829.7021852}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347829.8071537}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347829.8349154}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347829.9096453}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347829.946645}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347830.019396}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347830.0613098}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347830.121261}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347830.1781552}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347830.228481}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347830.2928064}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347830.3303459}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347830.4117541}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347830.438925}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347830.526145}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347830.5405576}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347830.6431947}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347830.6491795}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347830.7525826}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347830.7639635}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347830.8637316}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347830.880773}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347830.9674528}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347830.996528}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347831.0760689}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347831.1096752}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347831.193622}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347831.2290158}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347831.3100197}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347831.341647}]>
+BROKER<zone_1,primary> - Publishers shared state changed!
+BROKER<zone_1,primary> - Removing a publisher: 139751987444032
+BROKER<zone_1,primary> - Removing publisher 139751987444032
+BROKER<zone_1,primary> - Removing publisher 139751987444032
+BROKER<zone_1,primary> - Removing publisher 139751987444032
+BROKER<zone_1,primary> - Removing publisher 139751987444032
+BROKER<zone_1,primary> - Removing publisher 139751987444032
+BROKER<zone_1,primary> - Removing publisher 139751987444032
+BROKER<zone_1,primary> - Removing a publisher: 139751987444032
+BROKER<zone_1,primary> - Removing a publisher: 139751987444032
+BROKER<zone_1,primary> - Removing a publisher: 139751987444032
+BROKER<zone_1,primary> - Removing a publisher: 139751987444032
+BROKER<zone_1,primary> - Removing a publisher: 139751987444032
+BROKER<zone_1,primary> - Publishers shared state changed!
+BROKER<zone_1,primary> - Removing a publisher: 140593148066112
+BROKER<zone_1,primary> - Removing publisher 140593148066112
+BROKER<zone_1,primary> - Removing publisher 140593148066112
+BROKER<zone_1,primary> - Removing publisher 140593148066112
+BROKER<zone_1,primary> - Removing a publisher: 140593148066112
+BROKER<zone_1,primary> - Removing publisher 140593148066112
+BROKER<zone_1,primary> - Removing publisher 140593148066112
+BROKER<zone_1,primary> - Removing publisher 140593148066112
+BROKER<zone_1,primary> - Removing a publisher: 140593148066112
+BROKER<zone_1,primary> - Removing a publisher: 140593148066112
+BROKER<zone_1,primary> - Removing a publisher: 140593148066112
+BROKER<zone_1,primary> - Removing a publisher: 140593148066112
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347831.4134376}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347831.4593906}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347831.520854}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347831.5632005}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347831.6326272}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347831.6714287}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347831.7342248}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347831.7730834}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347831.8382604}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347831.8759742}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347831.9425418}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347831.9793847}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347832.046026}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347832.0822437}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347832.1494546}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347832.1858087}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347832.2521198}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347832.288811}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347832.3605273}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347832.3908324}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347832.4634933}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347832.4926195}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347832.5669339}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347832.594908}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347832.6703336}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347832.6978312}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347832.7728016}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347832.8004344}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347832.876412}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347832.9034874}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347832.9788468}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347833.0057962}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347833.0812576}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347833.1078298}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347833.1834173}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347833.209986}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347833.2862997}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347833.3123128}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347833.3892019}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347833.4148524}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347833.4916198}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347833.51811}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347833.594528}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347833.6207213}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347833.6967573}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347833.7230923}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347833.7989204}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347833.8253248}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347833.9016798}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347833.9282668}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347834.0049274}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347834.0306087}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347834.1145332}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347834.133792}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347834.222906}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347834.2403183}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347834.32545}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347834.343108}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347834.4279373}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347834.445509}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347834.530374}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347834.5478292}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347834.6337764}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347834.6516323}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347834.7364178}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347834.7572231}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347834.840021}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347834.8598902}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347834.943646}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347834.9626725}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347835.0464299}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347835.0665138}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347835.161706}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347835.1705308}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347835.2642443}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347835.2726426}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347835.3682835}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347835.376474}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347835.4714928}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347835.4785705}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347835.574421}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347835.5803914}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347835.6768863}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347835.68234}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347835.7800348}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347835.783977}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'B', 'publish_time': 1627347835.8824673}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347835.8865864}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347835.985065}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'C', 'publish_time': 1627347835.9892337}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347836.088104}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'A', 'publish_time': 1627347836.0908182}]>
+Connection dropped: socket connection broken
+Transition to CONNECTING
+BROKER<zone_1,primary> - Current state is now = SUSPENDED
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Network is unreachable

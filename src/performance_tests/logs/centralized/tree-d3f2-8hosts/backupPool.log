@@ -1,0 +1,47 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating an elastic backup pool of brokers with load threshold 30 
+BackupPool - Try to connect with ZooKeeper server: hosts = 10.0.0.1:2181
+BackupPool - ZooKeeper Current Status = LOST
+BackupPool - Current state is now = CONNECTED
+BackupPool - Creating znode /shared_state/current_load/ with value 0
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'0.0', stat = ZnodeStat(czxid=107032, mzxid=107039, ctime=1627347765265, mtime=1627347768299, version=1, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'1.0', stat = ZnodeStat(czxid=107032, mzxid=107047, ctime=1627347765265, mtime=1627347772676, version=2, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'2.0', stat = ZnodeStat(czxid=107032, mzxid=107049, ctime=1627347765265, mtime=1627347772897, version=3, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107051, ctime=1627347765265, mtime=1627347772999, version=4, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'4.0', stat = ZnodeStat(czxid=107032, mzxid=107055, ctime=1627347765265, mtime=1627347773098, version=5, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107318, ctime=1627347765265, mtime=1627347779532, version=6, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107456, ctime=1627347765265, mtime=1627347783316, version=7, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107460, ctime=1627347765265, mtime=1627347784329, version=8, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107471, ctime=1627347765265, mtime=1627347785431, version=9, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107476, ctime=1627347765265, mtime=1627347785560, version=10, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'2.0', stat = ZnodeStat(czxid=107032, mzxid=107492, ctime=1627347765265, mtime=1627347785973, version=11, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+Connection dropped: socket connection broken
+Transition to CONNECTING
+BackupPool - Current state is now = SUSPENDED
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused

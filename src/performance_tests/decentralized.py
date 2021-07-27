@@ -11,11 +11,11 @@ class DecentralizedPerformanceTest(PerformanceTest):
             event_interval=event_interval,wait_factor=wait_factor)
         self.set_logger()
         # 2 brokers, 1 zookeeper server. THEN pubs/subs.
-        self.OFFSET = 3
+        self.OFFSET = 4
         self.ZOOKEEPER_INDEX = 0
-        self.BROKER_1_INDEX = 1
-        self.BROKER_2_INDEX = 2
-        self.WAIT_FOR_ZK_START = 5
+        self.BACKUP_POOL_INDEX = 1
+        self.BROKER_1_INDEX = 2
+        self.BROKER_2_INDEX = 3
 
 
     def set_logger(self):
@@ -47,7 +47,7 @@ class DecentralizedPerformanceTest(PerformanceTest):
         broker_command_2 = (
             f'python3 driver.py '
             '--broker 1 --verbose '
-            '--zone 2 '
+            '--zone 1 '
             f'--zookeeper_host {zookeeper_host} '
             f'--indefinite ' # max event count only matters for subscribers who write files at end.
             f'&> {log_folder}/broker2.log &'
@@ -186,6 +186,7 @@ class DecentralizedPerformanceTest(PerformanceTest):
 
             # First host is zookeeper server.
             zookeeper_host = f'{self.setup_zookeeper_server(network, log_folder, self.WAIT_FOR_ZK_START)}:2181'
+            backup_pool_server = self.setup_backup_pool(network, log_folder)
             broker_ip_1, broker_ip_2 = self.setup_brokers(log_folder, network, zookeeper_host)
             subscribers = self.setup_subscribers(num_subscribers, network,
                 broker_ip_1, data_folder, log_folder, zookeeper_host)
@@ -194,6 +195,7 @@ class DecentralizedPerformanceTest(PerformanceTest):
 
             self.wait_for_execution()
             self.verify_data_written(subscribers, data_folder, test_results_file)
+            self.clear_zookeeper_nodes(network, log_folder)
             self.kill_zookeeper_server(network, log_folder)
             self.terminate_test(subscribers, publishers, network_name, network)
 

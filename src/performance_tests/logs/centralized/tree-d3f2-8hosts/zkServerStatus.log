@@ -1,0 +1,6 @@
+/usr/bin/java
+ZooKeeper JMX enabled by default
+Using config: /opt/zookeeper/bin/../conf/zoo.cfg
+myid could not be determined, will not able to locate clientPort in the server configs.
+Client port found:  2181. Client address: localhost. Client SSL: false.
+Error contacting service. It is probably not running.

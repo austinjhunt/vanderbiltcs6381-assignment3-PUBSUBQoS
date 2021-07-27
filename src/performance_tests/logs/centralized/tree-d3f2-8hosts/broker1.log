@@ -1,11 +1,10 @@
 DRIVER - Debug mode enabled
 DRIVER - Will autokill broker after 15 seconds
-BROKER<zone_1> - Successfully initialized broker object (BROKER140049506892096)
+BROKER<zone_1> - Successfully initialized broker object (BROKER140622634932544)
 BROKER<zone_1> - Try to connect with ZooKeeper server: hosts = 10.0.0.1:2181
 BROKER<zone_1> - ZooKeeper Current Status = LOST
 BROKER<zone_1> - Current state is now = CONNECTED
 BROKER<zone_1> - Setting up shared state znode for multiple primary brokers
-BROKER<zone_1> - Creating znode /shared_state/ with value container of shared state among primary brokers
 BROKER<zone_1> - Creating znode /shared_state/publishers/ with value shared state container of all active publishers
 BROKER<zone_1> - Creating znode /shared_state/subscribers/ with value shared state container of all active subscribers
 BROKER<zone_1> - initializing /primaries/ znode if not exists
@@ -14,7 +13,7 @@ BROKER<zone_1> - Publishers shared state changed!
 BROKER<zone_1> - Subscribers shared state changed!
 BROKER<zone_1,backup> - I am currently a contender/backup for zone_1
 BROKER<zone_1,backup> - contenders for /elections/zone_1: []
-BROKER<zone_1,primary> - I (0d8ba9f6-cfa5-4130-8611-da63a8337acd) AM LEADER OF /elections/zone_1
+BROKER<zone_1,primary> - I (ce6f5400-1316-4430-942e-684e0a6e6a5d) AM LEADER OF /elections/zone_1
 BROKER<zone_1,primary> - Storing my information in /primaries/zone_1
 BROKER<zone_1,primary> - Configuring myself!
 BROKER<zone_1,primary> - Configure Start
@@ -28,48 +27,36 @@ BROKER<zone_1,primary> - Enabling subscriber registration on port 5556
 BROKER<zone_1,primary> - Register sockets with a ZMQ poller
 BROKER<zone_1,primary> - Configure Stop
 BROKER<zone_1,primary> - /primaries/zone_1 znode does not exist: creating!
-BROKER<zone_1,primary> - Creating znode /primaries/zone_1 with value 10.0.0.2,5555,5556
+BROKER<zone_1,primary> - Creating znode /primaries/zone_1 with value 10.0.0.3,5555,5556
 BROKER<zone_1,primary> - Updating current system load znode
 BROKER<zone_1,primary> - Setting a new value = 0.0 on znode /shared_state/current_load
-BROKER<zone_1,primary> - /shared_state/current_load znode does not exist
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'0.0', stat = ZnodeStat(czxid=107032, mzxid=107039, ctime=1627347765265, mtime=1627347768299, version=1, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
 BROKER<zone_1,primary> - Start Event Loop
 BROKER<zone_1,primary> - Begin indefinite event poll loop
+BROKER<zone_1,primary> - Event 9: subscriber
+BROKER<zone_1,primary> - Subscriber Registration Started
+BROKER<zone_1,primary> - New subscriber info: {'address': '10.0.0.6', 'requested': 1, 'id': '140287870757184', 'topics': ['A', 'B', 'C']}
+BROKER<zone_1,primary> - Topic A is being sent at port 14964
+BROKER<zone_1,primary> - Topic B is being sent at port 19409
+BROKER<zone_1,primary> - Topic C is being sent at port 14034
+BROKER<zone_1,primary> - Sending topic/ports: {'A': 14964, 'B': 19409, 'C': 14034}
+BROKER<zone_1,primary> - Subscriber registered successfully
+BROKER<zone_1,primary> - Creating znode /shared_state/subscribers/140287870757184 with value {"address": "10.0.0.6", "requested": 1, "id": "140287870757184", "topics": ["A", "B", "C"]}
 BROKER<zone_1,primary> - Subscribers shared state changed!
-BROKER<zone_1,primary> - New subscriber! 139866800191808
-BROKER<zone_1,primary> - Checking if Znode /shared_state/subscribers/139866800191808 exists
-BROKER<zone_1,primary> - Details of znode /shared_state/subscribers/139866800191808: value = b'{"address": "10.0.0.4", "requested": 1, "id": "139866800191808", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=5819, mzxid=5819, ctime=1627231871674, mtime=1627231871674, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=91, numChildren=0, pzxid=5819)
-BROKER<zone_1,primary> - New sub info: {"address": "10.0.0.4", "requested": 1, "id": "139866800191808", "topics": ["A", "B", "C"]}
-BROKER<zone_1,primary> - Adding sub to subscribers[A]
-BROKER<zone_1,primary> - Adding sub to subscribers[B]
-BROKER<zone_1,primary> - Adding sub to subscribers[C]
-BROKER<zone_1,primary> - Publisher Registration Started: {
-    "address": "10.0.0.6:5556",
-    "topics": [
-        "A",
-        "B",
-        "C"
-    ],
-    "id": "140417714731328",
-    "offered": 1
-}
-BROKER<zone_1,primary> - Creating znode /shared_state/publishers/140417714731328 with value {"address": "10.0.0.6:5556", "offered": 1, "id": "140417714731328", "topics": ["A", "B", "C"]}
-BROKER<zone_1,primary> - Publishers shared state changed!
 BROKER<zone_1,primary> - Setting a new value = 1.0 on znode /shared_state/current_load
-BROKER<zone_1,primary> - /shared_state/current_load znode does not exist
-BROKER<zone_1,primary> - Sending response: {'success': 'registration success'}
-BROKER<zone_1,primary> - Publisher Registration Succeeded
-BROKER<zone_1,primary> - Updating receive socket to 'subscribe' to publisher
-BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
-BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
-BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'1.0', stat = ZnodeStat(czxid=107032, mzxid=107047, ctime=1627347765265, mtime=1627347772676, version=2, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BROKER<zone_1,primary> - Event 10: subscriber
+BROKER<zone_1,primary> - Subscriber Registration Started
+BROKER<zone_1,primary> - New subscriber info: {'address': '10.0.0.5', 'requested': 1, 'id': '139759703218496', 'topics': ['A', 'B', 'C']}
+BROKER<zone_1,primary> - Sending topic/ports: {'A': 14964, 'B': 19409, 'C': 14034}
+BROKER<zone_1,primary> - Subscriber registered successfully
+BROKER<zone_1,primary> - Creating znode /shared_state/subscribers/139759703218496 with value {"address": "10.0.0.5", "requested": 1, "id": "139759703218496", "topics": ["A", "B", "C"]}
 BROKER<zone_1,primary> - Subscribers shared state changed!
-BROKER<zone_1,primary> - New subscriber! 140632010283328
-BROKER<zone_1,primary> - Checking if Znode /shared_state/subscribers/140632010283328 exists
-BROKER<zone_1,primary> - Details of znode /shared_state/subscribers/140632010283328: value = b'{"address": "10.0.0.5", "requested": 1, "id": "140632010283328", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=5828, mzxid=5828, ctime=1627231872998, mtime=1627231872998, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=91, numChildren=0, pzxid=5828)
-BROKER<zone_1,primary> - New sub info: {"address": "10.0.0.5", "requested": 1, "id": "140632010283328", "topics": ["A", "B", "C"]}
-BROKER<zone_1,primary> - Adding sub to subscribers[A]
-BROKER<zone_1,primary> - Adding sub to subscribers[B]
-BROKER<zone_1,primary> - Adding sub to subscribers[C]
+BROKER<zone_1,primary> - Setting a new value = 2.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'2.0', stat = ZnodeStat(czxid=107032, mzxid=107049, ctime=1627347765265, mtime=1627347772897, version=3, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
 BROKER<zone_1,primary> - Publisher Registration Started: {
     "address": "10.0.0.8:5556",
     "topics": [
@@ -77,31 +64,154 @@ BROKER<zone_1,primary> - Publisher Registration Started: {
         "B",
         "C"
     ],
-    "id": "139883519203648",
+    "id": "139751987444032",
     "offered": 1
 }
-BROKER<zone_1,primary> - Creating znode /shared_state/publishers/139883519203648 with value {"address": "10.0.0.8:5556", "offered": 1, "id": "139883519203648", "topics": ["A", "B", "C"]}
+BROKER<zone_1,primary> - Creating znode /shared_state/publishers/139751987444032 with value {"address": "10.0.0.8:5556", "offered": 1, "id": "139751987444032", "topics": ["A", "B", "C"]}
 BROKER<zone_1,primary> - Publishers shared state changed!
-BROKER<zone_1,primary> - Setting a new value = 2.0 on znode /shared_state/current_load
-BROKER<zone_1,primary> - /shared_state/current_load znode does not exist
+BROKER<zone_1,primary> - Setting a new value = 3.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107051, ctime=1627347765265, mtime=1627347772999, version=4, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
 BROKER<zone_1,primary> - Sending response: {'success': 'registration success'}
 BROKER<zone_1,primary> - Publisher Registration Succeeded
 BROKER<zone_1,primary> - Updating receive socket to 'subscribe' to publisher
-BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
 BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
-BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
 BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
-BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.6:5556
 BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - Publisher Registration Started: {
+    "address": "10.0.0.7:5556",
+    "topics": [
+        "A",
+        "B",
+        "C"
+    ],
+    "id": "140593148066112",
+    "offered": 1
+}
+BROKER<zone_1,primary> - Creating znode /shared_state/publishers/140593148066112 with value {"address": "10.0.0.7:5556", "offered": 1, "id": "140593148066112", "topics": ["A", "B", "C"]}
 BROKER<zone_1,primary> - Publishers shared state changed!
-BROKER<zone_1,primary> - New publisher 140015159327040
-BROKER<zone_1,primary> - Checking if Znode /shared_state/publishers/140015159327040 exists
-BROKER<zone_1,primary> - Details of znode /shared_state/publishers/140015159327040: value = b'{"address": "10.0.0.7:5556", "offered": 1, "id": "140015159327040", "topics": ["A", "B", "C"]}', stat = ZnodeStat(czxid=5832, mzxid=5832, ctime=1627231873308, mtime=1627231873308, version=0, cversion=0, aversion=0, ephemeralOwner=0, dataLength=94, numChildren=0, pzxid=5832)
-BROKER<zone_1,primary> - New pub info: {"address": "10.0.0.7:5556", "offered": 1, "id": "140015159327040", "topics": ["A", "B", "C"]}
-BROKER<zone_1,primary> - Adding publisher to publishers[A]
-BROKER<zone_1,primary> - Adding publisher to publishers[B]
-BROKER<zone_1,primary> - Adding publisher to publishers[C]
-BROKER<zone_1,primary> - Notifying subscribers
+BROKER<zone_1,primary> - Setting a new value = 4.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'4.0', stat = ZnodeStat(czxid=107032, mzxid=107055, ctime=1627347765265, mtime=1627347773098, version=5, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
+BROKER<zone_1,primary> - Sending response: {'success': 'registration success'}
+BROKER<zone_1,primary> - Publisher Registration Succeeded
+BROKER<zone_1,primary> - Updating receive socket to 'subscribe' to publisher
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.8:5556
+BROKER<zone_1,primary> - 'Subscribing' to publisher 10.0.0.7:5556
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347773.6664517}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347773.791431}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347773.9034493}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347773.9085975}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347774.0633767}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347774.0756102}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347774.165044}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347774.1992698}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347774.278444}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347774.3156562}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347774.3810713}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347774.434154}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347774.4920156}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347774.5494971}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347774.5941024}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347774.6814222}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347774.7134082}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347774.8072104}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347774.8158836}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347774.938282}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347774.9410274}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347775.044064}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347775.070287}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347775.1628919}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347775.2209003}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347775.2656493}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347775.3413668}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347775.3794587}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347775.4650335}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347775.4812493}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347775.5856261}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347775.5930183}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347775.6946232}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347775.706569}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347775.8065302}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347775.8243926}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347775.908982}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347775.9463773}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347776.0239558}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347776.062735}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347776.1258104}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347776.1851604}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347776.2406716}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347776.3047123}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347776.342913}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347776.423091}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347776.4515166}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347776.5452874}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347776.5532892}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347776.669363}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347776.671812}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347776.7714558}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347776.7958155}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347776.8844075}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347776.9132137}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347776.9883637}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347777.0346873}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347777.1006942}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347777.151386}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347777.2059803}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347777.2830489}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347777.354176}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347777.407412}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347777.4591453}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347777.5291064}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347777.568589}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347777.6457767}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347777.6706192}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347777.7647922}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347777.7848458}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347777.8871312}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347777.892282}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347778.0030632}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347778.015606}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347778.1053658}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347778.133449}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347778.2162268}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347778.2497995}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347778.318162}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347778.3702145}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347778.4294684}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347778.4889581}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347778.5311384}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347778.6092892}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347778.6414957}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347778.7336314}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347778.743451}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347778.8588912}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347778.8627489}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347778.9683042}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347778.9805288}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347779.0791132}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347779.0989907}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347779.1814463}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347779.2141292}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347779.293201}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347779.330372}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'A', 'publish_time': 1627347779.395216}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.7:5556', 'topic': 'B', 'publish_time': 1627347779.4468253}]>
+BROKER<zone_1,primary> - Forwarding Msg: <[{'publisher': '10.0.0.8:5556', 'topic': 'C', 'publish_time': 1627347779.5173478}]>
+BROKER<zone_1,primary> - Event 114: subscriber
+BROKER<zone_1,primary> - Subscriber Registration Started
+BROKER<zone_1,primary> - Disconnecting subscriber...
+BROKER<zone_1,primary> - Subscribers shared state changed!
+BROKER<zone_1,primary> - Removing subscriber 140287870757184
+BROKER<zone_1,primary> - Removing subscriber 140287870757184
+BROKER<zone_1,primary> - Removing subscriber 140287870757184
+BROKER<zone_1,primary> - Setting a new value = 3.0 on znode /shared_state/current_load
+BROKER<zone_1,primary> - /shared_state/current_load znode exists; setting a new value on it
+BROKER<zone_1,primary> - New value at znode /shared_state/current_load: value = b'3.0', stat = ZnodeStat(czxid=107032, mzxid=107318, ctime=1627347765265, mtime=1627347779532, version=6, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=107032)
 BROKER<zone_1,primary> - Autokilling broker
 BROKER<zone_1,primary> - Disconnect
 BROKER<zone_1,primary> - Disconnecting. Destroying ZMQ context..

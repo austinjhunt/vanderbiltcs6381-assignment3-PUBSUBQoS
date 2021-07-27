@@ -67,7 +67,7 @@ class TestDriver:
         # Min = 4 hosts, Max = 27 hosts
         results = []
         depth = 3
-        for fanout in range(2,4): # 2,3
+        for fanout in range(2,3): # 2,3
             # Adjust the wait factor as number of hosts grows. fanout * 3 = (6->12)
             centralized_perf_test.setWaitFactor(factor=depth*fanout)
             result = centralized_perf_test.test_tree_topology(depth=depth, fanout=fanout)
@@ -86,7 +86,7 @@ class TestDriver:
         # Min = 4 hosts, Max = 27 hosts
         results = []
         depth = 3
-        for fanout in range(2,4):
+        for fanout in range(2,3):
             # Adjust the wait factor as number of hosts grows. fanout * 3 = (6->12)
             decentralized_perf_test.setWaitFactor(factor=depth*fanout)
             result = decentralized_perf_test.test_tree_topology(depth=depth, fanout=fanout)
@@ -174,6 +174,6 @@ if __name__ == "__main__":
     test_driver.generate_plots(model="decentralized")
 
     test_driver.debug("Checking centralized results...")
-    # test_driver.check_success_rate(centralized_results)
+    test_driver.check_success_rate(centralized_results)
     test_driver.debug("Checking decentralized results...")
     test_driver.check_success_rate(decentralized_results)

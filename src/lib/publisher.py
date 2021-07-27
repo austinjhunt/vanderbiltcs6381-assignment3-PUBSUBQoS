@@ -76,6 +76,7 @@ class Publisher(ZookeeperClient):
         """ Random assignment to load balance across zones """
         # This is the node this subscriber will watch for updated broker information in case of broker failure.
         all_zones = self.zk.get_children("/primaries/")
+        self.debug(f"All available zones: {all_zones}")
         self.zone = random.choice(all_zones)
         self.debug(f"out of all zones ({all_zones}), choosing {self.zone}")
         self.broker_leader_znode = f'/primaries/{self.zone}'

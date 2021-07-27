@@ -1,0 +1,44 @@
+DRIVER - Debug mode enabled
+DRIVER - Creating an elastic backup pool of brokers with load threshold 30 
+BackupPool - Try to connect with ZooKeeper server: hosts = 10.0.0.1:2181
+BackupPool - ZooKeeper Current Status = LOST
+BackupPool - Current state is now = CONNECTED
+BackupPool - Creating znode /shared_state/current_load/ with value 0
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'0.0', stat = ZnodeStat(czxid=109507, mzxid=109514, ctime=1627347861955, mtime=1627347866385, version=1, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'1.0', stat = ZnodeStat(czxid=109507, mzxid=109522, ctime=1627347861955, mtime=1627347867190, version=2, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'2.0', stat = ZnodeStat(czxid=109507, mzxid=109527, ctime=1627347861955, mtime=1627347867755, version=3, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'3.0', stat = ZnodeStat(czxid=109507, mzxid=109529, ctime=1627347861955, mtime=1627347867820, version=4, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'4.0', stat = ZnodeStat(czxid=109507, mzxid=109572, ctime=1627347861955, mtime=1627347868643, version=5, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'3.0', stat = ZnodeStat(czxid=109507, mzxid=111547, ctime=1627347861955, mtime=1627347879409, version=6, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'2.0', stat = ZnodeStat(czxid=109507, mzxid=111808, ctime=1627347861955, mtime=1627347880221, version=7, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'2.0', stat = ZnodeStat(czxid=109507, mzxid=112145, ctime=1627347861955, mtime=1627347881290, version=8, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'2.0', stat = ZnodeStat(czxid=109507, mzxid=112149, ctime=1627347861955, mtime=1627347881827, version=9, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+BackupPool - System load has changed!
+BackupPool - Checking if Znode /shared_state/current_load/ exists
+BackupPool - Details of znode /shared_state/current_load/: value = b'2.0', stat = ZnodeStat(czxid=109507, mzxid=112150, ctime=1627347861955, mtime=1627347881886, version=10, cversion=0, aversion=0, ephemeralOwner=0, dataLength=3, numChildren=0, pzxid=109507)
+Connection dropped: socket connection broken
+Transition to CONNECTING
+BackupPool - Current state is now = SUSPENDED
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused
+Connection dropped: socket connection error: Connection refused

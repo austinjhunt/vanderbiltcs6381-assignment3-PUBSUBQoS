@@ -10,12 +10,12 @@ class CentralizedPerformanceTest(PerformanceTest):
         super().__init__(num_events=num_events,
             event_interval=event_interval,wait_factor=wait_factor)
         self.set_logger()
-        # 2 brokers, 1 zookeeper server. THEN pubs/subs.
-        self.OFFSET = 3
+        # 1 backup pool service, 2 brokers, 1 zookeeper server. THEN pubs/subs.
+        self.OFFSET = 4
         self.ZOOKEEPER_INDEX = 0
-        self.BROKER_1_INDEX = 1
-        self.BROKER_2_INDEX = 2
-        self.WAIT_FOR_ZK_START = 5
+        self.BACKUP_POOL_INDEX = 1
+        self.BROKER_1_INDEX = 2
+        self.BROKER_2_INDEX = 3
 
     def set_logger(self):
         self.prefix = {'prefix': f'CENTRALTEST-'}
@@ -42,6 +42,7 @@ class CentralizedPerformanceTest(PerformanceTest):
         )
         broker_host_1 = network.hosts[self.BROKER_1_INDEX]
         broker_host_1.cmd(broker_command_1)
+        time.sleep(3)
         broker_ip_1 = broker_host_1.IP()
         self.debug(f'Broker 1 set up! (IP: {broker_ip_1})')
 
@@ -50,7 +51,7 @@ class CentralizedPerformanceTest(PerformanceTest):
         broker_command_2 = (
             f'python3 driver.py '
             '--broker 1 --verbose '
-            '--zone 2 '
+            '--zone 1 '
             f'--zookeeper_host {zookeeper_host} '
             f'--indefinite ' # max event count only matters for subscribers who write files at end.
             f'--centralized ' # CENTRALIZED TESTING
@@ -190,6 +191,7 @@ class CentralizedPerformanceTest(PerformanceTest):
                 f'{num_publishers} Publishers, and {num_subscribers} Subscribers...'
             )
             zookeeper_host = f'{self.setup_zookeeper_server(network, log_folder, self.WAIT_FOR_ZK_START)}:2181'
+            backup_pool_server = self.setup_backup_pool(network, log_folder)
             broker_ip_1, broker_ip_2 = self.setup_brokers(network,log_folder, zookeeper_host)
             subscribers = self.setup_subscribers(network,num_subscribers,broker_ip_1,
                 data_folder,log_folder, zookeeper_host
@@ -199,6 +201,7 @@ class CentralizedPerformanceTest(PerformanceTest):
 
             self.wait_for_execution()
             self.verify_data_written(subscribers,data_folder,test_results_file)
+            self.clear_zookeeper_nodes(network, log_folder)
             self.kill_zookeeper_server(network, log_folder)
             self.terminate_test(subscribers, publishers, network_name, network)
 

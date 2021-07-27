@@ -1,4 +1,0 @@
-/usr/bin/java
-ZooKeeper JMX enabled by default
-Using config: /opt/zookeeper/bin/../conf/zoo.cfg
-Stopping zookeeper ... 
