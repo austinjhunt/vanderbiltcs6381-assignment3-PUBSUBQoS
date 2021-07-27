@@ -1,6 +1,6 @@
-# A Python Framework for Multi-Broker Publish/Subscribe Distributed Systems Built With [ZeroMQ, an asynchronous messaging library](https://zeromq.org/) and [Apache Zookeeper](https://zookeeper.apache.org), a distributed coordination service
+## A Python Framework for Load-Balanced, Fault-Tolerant Publish/Subscribe Distributed Systems Built With [ZeroMQ, an asynchronous messaging library](https://zeromq.org/) and [Apache Zookeeper](https://zookeeper.apache.org), a distributed coordination service
 
-## [Watch this video demonstration of the framework on YouTube](https://youtu.be/a9ziTc_xPyA)
+### [Watch this video demonstration of the framework on YouTube](https://youtu.be/a9ziTc_xPyA)
 Note: the ZooKeeper service was already running on localhost (127.0.0.1) port 2181 in the above video demonstration.
 
 
@@ -8,7 +8,7 @@ This project is the 3rd iteration of a Python framework for creating distributed
 
 It offers integrated performance / latency analysis by allowing you to configure subscribers to write out latency data (between publishers and subscribers) to a provided filename, which provide insight about how long it takes for messages with specific topics from specific publishers to reach the subscriber (this is done by including the publish time in the message that gets sent).
 
-## How does this project extend on the other?
+### How does this project extend on the other?
 The previous project (iteration 2) extended the first by adding in [Apache ZooKeeper](https://zookeeper.apache.org) for distributed coordination. Specifically, it used [kazoo, a Python library for ZooKeeper](https://kazoo.readthedocs.io/en/latest/), to handle **multi-broker** pub/sub with **warm passive replication** between brokers. The ZooKeeper usage was completely transparent, meaning if you used one broker, the project functions exactly the same as the first (which did not use ZooKeeper and was only functional with one broker). If you use multiple brokers in iteration 2, and one broker fails, ZooKeeper enables all publishers and subscribers to continue functioning as though nothing happened by simply electing the next available broker as the leader.
 
 This project focuses on adding Quality of Service properties to the framework, and will extend on iteration 2 in **three primary ways**:
